@@ -1,4 +1,4 @@
-package model;
+package com.isa.projekcije.model;
 
 import javax.persistence.Entity;
 

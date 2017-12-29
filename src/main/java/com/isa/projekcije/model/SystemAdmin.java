@@ -1,4 +1,4 @@
-package model;
+package com.isa.projekcije.model;
 
 public class SystemAdmin extends User {
     public SystemAdmin() {

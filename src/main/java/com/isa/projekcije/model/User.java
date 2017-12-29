@@ -1,4 +1,4 @@
-package model;
+package com.isa.projekcije.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @NotNull
