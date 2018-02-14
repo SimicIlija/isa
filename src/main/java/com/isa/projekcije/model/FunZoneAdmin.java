@@ -5,4 +5,9 @@ public class FunZoneAdmin extends User {
         super();
         this.setRole(Role.ADMIN_FUN);
     }
+
+    public FunZoneAdmin(String firstName, String lastName, String phoneNumber, String email, String address, String city, String password) {
+        super(firstName, lastName, phoneNumber, email, address, city, password);
+        this.setRole(Role.ADMIN_FUN);
+    }
 }
