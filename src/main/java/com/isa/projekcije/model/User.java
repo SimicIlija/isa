@@ -35,13 +35,6 @@ public class User {
     protected String email;
 
 
-    @Column(unique = false,nullable = true)
-    protected String address;
-
-    @Column(unique = false,nullable = true)
-    protected String city;
-
-
     @NotNull
     @Column(unique = false, nullable = false)
     protected String password;
@@ -100,22 +93,6 @@ public class User {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -124,13 +101,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public User(String firstName, String lastName, String phoneNumber, String email, String address, String city, String password) {
+    public User(String firstName, String lastName, String phoneNumber, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.address = address;
-        this.city = city;
         this.password = password;
     }
 }

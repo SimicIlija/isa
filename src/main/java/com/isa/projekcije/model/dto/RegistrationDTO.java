@@ -6,8 +6,6 @@ public class RegistrationDTO {
 
     protected String firstName;
     protected String lastName;
-    protected String address;
-    protected String city;
     protected String phoneNumber;
     protected String email;
     protected String password;
@@ -15,11 +13,9 @@ public class RegistrationDTO {
 
     public RegistrationDTO(){}
 
-    public RegistrationDTO(String firstName, String lastName, String address, String city, String phoneNumber, String email, String password, String passwordConfirm) {
+    public RegistrationDTO(String firstName, String lastName, String phoneNumber, String email, String password, String passwordConfirm) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = address;
-        this.city = city;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
@@ -27,7 +23,7 @@ public class RegistrationDTO {
     }
 
     public RegisteredUser createNewUser(){
-        return new RegisteredUser(firstName,lastName,phoneNumber,email,address,city,password);
+        return new RegisteredUser(firstName, lastName, phoneNumber, email, password);
     }
     public boolean isEmpty(){
 
@@ -53,22 +49,6 @@ public class RegistrationDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getPhoneNumber() {

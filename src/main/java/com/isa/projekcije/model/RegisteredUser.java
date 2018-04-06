@@ -9,8 +9,8 @@ public class RegisteredUser extends User {
         this.setRole(Role.REGISTERED);
     }
 
-    public RegisteredUser(String firstName, String lastName, String phoneNumber, String email, String address, String city, String password) {
-        super(firstName, lastName, phoneNumber, email, address, city, password);
+    public RegisteredUser(String firstName, String lastName, String phoneNumber, String email, String password) {
+        super(firstName, lastName, phoneNumber, email, password);
         this.setRole(Role.REGISTERED);
     }
 }
