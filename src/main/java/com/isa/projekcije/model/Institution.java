@@ -14,11 +14,10 @@ public class Institution {
 
     @NotNull
     @Column(nullable = false)
-    protected String name;
+    private String name;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.EAGER)
-    protected Address address;
+    private float longitude;
+    private float latitude;
 
     @OneToMany(mappedBy = "institution")
     private List<Auditorium> auditoriums;
@@ -28,15 +27,17 @@ public class Institution {
     public Institution() {
     }
 
-    public Institution(String name, Address address, String description) {
+    public Institution(String name, float longitude, float latitude, String description) {
         this.name = name;
-        this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.description = description;
     }
 
-    public Institution(String name, Address address, String description, List<Auditorium> auditoriums) {
+    public Institution(String name, float longitude, float latitude, String description, List<Auditorium> auditoriums) {
         this.name = name;
-        this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.description = description;
         this.auditoriums = auditoriums;
     }
@@ -55,14 +56,6 @@ public class Institution {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address Address) {
-        this.address = Address;
     }
 
     public String getDescription() {

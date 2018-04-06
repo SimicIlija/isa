@@ -4,11 +4,9 @@ import com.isa.projekcije.model.RegisteredUser;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
+import com.isa.projekcije.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.isa.projekcije.repository.UserRepository;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,7 +14,7 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public Optional<User> findByEmail(String email) {
+    public User findByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
 
@@ -26,11 +24,14 @@ public class UserService {
     }
 
     public boolean emailExists(RegistrationDTO registrationDTO){
-        return userRepository.findByEmail(registrationDTO.getEmail()).isPresent();
+        if (userRepository.findByEmail(registrationDTO.getEmail()) != null) {
+            return true;
+        }
+        return false;
     }
 
     public User findUser(LoginDTO loginDTO){
-        return userRepository.findByEmailAndPassword(loginDTO.getEmail(),loginDTO.getPassword()).orElseThrow(() -> new RuntimeException()) ;
+        return userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
     }
 
 }
