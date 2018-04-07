@@ -1,7 +1,10 @@
 package com.isa.projekcije.model;
 
+import com.isa.projekcije.model.fanzone.ThemeProps;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Show {
@@ -26,6 +29,9 @@ public class Show {
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     private List<Actor> actors;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "show")
+    private Set<ThemeProps> themeProps;
 
     public Show() {
     }
