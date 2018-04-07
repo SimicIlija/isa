@@ -18,11 +18,13 @@ insert into seat (row, seat_number, id_segment) values (1, 3, 1);
 insert into seat (row, seat_number, id_segment) values (1, 4, 1);
 
 
+
 insert into show(name,genre,producer,duration) values ('Red sparrow','thriller', 'Francis Lorens', 141);
 insert into show(name,genre,producer,duration) values ('LED','drama', 'Oleg Trofim', 113);
 
-
 insert into theme_props (name, description, amount, price, image_url, show_id) values ('igracka', 'opis', 20, 50, 'url', 1);
+insert into theme_props (name, description, amount, price, image_url, show_id) values ('igracka', 'opis', 0, 50, 'url', 1);
+
 
 insert into actor(name, lastname) values ('imeGlumca1', 'prezimeGlumca1');
 insert into actor(name, lastname) values ('imeGlumca2', 'prezimeGlumca2');
