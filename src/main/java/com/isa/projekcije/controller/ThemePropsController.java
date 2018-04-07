@@ -1,11 +1,15 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.model.Show;
+import com.isa.projekcije.model.dto.ThemePropsDTO;
 import com.isa.projekcije.model.fanzone.ThemeProps;
+import com.isa.projekcije.service.ShowService;
 import com.isa.projekcije.service.ThemePropsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +22,9 @@ public class ThemePropsController {
 
     @Autowired
     private ThemePropsService service;
+
+    @Autowired
+    private ShowService showService;
 
     /**
      * Returns all theme props, for admins only
@@ -39,5 +46,32 @@ public class ThemePropsController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "add", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addNewThemeProps(@RequestBody ThemePropsDTO themePropsDTO) {
+        System.out.println(themePropsDTO.toString());
+        try {
+            Show show = showService.findOne(themePropsDTO.getShowId());
+            ThemeProps themeProps = themePropsDTO.createThemeProps(show);
+            themeProps = service.create(themeProps);
+            return new ResponseEntity(themeProps, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity(new Exception("There is now show with id"), HttpStatus.NOT_FOUND);
+        }
+    }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity modifyThemeProps(ThemePropsDTO themePropsDTO) {
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity deleteThemeProps() {
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
 }

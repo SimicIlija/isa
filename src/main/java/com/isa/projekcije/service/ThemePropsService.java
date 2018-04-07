@@ -14,10 +14,14 @@ public class ThemePropsService {
     private ThemePropsRepository themePropsRepository;
 
     public List<ThemeProps> getAll() {
-        return (List<ThemeProps>) themePropsRepository.findAll();
+        return themePropsRepository.findAll();
     }
 
     public List<ThemeProps> getAvailable() {
-        return (List<ThemeProps>) themePropsRepository.findAvailable();
+        return themePropsRepository.findAvailable();
+    }
+
+    public ThemeProps create(ThemeProps themeProps) {
+        return themePropsRepository.save(themeProps);
     }
 }
