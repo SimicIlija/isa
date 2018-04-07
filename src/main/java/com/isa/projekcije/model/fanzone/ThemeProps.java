@@ -79,6 +79,18 @@ public class ThemeProps {
     }
 
     public ThemeProps() {
+    }
 
+    @Override
+    public String toString() {
+        return "ThemeProps{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", show=" + show +
+                '}';
     }
 }

@@ -24,4 +24,12 @@ public class ThemePropsService {
     public ThemeProps create(ThemeProps themeProps) {
         return themePropsRepository.save(themeProps);
     }
+
+    public ThemeProps findById(long id) {
+        return themePropsRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    }
+
+    public void delete(ThemeProps themeProps) {
+        themePropsRepository.delete(themeProps);
+    }
 }
