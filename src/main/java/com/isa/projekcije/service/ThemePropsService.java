@@ -32,4 +32,8 @@ public class ThemePropsService {
     public void delete(ThemeProps themeProps) {
         themePropsRepository.delete(themeProps);
     }
+
+    public void update(ThemeProps themeProps) {
+        themePropsRepository.save(themeProps);
+    }
 }
