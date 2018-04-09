@@ -17,16 +17,16 @@ public class User {
     protected Role role;
 
     @NotNull
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     protected String firstName;
 
     @NotNull
-    @Column(unique = false,nullable = false)
+    @Column(nullable = false)
     protected String lastName;
 
 
     @NotNull
-    @Column(unique = false,nullable = false)
+    @Column(nullable = false)
     protected String phoneNumber;
 
 
@@ -36,7 +36,7 @@ public class User {
 
 
     @NotNull
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     protected String password;
 
 
