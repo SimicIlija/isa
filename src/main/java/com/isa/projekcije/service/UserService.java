@@ -20,6 +20,7 @@ public class UserService {
 
     public User createUser(RegistrationDTO registrationDTO){
         RegisteredUser registeredUser = registrationDTO.createNewUser();
+        System.out.println(registeredUser.getFirstName());
         return userRepository.save(registeredUser);
     }
 
@@ -31,6 +32,7 @@ public class UserService {
     }
 
     public User findUser(LoginDTO loginDTO){
+        System.out.println(userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword()));
         return userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
     }
 

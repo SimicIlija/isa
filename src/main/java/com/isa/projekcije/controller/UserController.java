@@ -1,6 +1,5 @@
 package com.isa.projekcije.controller;
 
-import com.isa.projekcije.model.RegisteredUser;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.isa.projekcije.service.UserService;
-
-import java.util.Optional;
 
 
 @RestController
@@ -35,7 +32,7 @@ public class UserController {
         if (user != null && user.getPassword().equals(loginDTO.getPassword())) {
             return new ResponseEntity(user, HttpStatus.OK);
         }
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
 
@@ -45,6 +42,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO) {
+        System.out.println(registrationDTO.getFirstName());
         if(registrationDTO.isEmpty()){
             return new ResponseEntity(new RuntimeException("Missing mandatory fields!"),HttpStatus.BAD_REQUEST);
         }
@@ -57,6 +55,7 @@ public class UserController {
             return new ResponseEntity(new RuntimeException("Email already exists!"),HttpStatus.BAD_REQUEST);
         }
         User registeredUser = userService.createUser(registrationDTO);
+        System.out.println(registeredUser.getFirstName());
         return new ResponseEntity<>(registeredUser,HttpStatus.CREATED);
 
     }
