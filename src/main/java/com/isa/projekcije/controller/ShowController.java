@@ -2,8 +2,11 @@ package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.ShowDTOToShowConverter;
 import com.isa.projekcije.converters.ShowToShowDTOConverter;
+import com.isa.projekcije.model.Actor;
 import com.isa.projekcije.model.Show;
+import com.isa.projekcije.model.dto.ShowActorDTO;
 import com.isa.projekcije.model.dto.ShowDTO;
+import com.isa.projekcije.service.ActorService;
 import com.isa.projekcije.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,9 @@ public class ShowController {
 
     @Autowired
     private ShowService showService;
+
+    @Autowired
+    private ActorService actorService;
 
     @Autowired
     private ShowDTOToShowConverter showDTOToShowConverter;
@@ -75,5 +81,21 @@ public class ShowController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(showToShowDTOConverter.convert(deleted), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/addActor",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<?> addActorToShow(@RequestBody ShowActorDTO showActorDTO) {
+        Show show = showService.findOne(showActorDTO.getIdShow());
+        Actor actor = actorService.findById(showActorDTO.getIdActor());
+        if ((show == null) || (actor == null)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        show.getActors().add(actor);
+        Show saved = showService.save(show);
+        return new ResponseEntity<>(showToShowDTOConverter.convert(saved), HttpStatus.OK);
     }
 }

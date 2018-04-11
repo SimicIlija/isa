@@ -3,8 +3,6 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.TicketDTOToTicket;
 import com.isa.projekcije.converters.TicketToTicketDTO;
 import com.isa.projekcije.model.Ticket;
-import com.isa.projekcije.model.User;
-import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.TicketDTO;
 import com.isa.projekcije.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -49,6 +48,26 @@ public class TicketController {
         Ticket addedTicket = ticketService.save(ticket);
         TicketDTO ticketDTO = ticketToTicketDTO.convert(addedTicket);
         return new ResponseEntity(ticketDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/addTicketArray",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addTicketArray(@RequestBody List<TicketDTO> ticketsDTOList) {
+        List<TicketDTO> addedTicketsDTO = new ArrayList<TicketDTO>();
+        for (TicketDTO ticketDTO : ticketsDTOList) {
+            Ticket ticket = ticketDTOToTicket.convert(ticketDTO);
+            try {
+                Ticket addedTicket = ticketService.save(ticket);
+                addedTicketsDTO.add(ticketToTicketDTO.convert(addedTicket));
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        }
+
+        return new ResponseEntity(addedTicketsDTO, HttpStatus.OK);
     }
 
     @RequestMapping(
