@@ -2,9 +2,13 @@ package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.ProjectionDTOToProjection;
 import com.isa.projekcije.converters.ProjectionToProjectionDTO;
+import com.isa.projekcije.model.Auditorium;
 import com.isa.projekcije.model.Projection;
+import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.dto.ProjectionDTO;
+import com.isa.projekcije.service.AuditoriumService;
 import com.isa.projekcije.service.ProjectionService;
+import com.isa.projekcije.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,11 +23,42 @@ public class ProjectionController {
     private ProjectionService projectionService;
 
     @Autowired
+    private ShowService showService;
+
+    @Autowired
+    private AuditoriumService auditoriumService;
+
+    @Autowired
     private ProjectionDTOToProjection projectionDTOToProjection;
 
     @Autowired
     private ProjectionToProjectionDTO projectionToProjectionDTO;
 
+    @RequestMapping(
+            value = "/getByShow/{idShow}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getByShow(@PathVariable Long idShow) {
+        Show show = showService.findOne(idShow);
+        if (show == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(projectionToProjectionDTO.convert(show.getProjections()), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getByAuditorium/{idAuditorium}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getByAuditorium(@PathVariable Long idAuditorium) {
+        Auditorium auditorium = auditoriumService.findOne(idAuditorium);
+        if (auditorium == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(projectionToProjectionDTO.convert(auditorium.getProjections()), HttpStatus.OK);
+    }
 
     @RequestMapping(
             value = "/addProjection",

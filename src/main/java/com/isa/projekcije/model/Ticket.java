@@ -6,6 +6,9 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id_seat", "id_projection"})
+})
 public class Ticket {
 
     @Id

@@ -3,8 +3,10 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.ActorDTOToActor;
 import com.isa.projekcije.converters.ActorToActorDTO;
 import com.isa.projekcije.model.Actor;
+import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.dto.ActorDTO;
 import com.isa.projekcije.service.ActorService;
+import com.isa.projekcije.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,11 +21,27 @@ public class ActorController {
     private ActorService actorService;
 
     @Autowired
+    private ShowService showService;
+
+    @Autowired
     private ActorDTOToActor actorDTOToActor;
 
     @Autowired
     private ActorToActorDTO actorToActorDTO;
 
+    @RequestMapping(
+            value = "/{idShow}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getActorsByShow(@PathVariable Long idShow) {
+        Show show = showService.findOne(idShow);
+        if (show == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(actorToActorDTO.convert(show.getActors()), HttpStatus.OK);
+
+    }
 
     @RequestMapping(
             value = "/addActor",
