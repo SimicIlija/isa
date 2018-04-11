@@ -24,7 +24,7 @@ public class Seat {
     @JoinColumn(name = "id_segment")
     private Segment segment;
 
-    @OneToMany(mappedBy = "seat")
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.REMOVE)
     private List<Ticket> tickets;
 
     public Seat() {
