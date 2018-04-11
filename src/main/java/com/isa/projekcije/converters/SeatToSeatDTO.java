@@ -3,6 +3,8 @@ package com.isa.projekcije.converters;
 
 import com.isa.projekcije.model.Seat;
 import com.isa.projekcije.model.dto.SeatDTO;
+import com.isa.projekcije.service.SegmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Component
 public class SeatToSeatDTO implements Converter<Seat, SeatDTO> {
+
 
     @Override
     public SeatDTO convert(Seat seat) {
@@ -24,7 +27,7 @@ public class SeatToSeatDTO implements Converter<Seat, SeatDTO> {
         seatDTO.setId(seat.getId());
 
         if (seat.getSegment() != null) {
-            //fali deo za segment
+            seatDTO.setSegmentId(seat.getSegment().getId());
         }
 
         return seatDTO;

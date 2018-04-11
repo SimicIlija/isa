@@ -5,6 +5,8 @@ import com.isa.projekcije.model.Seat;
 import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.model.dto.SeatDTO;
 import com.isa.projekcije.model.dto.TicketDTO;
+import com.isa.projekcije.service.SegmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,9 @@ import java.util.List;
 
 @Component
 public class SeatDTOToSeat implements Converter<SeatDTO, Seat> {
+
+    @Autowired
+    private SegmentService segmentService;
 
     @Override
     public Seat convert(SeatDTO seatDTO) {
@@ -28,7 +33,7 @@ public class SeatDTOToSeat implements Converter<SeatDTO, Seat> {
         seat.setTickets(new ArrayList<Ticket>());
 
         if (seatDTO.getSegmentId() != null) {
-            //fali deo za segment
+            seat.setSegment(segmentService.findOne(seatDTO.getSegmentId()));
         }
         return seat;
     }

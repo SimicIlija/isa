@@ -1,8 +1,12 @@
 package com.isa.projekcije.converters;
 
 import com.isa.projekcije.model.Projection;
+import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.model.dto.ProjectionDTO;
+import com.isa.projekcije.service.AuditoriumService;
+import com.isa.projekcije.service.ShowService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +20,12 @@ import java.util.List;
 @Component
 public class ProjectionDTOToProjection implements Converter<ProjectionDTO, Projection> {
 
+    @Autowired
+    private AuditoriumService auditoriumService;
+
+    @Autowired
+    private ShowService showService;
+
     @Override
     public Projection convert(ProjectionDTO projectionDTO) {
         if (projectionDTO == null) {
@@ -25,11 +35,11 @@ public class ProjectionDTOToProjection implements Converter<ProjectionDTO, Proje
         Projection projection = new Projection();
 
         if (projectionDTO.getId_auditorium() != null) {
-            //fali auditorium
+            projection.setAuditorium(auditoriumService.findOne(projectionDTO.getId_auditorium()));
         }
 
         if (projectionDTO.getId_show() != null) {
-            //fali show
+            projection.setShow(showService.findOne(projectionDTO.getId_show()));
         }
 
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss");
