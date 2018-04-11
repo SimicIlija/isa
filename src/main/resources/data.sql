@@ -16,5 +16,7 @@ insert into seat (row, seat_number, id_segment) values (1, 2, 1);
 insert into seat (row, seat_number, id_segment) values (1, 3, 1);
 insert into seat (row, seat_number, id_segment) values (1, 4, 1);
 
-
-
+insert into show(name,genre,producer,duration) values ('Red sparrow','thriller', 'Francis Lorens', 141);
+insert into projection(id_show,date,id_auditorium) values (1,'2018-02-28',1);
+insert into ticket(price,id_seat,id_projection,reserved) values('220.00',1,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('240.00',1,1,false);

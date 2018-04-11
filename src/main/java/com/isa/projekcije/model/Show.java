@@ -30,6 +30,14 @@ public class Show {
     public Show() {
     }
 
+    public Show(String name, String genre, String producer, int duration) {
+        this.name = name;
+        this.genre = genre;
+        this.producer = producer;
+        this.duration = duration;
+
+    }
+
     public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData) {
         this.name = name;
         this.genre = genre;

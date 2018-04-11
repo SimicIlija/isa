@@ -21,7 +21,7 @@ public class Projection {
     @JoinColumn(name = "id_auditorium")
     private Auditorium auditorium;
 
-    @OneToMany(mappedBy = "projection")
+    @OneToMany(mappedBy = "projection", cascade = CascadeType.REMOVE)
     private List<Ticket> tickets;
 
     public Projection() {
