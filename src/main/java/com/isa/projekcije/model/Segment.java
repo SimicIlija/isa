@@ -23,19 +23,21 @@ public class Segment {
     @JoinColumn(name = "id_auditorium")
     private Auditorium auditorium;
 
-    @OneToMany(mappedBy = "segment")
+    @OneToMany(mappedBy = "segment", cascade = CascadeType.REMOVE)
     private List<Seat> seats;
 
     public Segment() {
     }
 
-    public Segment(String label, boolean closed) {
+    public Segment(String label, Auditorium auditorium, boolean closed) {
         this.label = label;
+        this.auditorium = auditorium;
         this.closed = closed;
     }
 
-    public Segment(String label, boolean closed, List<Seat> seats) {
+    public Segment(String label, Auditorium auditorium, boolean closed, List<Seat> seats) {
         this.label = label;
+        this.auditorium = auditorium;
         this.closed = closed;
         this.seats = seats;
     }

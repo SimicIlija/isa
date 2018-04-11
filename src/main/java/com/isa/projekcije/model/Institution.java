@@ -19,7 +19,7 @@ public class Institution {
     private float longitude;
     private float latitude;
 
-    @OneToMany(mappedBy = "institution")
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
     private List<Auditorium> auditoriums;
 
     private String description;
@@ -72,5 +72,21 @@ public class Institution {
 
     public void setAuditoriums(List<Auditorium> auditoriums) {
         this.auditoriums = auditoriums;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
     }
 }

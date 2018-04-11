@@ -1,9 +1,17 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.converters.InstitutionDTOToInstitutionConverter;
+import com.isa.projekcije.converters.InstitutionToInstitutionDTOConverter;
+import com.isa.projekcije.model.Institution;
+import com.isa.projekcije.model.dto.InstitutionDTO;
 import com.isa.projekcije.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/institution")
@@ -12,13 +20,58 @@ public class InstitutionController {
     @Autowired
     private InstitutionService institutionService;
 
-    /*@RequestMapping(
-            value = "/{id_institution}",
-            method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> changeInstitution(@PathVariable String id_institution, @RequestBody InstitutionDTO institutionDTO) {
+    @Autowired
+    private InstitutionToInstitutionDTOConverter institutionToInstitutionDTOConverter;
 
-    }*/
+    @Autowired
+    private InstitutionDTOToInstitutionConverter institutionDTOToInstitutionConverter;
+
+    @RequestMapping(
+            value = "getInstitutions",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getInstitutions() {
+        List<Institution> institutions = institutionService.findAll();
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(institutions), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            consumes = "application/json"
+    )
+    public ResponseEntity<?> addInstitution(@RequestBody InstitutionDTO institutionDTO) {
+        Institution newInstitution = institutionService.save(institutionDTOToInstitutionConverter.convert(institutionDTO));
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(newInstitution), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.PUT,
+            consumes = "application/json"
+    )
+    public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody InstitutionDTO institutionDTO) {
+        Institution edited = institutionService.findOne(id);
+        if (edited == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        edited.setName(institutionDTO.getName());
+        edited.setLongitude(institutionDTO.getLongitude());
+        edited.setLatitude(institutionDTO.getLatitude());
+        edited.setDescription(institutionDTO.getDescription());
+        Institution newInstitution = institutionService.save(edited);
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(newInstitution), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.DELETE
+    )
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Institution deleted = institutionService.delete(id);
+        if (deleted == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(deleted), HttpStatus.OK);
+    }
 
 }
