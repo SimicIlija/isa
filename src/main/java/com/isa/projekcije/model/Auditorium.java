@@ -19,10 +19,10 @@ public class Auditorium {
     @JoinColumn(name = "id_institution")
     private Institution institution;
 
-    @OneToMany(mappedBy = "auditorium")
+    @OneToMany(mappedBy = "auditorium", cascade = CascadeType.REMOVE)
     private List<Segment> segments;
 
-    @OneToMany(mappedBy = "auditorium")
+    @OneToMany(mappedBy = "auditorium", cascade = CascadeType.REMOVE)
     private List<Projection> projections;
 
     public Auditorium() {
@@ -35,6 +35,13 @@ public class Auditorium {
     public Auditorium(String name, Institution institution) {
         this.name = name;
         this.institution = institution;
+    }
+
+    public Auditorium(String name, Institution institution, List<Segment> segments, List<Projection> projections) {
+        this.name = name;
+        this.institution = institution;
+        this.segments = segments;
+        this.projections = projections;
     }
 
     public long getId() {

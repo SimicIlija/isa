@@ -1,0 +1,79 @@
+package com.isa.projekcije.controller;
+
+import com.isa.projekcije.converters.ShowDTOToShowConverter;
+import com.isa.projekcije.converters.ShowToShowDTOConverter;
+import com.isa.projekcije.model.Show;
+import com.isa.projekcije.model.dto.ShowDTO;
+import com.isa.projekcije.service.ShowService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(value = "/show")
+public class ShowController {
+
+    @Autowired
+    private ShowService showService;
+
+    @Autowired
+    private ShowDTOToShowConverter showDTOToShowConverter;
+
+    @Autowired
+    private ShowToShowDTOConverter showToShowDTOConverter;
+
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        Show show = showService.findOne(id);
+        if (show == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> addShow(@RequestBody ShowDTO showDTO) {
+        Show show = showService.save(showDTOToShowConverter.convert(showDTO));
+        return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody ShowDTO showDTO) {
+        Show edited = showService.findOne(id);
+        if (edited == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        edited.setName(showDTO.getName());
+        edited.setGenre(showDTO.getGenre());
+        edited.setProducer(showDTO.getProducer());
+        edited.setDuration(showDTO.getDuration());
+        edited.setPosterFileName(showDTO.getPosterFileName());
+        edited.setPosterData(showDTO.getPosterData());
+        Show newShow = showService.save(edited);
+        return new ResponseEntity<>(showToShowDTOConverter.convert(newShow), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.DELETE
+    )
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Show deleted = showService.delete(id);
+        if (deleted == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(showToShowDTOConverter.convert(deleted), HttpStatus.OK);
+    }
+}
