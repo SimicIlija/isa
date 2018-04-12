@@ -15,10 +15,11 @@ import java.util.UUID;
 public class StorageService {
     private final Path rootLocation = Paths.get("upload-dir");
 
-    public void store(MultipartFile file) {
+    public String store(MultipartFile file) {
         try {
             String imageId = UUID.randomUUID().toString() + file.getOriginalFilename();
             Files.copy(file.getInputStream(), this.rootLocation.resolve(imageId));
+            return imageId;
         } catch (Exception e) {
             throw new RuntimeException("FAIL!");
         }

@@ -1,6 +1,7 @@
 package com.isa.projekcije.model.fanzone;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.Show;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class ThemeProps {
     private double price;
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     private Show show;
 
