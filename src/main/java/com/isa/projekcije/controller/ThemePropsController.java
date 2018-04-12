@@ -61,7 +61,7 @@ public class ThemePropsController {
     public ResponseEntity<?> addNewThemeProps(@RequestBody ThemePropsDTO themePropsDTO) {
         System.out.println(themePropsDTO.toString());
         try {
-            Show show = showService.findOne(themePropsDTO.getShowId());
+            Show show = showService.findById(themePropsDTO.getShowId());
             ThemeProps themeProps = themePropsDTO.createThemeProps(show);
             themeProps = themePropsService.create(themeProps);
             return new ResponseEntity(themeProps, HttpStatus.CREATED);
@@ -77,8 +77,22 @@ public class ThemePropsController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity modifyThemeProps(ThemePropsDTO themePropsDTO, @PathVariable long id) {
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    public ResponseEntity modifyThemeProps(@RequestBody ThemePropsDTO themePropsDTO, @PathVariable long id) {
+        try {
+            ThemeProps themeProps = themePropsService.findById(id);
+            if (themeProps.getShow().getId() != themePropsDTO.getShowId()) {
+                Show show = showService.findById(themePropsDTO.getShowId());
+                themeProps.setShow(show);
+            }
+            themeProps.setPrice(themePropsDTO.getPrice());
+            themeProps.setAmount(themePropsDTO.getAmount());
+            themeProps.setName(themePropsDTO.getName());
+            themeProps.setDescription(themePropsDTO.getDescription());
+            themePropsService.update(themeProps);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**

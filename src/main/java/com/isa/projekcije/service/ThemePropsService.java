@@ -36,4 +36,6 @@ public class ThemePropsService {
     public void update(ThemeProps themeProps) {
         themePropsRepository.save(themeProps);
     }
+
+
 }
