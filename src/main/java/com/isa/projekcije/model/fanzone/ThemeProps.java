@@ -13,9 +13,12 @@ public class ThemeProps {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String description;
+
     private int amount;
     private double price;
     private String imageUrl;

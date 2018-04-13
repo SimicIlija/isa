@@ -2,12 +2,19 @@ package com.isa.projekcije.model.dto;
 
 import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.fanzone.ThemeProps;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class ThemePropsDTO {
+
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
+    @NotEmpty
     private int amount;
+    @NotEmpty
     private double price;
+    @NotEmpty
     private long showId;
 
     public ThemePropsDTO() {

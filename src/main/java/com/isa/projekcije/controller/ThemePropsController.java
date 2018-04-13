@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -58,7 +59,7 @@ public class ThemePropsController {
     @RequestMapping(value = "add", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addNewThemeProps(@RequestBody ThemePropsDTO themePropsDTO) {
+    public ResponseEntity<?> addNewThemeProps(@Valid @RequestBody ThemePropsDTO themePropsDTO) {
         System.out.println(themePropsDTO.toString());
         try {
             Show show = showService.findById(themePropsDTO.getShowId());
@@ -77,7 +78,7 @@ public class ThemePropsController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity modifyThemeProps(@RequestBody ThemePropsDTO themePropsDTO, @PathVariable long id) {
+    public ResponseEntity modifyThemeProps(@Valid @RequestBody ThemePropsDTO themePropsDTO, @PathVariable long id) {
         try {
             ThemeProps themeProps = themePropsService.findById(id);
             if (themeProps.getShow().getId() != themePropsDTO.getShowId()) {
