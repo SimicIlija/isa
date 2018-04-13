@@ -4,17 +4,19 @@ import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.fanzone.ThemeProps;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 public class ThemePropsDTO {
 
     @NotEmpty
     private String name;
     @NotEmpty
     private String description;
-    @NotEmpty
+    @NotNull
     private int amount;
-    @NotEmpty
+    @NotNull
     private double price;
-    @NotEmpty
+    @NotNull
     private long showId;
 
     public ThemePropsDTO() {

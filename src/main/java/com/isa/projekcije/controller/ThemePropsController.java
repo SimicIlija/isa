@@ -103,6 +103,7 @@ public class ThemePropsController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteThemeProps(@PathVariable long id) {
+        System.out.println(id);
         try {
             ThemeProps themeProps = themePropsService.findById(id);
             themePropsService.delete(themeProps);
