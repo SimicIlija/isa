@@ -33,4 +33,8 @@ public class ShowService {
         showRepository.delete(show);
         return show;
     }
+
+    public Show findById(long id) {
+        return showRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    }
 }
