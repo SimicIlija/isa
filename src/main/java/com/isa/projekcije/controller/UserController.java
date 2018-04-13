@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ public class UserController {
         User user = this.userService.findUser(loginDTO);
 
         if (user != null && user.getPassword().equals(loginDTO.getPassword())) {
+            userService.setCurrentUser(user);
             return new ResponseEntity(user, HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -59,5 +61,6 @@ public class UserController {
         return new ResponseEntity<>(registeredUser,HttpStatus.CREATED);
 
     }
+
 
 }

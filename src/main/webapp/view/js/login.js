@@ -24,7 +24,7 @@ function logInUser() {
                 toastr["error"]("Username/password is incorrect,doesn't exist or empty");
 
             } else {
-                //top.location.href="index.html";
+                top.location.href = "users.html";
                 alert('uspeo!');
             }
         }, error: function (jqxhr, textStatus, errorThrown) {

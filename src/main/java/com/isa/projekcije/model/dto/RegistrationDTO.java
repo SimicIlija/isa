@@ -1,5 +1,6 @@
 package com.isa.projekcije.model.dto;
 
+import com.isa.projekcije.model.InstitutionAdmin;
 import com.isa.projekcije.model.RegisteredUser;
 
 public class RegistrationDTO {
@@ -24,6 +25,10 @@ public class RegistrationDTO {
 
     public RegisteredUser createNewUser(){
         return new RegisteredUser(firstName, lastName, phoneNumber, email, password);
+    }
+
+    public InstitutionAdmin createNewInstitutionAdmin() {
+        return new InstitutionAdmin(firstName, lastName, phoneNumber, email, password);
     }
     public boolean isEmpty(){
 
