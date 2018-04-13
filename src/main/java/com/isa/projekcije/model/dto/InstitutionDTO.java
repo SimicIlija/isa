@@ -7,16 +7,18 @@ public class InstitutionDTO {
     private double longitude;
     private double latitude;
     private String description;
+    private Boolean isCinema;
 
     public InstitutionDTO() {
     }
 
-    public InstitutionDTO(Long id, String name, double longitude, double latitude, String description) {
+    public InstitutionDTO(Long id, String name, double longitude, double latitude, String description, Boolean isCinema) {
         this.id = id;
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
+        this.isCinema = isCinema;
     }
 
     public Long getId() {
@@ -59,4 +61,11 @@ public class InstitutionDTO {
         this.description = description;
     }
 
+    public Boolean isCinema() {
+        return isCinema;
+    }
+
+    public void setCinema(Boolean cinema) {
+        isCinema = cinema;
+    }
 }

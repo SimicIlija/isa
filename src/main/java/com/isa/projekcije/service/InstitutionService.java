@@ -21,6 +21,14 @@ public class InstitutionService {
         return institutionRepository.findAll();
     }
 
+    public List<Institution> getCinemas() {
+        return institutionRepository.findByIsCinema(true);
+    }
+
+    public List<Institution> getTheatres() {
+        return institutionRepository.findByIsCinema(false);
+    }
+
     public Institution save(Institution institution) {
         return institutionRepository.save(institution);
     }

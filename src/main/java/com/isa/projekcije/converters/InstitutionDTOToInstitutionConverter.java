@@ -22,6 +22,7 @@ public class InstitutionDTOToInstitutionConverter implements Converter<Instituti
         institution.setLatitude(institutionDTO.getLatitude());
         institution.setDescription(institutionDTO.getDescription());
         institution.setAuditoriums(new ArrayList<Auditorium>());
+        institution.setCinema(institutionDTO.isCinema());
         return institution;
     }
 }

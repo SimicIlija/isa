@@ -16,7 +16,7 @@ public class InstitutionToInstitutionDTOConverter implements Converter<Instituti
         if (source == null) {
             return null;
         }
-        return new InstitutionDTO(source.getId(), source.getName(), source.getLongitude(), source.getLatitude(), source.getDescription());
+        return new InstitutionDTO(source.getId(), source.getName(), source.getLongitude(), source.getLatitude(), source.getDescription(), source.isCinema());
     }
 
     public List<InstitutionDTO> convert(List<Institution> source) {
