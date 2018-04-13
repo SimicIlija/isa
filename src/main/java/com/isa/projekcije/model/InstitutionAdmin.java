@@ -6,7 +6,7 @@ public class InstitutionAdmin extends User {
         this.setRole(Role.ADMIN_INST);
     }
 
-    public InstitutionAdmin(String firstName, String lastName, String phoneNumber, String email, String address, String city, String password) {
+    public InstitutionAdmin(String firstName, String lastName, String phoneNumber, String email, String password) {
         super(firstName, lastName, phoneNumber, email, password);
         this.setRole(Role.ADMIN_INST);
     }
