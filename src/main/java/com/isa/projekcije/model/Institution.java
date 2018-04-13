@@ -26,6 +26,7 @@ public class Institution {
 
     private Boolean isCinema;
 
+
     @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
     private List<Show> shows;
 
@@ -47,6 +48,7 @@ public class Institution {
         this.isCinema = isCinema;
         this.shows = shows;
     }
+
 
     public Institution() {
     }
