@@ -16,8 +16,8 @@ public class Institution {
     @Column(nullable = false)
     private String name;
 
-    private float longitude;
-    private float latitude;
+    private double longitude;
+    private double latitude;
 
     @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
     private List<Auditorium> auditoriums;
@@ -27,14 +27,14 @@ public class Institution {
     public Institution() {
     }
 
-    public Institution(String name, float longitude, float latitude, String description) {
+    public Institution(String name, double longitude, double latitude, String description) {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
     }
 
-    public Institution(String name, float longitude, float latitude, String description, List<Auditorium> auditoriums) {
+    public Institution(String name, double longitude, double latitude, String description, List<Auditorium> auditoriums) {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -74,19 +74,19 @@ public class Institution {
         this.auditoriums = auditoriums;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 }
