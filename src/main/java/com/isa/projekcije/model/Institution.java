@@ -24,22 +24,26 @@ public class Institution {
 
     private String description;
 
+    private Boolean isCinema;
+
     public Institution() {
     }
 
-    public Institution(String name, double longitude, double latitude, String description) {
+    public Institution(String name, double longitude, double latitude, String description, Boolean isCinema) {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
+        this.isCinema = isCinema;
     }
 
-    public Institution(String name, double longitude, double latitude, String description, List<Auditorium> auditoriums) {
+    public Institution(String name, double longitude, double latitude, String description, List<Auditorium> auditoriums, boolean isCinema) {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
         this.auditoriums = auditoriums;
+        this.isCinema = isCinema;
     }
 
     public long getId() {
@@ -88,5 +92,13 @@ public class Institution {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public Boolean isCinema() {
+        return isCinema;
+    }
+
+    public void setCinema(Boolean cinema) {
+        isCinema = cinema;
     }
 }

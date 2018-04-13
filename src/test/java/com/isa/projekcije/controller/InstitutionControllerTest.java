@@ -58,6 +58,7 @@ public class InstitutionControllerTest extends ProjekcijeApplicationTests {
         institutionDTO.setDescription(InstitutionConstants.NEW_DESCRIPTION);
         institutionDTO.setLongitude(InstitutionConstants.NEW_LONGITUDE);
         institutionDTO.setLatitude(InstitutionConstants.NEW_LATITUDE);
+        institutionDTO.setCinema(InstitutionConstants.NEW_ISCINEMA);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

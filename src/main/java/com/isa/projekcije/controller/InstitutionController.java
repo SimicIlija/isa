@@ -36,6 +36,24 @@ public class InstitutionController {
     }
 
     @RequestMapping(
+            value = "getCinemas",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getCinemas() {
+        List<Institution> institutions = institutionService.getCinemas();
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(institutions), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "getTheatres",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getTheatres() {
+        List<Institution> institutions = institutionService.getTheatres();
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(institutions), HttpStatus.OK);
+    }
+
+    @RequestMapping(
             method = RequestMethod.POST,
             consumes = "application/json"
     )

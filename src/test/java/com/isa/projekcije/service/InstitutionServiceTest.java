@@ -31,6 +31,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         assertThat(institution.getName()).isEqualTo(InstitutionConstants.DB_NAME);
         assertThat(institution.getLongitude()).isEqualTo(InstitutionConstants.DB_LONGITUDE);
         assertThat(institution.getLatitude()).isEqualTo(InstitutionConstants.DB_LATITUDE);
+        assertThat(institution.isCinema()).isEqualTo(InstitutionConstants.DB_ISCINEMA);
     }
 
     @Test
@@ -42,6 +43,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         institution.setDescription(InstitutionConstants.NEW_DESCRIPTION);
         institution.setLongitude(InstitutionConstants.NEW_LONGITUDE);
         institution.setLatitude(InstitutionConstants.NEW_LATITUDE);
+        institution.setCinema(InstitutionConstants.NEW_ISCINEMA);
 
         int dbSizeBeforeAdd = institutionService.findAll().size();
 
@@ -55,6 +57,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         assertThat(dbInstitution.getDescription()).isEqualTo(InstitutionConstants.NEW_DESCRIPTION);
         assertThat(dbInstitution.getLongitude()).isEqualTo(InstitutionConstants.NEW_LONGITUDE);
         assertThat(dbInstitution.getLatitude()).isEqualTo(InstitutionConstants.NEW_LATITUDE);
+        assertThat(dbInstitution.isCinema()).isEqualTo(InstitutionConstants.NEW_ISCINEMA);
     }
 
     @Test
@@ -67,6 +70,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         dbInstitution.setDescription(InstitutionConstants.NEW_DESCRIPTION);
         dbInstitution.setLongitude(InstitutionConstants.NEW_LONGITUDE);
         dbInstitution.setLatitude(InstitutionConstants.NEW_LATITUDE);
+        dbInstitution.setCinema(InstitutionConstants.NEW_ISCINEMA);
 
         dbInstitution = institutionService.save(dbInstitution);
         assertThat(dbInstitution).isNotNull();
@@ -76,6 +80,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         assertThat(dbInstitution.getDescription()).isEqualTo(InstitutionConstants.NEW_DESCRIPTION);
         assertThat(dbInstitution.getLongitude()).isEqualTo(InstitutionConstants.NEW_LONGITUDE);
         assertThat(dbInstitution.getLatitude()).isEqualTo(InstitutionConstants.NEW_LATITUDE);
+        assertThat(dbInstitution.isCinema()).isEqualTo(InstitutionConstants.NEW_ISCINEMA);
     }
 
     @Test
