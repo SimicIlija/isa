@@ -17,6 +17,10 @@ public class AuditoriumService {
         return auditoriumRepository.findOne(id);
     }
 
+    public List<Auditorium> findAll() {
+        return auditoriumRepository.findAll();
+    }
+
     public List<Auditorium> findByInstitution(Long idInstitution) {
         return auditoriumRepository.findByInstitutionId(idInstitution);
     }

@@ -4,14 +4,14 @@ public class InstitutionDTO {
 
     private Long id;
     private String name;
-    private float longitude;
-    private float latitude;
+    private double longitude;
+    private double latitude;
     private String description;
 
     public InstitutionDTO() {
     }
 
-    public InstitutionDTO(Long id, String name, float longitude, float latitude, String description) {
+    public InstitutionDTO(Long id, String name, double longitude, double latitude, String description) {
         this.id = id;
         this.name = name;
         this.longitude = longitude;
@@ -35,19 +35,19 @@ public class InstitutionDTO {
         this.name = name;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 

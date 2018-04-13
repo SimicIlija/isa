@@ -13,6 +13,10 @@ public class SegmentService {
     @Autowired
     private SegmentRepository segmentRepository;
 
+    public List<Segment> findAll() {
+        return segmentRepository.findAll();
+    }
+
     public Segment findOne(Long id) {
         return segmentRepository.findOne(id);
     }
