@@ -32,6 +32,7 @@ public class ShowDTOToShowConverter implements Converter<ShowDTO, Show> {
         show.setPosterData(showDTO.getPosterData());
         show.setActors(new ArrayList<Actor>());
         show.setProjections(new ArrayList<Projection>());
+        show.setDescription(showDTO.getDescription());
         if (showDTO.getIdInstitution() != null) {
             Institution institution = institutionService.findOne(showDTO.getIdInstitution());
             show.setInstitution(institution);

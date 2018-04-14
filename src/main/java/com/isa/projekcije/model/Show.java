@@ -22,6 +22,7 @@ public class Show {
     private int duration;
     private String posterFileName;
     private byte[] posterData;
+    private String description;
 
     @ManyToMany()
     @JoinTable(name = "show_actor",
@@ -45,15 +46,16 @@ public class Show {
         this.institution = institution;
     }
 
-    public Show(String name, String genre, String producer, int duration, Institution institution) {
+    public Show(String name, String genre, String producer, int duration, Institution institution, String description) {
         this.name = name;
         this.genre = genre;
         this.producer = producer;
         this.duration = duration;
         this.institution = institution;
+        this.description = description;
     }
 
-    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Institution institution) {
+    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Institution institution, String description) {
         this.name = name;
         this.genre = genre;
         this.producer = producer;
@@ -61,26 +63,28 @@ public class Show {
         this.posterFileName = posterFileName;
         this.posterData = posterData;
         this.institution = institution;
+        this.description = description;
     }
 
     public Show() {
     }
 
-    public Show(String name, String genre, String producer, int duration) {
+    public Show(String name, String genre, String producer, int duration, String description) {
         this.name = name;
         this.genre = genre;
         this.producer = producer;
         this.duration = duration;
-
+        this.description = description;
     }
 
-    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData) {
+    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, String description) {
         this.name = name;
         this.genre = genre;
         this.producer = producer;
         this.duration = duration;
         this.posterFileName = posterFileName;
         this.posterData = posterData;
+        this.description = description;
     }
 
     public long getId() {
@@ -155,4 +159,11 @@ public class Show {
         this.actors = actors;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -17,8 +17,10 @@ insert into seat (row, seat_number, id_segment) values (1, 2, 1);
 insert into seat (row, seat_number, id_segment) values (1, 3, 1);
 insert into seat (row, seat_number, id_segment) values (1, 4, 1);
 
-insert into show(name,genre,producer,duration, id_institution) values ('Red sparrow','thriller', 'Francis Lorens', 141, 1);
-insert into show(name,genre,producer,duration, id_institution) values ('LED','drama', 'Oleg Trofim', 113, 1);
+insert into show(name,genre,producer,duration, id_institution, description) values ('Red sparrow','thriller', 'Francis Lorens', 141, 1, 'frfrgvregvrwv');
+insert into show(name,genre,producer,duration, id_institution, description) values ('LED','drama', 'Oleg Trofim', 113, 1, 'rgergergergervvb');
+insert into show(name,genre,producer,duration, id_institution, description) values ('Rampage 3D','action', 'Brad Peyton', 107, 1, 'vruihveuie');
+insert into show(name,genre,producer,duration, id_institution, description) values ('Gnome Alone 3D','comedy', 'Peter Lepeniotis', 89, 1, 'fjwruhfirhrue');
 
 insert into actor(name, lastname) values ('imeGlumca1', 'prezimeGlumca1');
 insert into actor(name, lastname) values ('imeGlumca2', 'prezimeGlumca2');
@@ -29,10 +31,12 @@ insert into show_actor(show_id, actor_id) values (1, 1);
 insert into show_actor(show_id, actor_id) values (1, 2);
 insert into show_actor(show_id, actor_id) values (1, 3);
 
-insert into projection(id_show,date,id_auditorium) values (1,'2018-02-28',1);
-insert into projection(id_show,date,id_auditorium) values (1,'2018-02-28',2);
-insert into projection(id_show,date,id_auditorium) values (2,'2018-02-28',3);
-insert into projection(id_show,date,id_auditorium) values (2,'2018-02-28',1);
+insert into projection(id_show,date,id_auditorium) values (1,'2018-06-28 21:00:00',1);
+insert into projection(id_show,date,id_auditorium) values (1,'2018-06-28 20:00:00',2);
+insert into projection(id_show,date,id_auditorium) values (2,'2018-06-14 19:30:00',3);
+insert into projection(id_show,date,id_auditorium) values (2,'2018-06-28 21:00:00',1);
+insert into projection(id_show,date,id_auditorium) values (3,'2018-06-28 22:00:00',1);
+insert into projection(id_show,date,id_auditorium) values (4,'2018-06-28 23:00:00',1);
 
 insert into ticket(price,id_seat,id_projection,reserved) values('220.00',1,1,false);
 insert into ticket(price,id_seat,id_projection,reserved) values('240.00',2,1,false);

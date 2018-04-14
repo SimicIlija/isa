@@ -17,7 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -48,7 +51,19 @@ public class ShowController {
         List<Show> shows = new ArrayList<Show>();
         for (Show show : institution.getShows()) {
             for (Projection projection : show.getProjections()) {
-
+                Date projectionDate = projection.getDate();
+                Date todayDate = new Date();
+                SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+                String strCurrDate = sdfDate.format(todayDate);
+                try {
+                    todayDate = new SimpleDateFormat("dd/MM/yyyy").parse(strCurrDate);
+                    if (projectionDate.before(todayDate))
+                        continue;
+                    shows.add(show);
+                    break;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return new ResponseEntity<>(showToShowDTOConverter.convert(shows), HttpStatus.OK);

@@ -10,6 +10,7 @@ public class ShowDTO {
     private String posterFileName;
     private byte[] posterData;
     private Long idInstitution;
+    private String description;
 
     public Long getIdInstitution() {
         return idInstitution;
@@ -19,7 +20,7 @@ public class ShowDTO {
         this.idInstitution = idInstitution;
     }
 
-    public ShowDTO(Long id, String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Long idInstitution) {
+    public ShowDTO(Long id, String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Long idInstitution, String description) {
         this.id = id;
         this.name = name;
         this.genre = genre;
@@ -28,12 +29,13 @@ public class ShowDTO {
         this.posterFileName = posterFileName;
         this.posterData = posterData;
         this.idInstitution = idInstitution;
+        this.description = description;
     }
 
     public ShowDTO() {
     }
 
-    public ShowDTO(Long id, String name, String genre, String producer, int duration, String posterFileName, byte[] posterData) {
+    public ShowDTO(Long id, String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, String description) {
         this.id = id;
         this.name = name;
         this.genre = genre;
@@ -41,6 +43,7 @@ public class ShowDTO {
         this.duration = duration;
         this.posterFileName = posterFileName;
         this.posterData = posterData;
+        this.description = description;
     }
 
     public Long getId() {
@@ -97,5 +100,13 @@ public class ShowDTO {
 
     public void setPosterData(byte[] posterData) {
         this.posterData = posterData;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

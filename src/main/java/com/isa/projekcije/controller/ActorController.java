@@ -30,7 +30,7 @@ public class ActorController {
     private ActorToActorDTO actorToActorDTO;
 
     @RequestMapping(
-            value = "/{idShow}",
+            value = "getByShow/{idShow}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
