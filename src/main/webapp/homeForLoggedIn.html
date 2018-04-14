@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="view/jquery-3.3.1.min.js"></script>
+    <script src="view/js/homeForLoggedIn.js"></script>
+    <link rel="stylesheet" type="text/css" href="view/style.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel with-nav-tabs panel-default">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="active dropdown">
+                        <a href="#" data-toggle="dropdown">Home <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#tabHomeMyProfile" data-toggle="tab">My profile</a></li>
+                            <li><a href="#tabHomeLogout" data-toggle="tab">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#tabTheatres" data-toggle="tab">Theatres</a></li>
+                    <li><a href="#tabCinemas" data-toggle="tab" onclick='return tabCinemasClick()'>Cinemas</a></li>
+                    <li><a href="#tabFriends" data-toggle="tab">Friends</a></li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">Settings <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#tabSettingsTheatres" data-toggle="tab">Theatres</a></li>
+                            <li><a href="#tabSettingsCinemas" data-toggle="tab">Cinemas</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="tabHomeMyProfile">profil</div>
+                    <div class="tab-pane fade" id="tabTheatres">pozorista</div>
+                    <div class="tab-pane fade" id="tabCinemas">
+                        <div class="container" id="cinemaDiv">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabFriends">prijatelji</div>
+                    <div class="tab-pane fade" id="tabSettingsTheatres">podesi pozoriste</div>
+                    <div class="tab-pane fade" id="tabSettingsCinemas">podesi bioskop</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

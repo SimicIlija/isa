@@ -17,7 +17,8 @@ public class ShowToShowDTOConverter implements Converter<Show, ShowDTO> {
             return null;
         }
         return new ShowDTO(show.getId(), show.getName(), show.getGenre(), show.getProducer(),
-                show.getDuration(), show.getPosterFileName(), show.getPosterData());
+                show.getDuration(), show.getPosterFileName(), show.getPosterData(), show.getInstitution().getId(), show.getDescription());
+
     }
 
     public List<ShowDTO> convert(List<Show> showList) {

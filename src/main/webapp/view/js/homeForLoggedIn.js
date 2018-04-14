@@ -1,8 +1,4 @@
-$(document).ready(function () {
-    cinemasHome();
-});
-
-function cinemasHome() {
+function tabCinemasClick() {
     $.ajax({
         url: "institution/getCinemas",
         dataType: "json",
@@ -12,7 +8,7 @@ function cinemasHome() {
             for (i = 0; i < data.length; i++) {
                 newCinema =
                     "<div class='container'>"
-                    + "<div class=\"divCinemaTheatre\">"
+                    + "<div class='divCinemaTheatre'>"
                     + "<h2>" + data[i].name + "</h2>"
                     + "<p>" + data[i].description + "</p>"
                     + "<button type=\"button\" class=\"btn btn-link\" onclick=\"cinemaRepertoar(" + data[i].id + ")\">Repertoar</button>"
@@ -83,13 +79,21 @@ function loadProjections(idShow, newShow) {
         success: function (dataProjections) {
             newShow += "<p>"
                 + "<b>Projections: </b><br> ";
+            var projList = [];
             for (k = 0; k < dataProjections.length; k++) {
                 var dateProjection = (dataProjections[k].date).substring(0, 10);
+                if (!projList.includes(dateProjection)) {
+                    projList.push(dateProjection)
+                    newShow += "<button type=\"button\" class=\"btn btn-primary\" onclick='projectionClick(" + dateProjection + "," + dataProjections[k].id_show + ")'>" + dateProjection + "</button>&thinsp;&thinsp;";
+                }
                 var timeProjection = (dataProjections[k].date).substring(10, 16);
-                newShow += "&thinsp;&thinsp;" + dateProjection + "&thinsp;&thinsp;" + timeProjection + "<br>";
             }
             newShow += "</p>";
         }
     });
     return newShow;
+}
+
+function projectionClick(dateProjection, idShow) {
+    alert(dateProjection + " " + idShow);
 }
