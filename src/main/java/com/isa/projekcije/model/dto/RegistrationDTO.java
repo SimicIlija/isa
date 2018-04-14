@@ -1,7 +1,8 @@
 package com.isa.projekcije.model.dto;
 
 import com.isa.projekcije.model.InstitutionAdmin;
-import com.isa.projekcije.model.RegisteredUser;
+
+import com.isa.projekcije.model.User;
 
 public class RegistrationDTO {
 
@@ -23,8 +24,8 @@ public class RegistrationDTO {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public RegisteredUser createNewUser(){
-        return new RegisteredUser(firstName, lastName, phoneNumber, email, password);
+    public User createNewUser() {
+        return new User(firstName, lastName, phoneNumber, email, password);
     }
 
     public InstitutionAdmin createNewInstitutionAdmin() {

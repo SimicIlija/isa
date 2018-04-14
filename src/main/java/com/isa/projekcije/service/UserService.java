@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public User createUser(RegistrationDTO registrationDTO){
-        RegisteredUser registeredUser = registrationDTO.createNewUser();
+        User registeredUser = registrationDTO.createNewUser();
         System.out.println(registeredUser.getFirstName());
         return userRepository.save(registeredUser);
     }
