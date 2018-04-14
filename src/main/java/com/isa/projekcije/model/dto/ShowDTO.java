@@ -9,6 +9,26 @@ public class ShowDTO {
     private int duration;
     private String posterFileName;
     private byte[] posterData;
+    private Long idInstitution;
+
+    public Long getIdInstitution() {
+        return idInstitution;
+    }
+
+    public void setIdInstitution(Long idInstitution) {
+        this.idInstitution = idInstitution;
+    }
+
+    public ShowDTO(Long id, String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Long idInstitution) {
+        this.id = id;
+        this.name = name;
+        this.genre = genre;
+        this.producer = producer;
+        this.duration = duration;
+        this.posterFileName = posterFileName;
+        this.posterData = posterData;
+        this.idInstitution = idInstitution;
+    }
 
     public ShowDTO() {
     }

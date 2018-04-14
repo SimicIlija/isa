@@ -7,6 +7,7 @@ import com.isa.projekcije.model.Projection;
 import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.dto.ProjectionDTO;
 import com.isa.projekcije.service.AuditoriumService;
+import com.isa.projekcije.service.InstitutionService;
 import com.isa.projekcije.service.ProjectionService;
 import com.isa.projekcije.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class ProjectionController {
     private AuditoriumService auditoriumService;
 
     @Autowired
+    private InstitutionService institutionService;
+
+    @Autowired
     private ProjectionDTOToProjection projectionDTOToProjection;
 
     @Autowired
@@ -46,6 +50,23 @@ public class ProjectionController {
         }
         return new ResponseEntity<>(projectionToProjectionDTO.convert(show.getProjections()), HttpStatus.OK);
     }
+
+    /*@RequestMapping(
+            value = "/getByInstitution/{idInstitution}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getByInstitution(@PathVariable Long idInstitution) {
+        Institution institution = institutionService.findOne(idInstitution);
+        if (institution == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<Projection> projections = new ArrayList<Projection>();
+        for(Auditorium auditorium : institution.getAuditoriums()) {
+            projections.addAll(auditorium.getProjections());
+        }
+        return new ResponseEntity<>(projectionToProjectionDTO.convert(projections), HttpStatus.OK);
+    }*/
 
     @RequestMapping(
             value = "/getByAuditorium/{idAuditorium}",

@@ -33,6 +33,36 @@ public class Show {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "show")
     private Set<ThemeProps> themeProps;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_institution")
+    private Institution institution;
+
+    public Institution getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(Institution institution) {
+        this.institution = institution;
+    }
+
+    public Show(String name, String genre, String producer, int duration, Institution institution) {
+        this.name = name;
+        this.genre = genre;
+        this.producer = producer;
+        this.duration = duration;
+        this.institution = institution;
+    }
+
+    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Institution institution) {
+        this.name = name;
+        this.genre = genre;
+        this.producer = producer;
+        this.duration = duration;
+        this.posterFileName = posterFileName;
+        this.posterData = posterData;
+        this.institution = institution;
+    }
+
     public Show() {
     }
 

@@ -26,6 +26,28 @@ public class Institution {
 
     private Boolean isCinema;
 
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
+    private List<Show> shows;
+
+    public List<Show> getShows() {
+        return shows;
+    }
+
+    public void setShows(List<Show> shows) {
+        this.shows = shows;
+    }
+
+    public Institution(String name, double longitude, double latitude, String description, List<Auditorium> auditoriums,
+                       boolean isCinema, List<Show> shows) {
+        this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.description = description;
+        this.auditoriums = auditoriums;
+        this.isCinema = isCinema;
+        this.shows = shows;
+    }
+
     public Institution() {
     }
 

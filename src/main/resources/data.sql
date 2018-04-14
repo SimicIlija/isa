@@ -17,10 +17,8 @@ insert into seat (row, seat_number, id_segment) values (1, 2, 1);
 insert into seat (row, seat_number, id_segment) values (1, 3, 1);
 insert into seat (row, seat_number, id_segment) values (1, 4, 1);
 
-
-
-insert into show(name,genre,producer,duration) values ('Red sparrow','thriller', 'Francis Lorens', 141);
-insert into show(name,genre,producer,duration) values ('LED','drama', 'Oleg Trofim', 113);
+insert into show(name,genre,producer,duration, id_institution) values ('Red sparrow','thriller', 'Francis Lorens', 141, 1);
+insert into show(name,genre,producer,duration, id_institution) values ('LED','drama', 'Oleg Trofim', 113, 1);
 
 insert into actor(name, lastname) values ('imeGlumca1', 'prezimeGlumca1');
 insert into actor(name, lastname) values ('imeGlumca2', 'prezimeGlumca2');

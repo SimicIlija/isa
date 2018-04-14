@@ -3,10 +3,13 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.ShowDTOToShowConverter;
 import com.isa.projekcije.converters.ShowToShowDTOConverter;
 import com.isa.projekcije.model.Actor;
+import com.isa.projekcije.model.Institution;
+import com.isa.projekcije.model.Projection;
 import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.dto.ShowActorDTO;
 import com.isa.projekcije.model.dto.ShowDTO;
 import com.isa.projekcije.service.ActorService;
+import com.isa.projekcije.service.InstitutionService;
 import com.isa.projekcije.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +17,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/show")
 public class ShowController {
+
+    @Autowired
+    private InstitutionService institutionService;
 
     @Autowired
     private ShowService showService;
@@ -29,6 +38,21 @@ public class ShowController {
 
     @Autowired
     private ShowToShowDTOConverter showToShowDTOConverter;
+
+    @RequestMapping(
+            value = "/getByInstitution/{idInstitution}",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getByInstitution(@PathVariable Long idInstitution) {
+        Institution institution = institutionService.findOne(idInstitution);
+        List<Show> shows = new ArrayList<Show>();
+        for (Show show : institution.getShows()) {
+            for (Projection projection : show.getProjections()) {
+
+            }
+        }
+        return new ResponseEntity<>(showToShowDTOConverter.convert(shows), HttpStatus.OK);
+    }
 
     @RequestMapping(
             value = "/{id}",
