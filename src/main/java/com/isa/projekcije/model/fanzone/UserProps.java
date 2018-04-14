@@ -1,7 +1,10 @@
 package com.isa.projekcije.model.fanzone;
 
+import com.isa.projekcije.model.User;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class UserProps {
@@ -16,16 +19,19 @@ public class UserProps {
     private String description;
 
     @Column(nullable = false)
-    private double price;
-
-    @Column(nullable = false)
     private Date endDate;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserPropsState state;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
     private String imageUrl;
+
+    @OneToMany(mappedBy = "userProps")
+    private Set<Bid> bids;
 
     public UserProps() {
     }
@@ -54,14 +60,6 @@ public class UserProps {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public Date getEndDate() {
         return endDate;
     }
@@ -84,5 +82,21 @@ public class UserProps {
 
     public void setState(UserPropsState state) {
         this.state = state;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
     }
 }

@@ -44,7 +44,7 @@ public class UserPropsDto {
 
     public UserProps createUserProps() {
         UserProps userProps = new UserProps();
-        userProps.setState(UserPropsState.REJECTED);
+        userProps.setState(UserPropsState.DENIED);
         userProps.setName(this.name);
         userProps.setDescription(this.description);
         userProps.setEndDate(this.endDate);
