@@ -43,6 +43,7 @@ public class ThemePropsController {
     }
 
     /**
+     * GET api/themeprops
      * Returns only theme props available for shopping. For all users.
      */
     @RequestMapping(method = RequestMethod.GET,
@@ -60,7 +61,6 @@ public class ThemePropsController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addNewThemeProps(@Valid @RequestBody ThemePropsDTO themePropsDTO) {
-        System.out.println(themePropsDTO.toString());
         try {
             Show show = showService.findById(themePropsDTO.getShowId());
             ThemeProps themeProps = themePropsDTO.createThemeProps(show);
