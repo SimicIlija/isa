@@ -1,5 +1,6 @@
 package com.isa.projekcije.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.fanzone.Bid;
 import com.isa.projekcije.model.fanzone.UserProps;
 
@@ -43,9 +44,11 @@ public class User {
     @Column(nullable = false)
     protected String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "creator")
     private Set<UserProps> userProps;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "bidder")
     private Set<Bid> bids;
 
