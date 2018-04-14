@@ -1,9 +1,6 @@
 package com.isa.projekcije.service;
 
-import com.isa.projekcije.model.Institution;
-import com.isa.projekcije.model.InstitutionAdmin;
-import com.isa.projekcije.model.RegisteredUser;
-import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.*;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
 import com.isa.projekcije.repository.UserRepository;
@@ -27,6 +24,7 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
@@ -75,12 +73,11 @@ public class UserService {
     }
 
     public void setCurrentUser(User user) {
+
         final Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
         final Authentication authentication = new PreAuthenticatedAuthenticationToken(user.getId(), null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        //HttpSession session = request.getSession(true);
-        //session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
     }
 
