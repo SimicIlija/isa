@@ -1,5 +1,8 @@
 package com.isa.projekcije.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class InstitutionAdmin extends User {
     public InstitutionAdmin() {
         super();

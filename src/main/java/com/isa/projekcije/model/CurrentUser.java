@@ -3,7 +3,9 @@ package com.isa.projekcije.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import javax.persistence.Entity;
 import java.util.Collection;
+
 
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
     private User user;

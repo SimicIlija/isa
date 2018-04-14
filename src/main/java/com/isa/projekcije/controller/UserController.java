@@ -1,5 +1,6 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.model.ServletContextImpl;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
@@ -14,13 +15,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.isa.projekcije.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
 
+    public HttpServletRequest request;
+
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    public UserController(HttpServletRequest request) {
+        this.request = request;
+    }
 
     @RequestMapping(
             value = "/login",
@@ -32,8 +43,10 @@ public class UserController {
 
         if (user != null && user.getPassword().equals(loginDTO.getPassword())) {
             userService.setCurrentUser(user);
+            request.getSession().setAttribute("user", user);
             return new ResponseEntity(user, HttpStatus.OK);
         }
+
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
@@ -62,5 +75,11 @@ public class UserController {
 
     }
 
+    public HttpServletRequest getRequest() {
+        return request;
+    }
 
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
 }

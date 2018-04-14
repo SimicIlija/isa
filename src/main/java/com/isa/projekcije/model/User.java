@@ -107,5 +107,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+        this.role = Role.REGISTERED;
     }
 }
