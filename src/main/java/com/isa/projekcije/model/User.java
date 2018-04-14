@@ -1,7 +1,12 @@
 package com.isa.projekcije.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.isa.projekcije.model.fanzone.Bid;
+import com.isa.projekcije.model.fanzone.UserProps;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_table")
@@ -31,7 +36,7 @@ public class User {
 
 
     @NotNull
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     protected String email;
 
 
@@ -39,7 +44,13 @@ public class User {
     @Column(nullable = false)
     protected String password;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "creator")
+    private Set<UserProps> userProps;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "bidder")
+    private Set<Bid> bids;
 
     public User() {
     }
@@ -99,6 +110,22 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Set<UserProps> getUserProps() {
+        return userProps;
+    }
+
+    public void setUserProps(Set<UserProps> userProps) {
+        this.userProps = userProps;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
     }
 
     public User(String firstName, String lastName, String phoneNumber, String email, String password) {
