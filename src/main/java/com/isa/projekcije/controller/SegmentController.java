@@ -27,7 +27,7 @@ public class SegmentController {
     private SegmentToSegmnetDTOConverter segmentToSegmnetDTOConverter;
 
     @RequestMapping(
-            value = "/{idAuditorium}",
+            value = "/getByAuditorium/{idAuditorium}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

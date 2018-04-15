@@ -16,7 +16,7 @@
     <div class="col-lg-12">
         <div class="panel with-nav-tabs panel-default">
             <div class="panel-heading">
-                <ul class="nav nav-tabs">
+                <ul id="tabovi" , class="nav nav-tabs">
                     <li class="active dropdown">
                         <a href="#" data-toggle="dropdown">Home <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -38,7 +38,7 @@
                 </ul>
             </div>
             <div class="panel-body">
-                <div class="tab-content">
+                <div id="divovi" , class="tab-content">
                     <div class="tab-pane fade in active" id="tabHomeMyProfile">profil</div>
                     <div class="tab-pane fade" id="tabTheatres">pozorista</div>
                     <div class="tab-pane fade" id="tabCinemas">
@@ -84,5 +84,61 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="editAuditoriumModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editAuditoriumForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="idAuditoriuEdit"/>
+                    <p>
+                        <label>Name</label> <input class="form-control" type="text" name="name"
+                                                   id="nameAuditoriumEdit"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editAuditoriumButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addAuditoriumModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New auditorium</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addAuditoriumForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addAuditoriumInstitutionId"/>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Name"
+                               id="addAuditoriumName"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addAuditoriumButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

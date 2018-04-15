@@ -3,8 +3,12 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.InstitutionDTOToInstitutionConverter;
 import com.isa.projekcije.converters.InstitutionToInstitutionDTOConverter;
 import com.isa.projekcije.model.Institution;
+import com.isa.projekcije.model.InstitutionAdmin;
+import com.isa.projekcije.model.Role;
+import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.InstitutionDTO;
 import com.isa.projekcije.service.InstitutionService;
+import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,8 +30,24 @@ public class InstitutionController {
     @Autowired
     private InstitutionDTOToInstitutionConverter institutionDTOToInstitutionConverter;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(
-            value = "getInstitutions",
+            value = "/getById/{idInstitution}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getByInstitution(@PathVariable Long idInstitution) {
+        Institution institution = institutionService.findOne(idInstitution);
+        if (institution == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(institution), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getInstitutions",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getInstitutions() {
@@ -90,6 +110,20 @@ public class InstitutionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(deleted), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getInstitutionsByAdmin",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity getInstitutionsByAdmin() {
+        User loggedIn = userService.getCurrentUser();
+        if (loggedIn.getRole().equals(Role.ADMIN_INST)) {
+            if (((InstitutionAdmin) loggedIn).getInstitutions() != null) {
+                return new ResponseEntity(institutionToInstitutionDTOConverter.convert(((InstitutionAdmin) loggedIn).getInstitutions()), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
 }

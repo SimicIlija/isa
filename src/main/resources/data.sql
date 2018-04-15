@@ -1,10 +1,18 @@
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Jelena','Stanarevic','jelena@gmail.com', '596262652', 'jelena','REGISTERED');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Ilija','Simic','sima@gmail.com', '5558896', 'ilija','ADMIN_SYS');
+
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Marko','Markovic','marko@gmail.com', '5558896', 'marko','ADMIN_SYS');
+
+insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Smiljana','Dragoljevic','smiljana@gmail.com', '797679', 'smiljana','ADMIN_INST');
+
+insert into institution_admin (id) VALUES (3);
+
 
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'ArenaCineplex', 1.0, 1.0, true);
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'Cinestar', 1.0, 1.0, true);
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opissss...', 'SNP', 2.0, 2.0, false);
+
+insert into admin_institution (admin_id, institution_id) values (3, 1);
 
 insert into auditorium (name, id_institution) values ('sala1', 1);
 insert into auditorium (name, id_institution) values ('sala2', 1);

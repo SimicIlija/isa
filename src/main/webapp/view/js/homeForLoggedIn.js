@@ -7,9 +7,260 @@ function getFormData($form) {
     });
     return ordered_array;
 }
+$(document).ready(function () {
+    /*$.ajax({
+        url: "institution/getInstitutionsByAdmin",
+        dataType: "json",
+        success: function (data) {
+            for(i = 0; i < data.length; i++) {
+                $(".nav nav-tabs").append("<li><a href=\"#tab" + data[i].id + "\" data-toggle=\"tab\">" + data[i].name + "</a></li>");
+                $(".tab-content").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
+            }
+        }
+    });*/
+
+    $.ajax({
+        async: false,
+        url: "institution/getInstitutions",
+        dataType: "json",
+        success: function (data) {
+            for (i = 0; i < data.length; i++) {
+                $("#tabovi").append("<li><a href=\"#tab" + data[i].id + "\" onclick='return showInstitution(" + data[i].id + ")' data-toggle=\"tab\">" + data[i].name + "</a></li>");
+                $("#divovi").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
+            }
+        }
+    });
+
+    $("#addAuditoriumButton").click(function () {
+        var idInstitution = $("#addAuditoriumInstitutionId").val();
+        auditoriumName = $("#addAuditoriumName").val();
+        var dataAuditorium = JSON.stringify({"name": auditoriumName, "idInstitution": idInstitution});
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "auditorium/addAuditorium/",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataAuditorium,
+            success: function (data) {
+                newAuditorium = "<tr>"
+                    + "<td id='auditoriumName" + data.id + "'>" + data.name + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editAuditorium(" + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteAuditorium(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showSegments(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-default\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+                $("#addAuditoriumModal").modal('toggle');
+                $("#tableAuditoriumsTBody" + idInstitution).append(newAuditorium);
+            }
+        });
+    });
+
+    $("#editAuditoriumButton").click(function () {
+        idAuditorium = $("#idAuditoriuEdit").val();
+        auditoriumName = $("#nameAuditoriumEdit").val();
+        var dataAuditorium = JSON.stringify({"name": auditoriumName});
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "auditorium/editAuditorium/" + idAuditorium,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataAuditorium,
+            success: function (data) {
+                $('#auditoriumName' + data.id).text(data.name);
+                $('#editAuditoriumModal').modal('toggle');
+            }
+        });
+    });
+});
+
+function showInstitution(idInstitution) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "institution/getById/" + idInstitution,
+        dataType: "json",
+        success: function (data) {
+            var tab = $('#tab' + idInstitution);
+            tab.empty();
+            newInstitution =
+                "<div>"
+                + "<h2>" + data.name + "</h2>"
+                + "<p>" + data.description + "</p>"
+
+                + "</div><br><br>";
+            tab.append(newInstitution);
+            tabela = "<div class='container'>" +
+                "<div class='col-lg-6'>" +
+                "<div class=\"span7\">\n" +
+                "                                <div class=\"widget stacked widget-table action-table\">\n" +
+                "                                    <div class=\"widget-header\">\n" +
+                "<a href=\"#\" onclick=\"return addAuditorium(" + idInstitution + ");\" class=\"btn btn-small btn-success\">"
+                + "<i class=\"glyphicon glyphicon-plus\"></i>"
+                + "</a>&nbsp;&nbsp;&nbsp;" +
+                "                                        <h3>Auditoriums</h3>\n" +
+
+                "                                    </div>\n" +
+                "                                    <div class=\"widget-content\">\n" +
+                "                                        <table class=\"table table-striped table-bordered\">\n" +
+                "                                            <thead>\n" +
+                "                                            <tr>\n" +
+                "                                                <th>Name</th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
+                "                                            </tr>\n" +
+                "                                            </thead>\n" +
+                "                                            <tbody id=\"tableAuditoriumsTBody" + idInstitution + "\">\n" +
+                "                                            </tbody>\n" +
+                "                                        </table>\n" +
+                "                                    </div>\n" +
+                "                                </div>\n" +
+                "                            </div>" +
+                "</div>" +
+                "<div class='col-lg-6'>" +
+                "<div class=\"span7\">\n" +
+                "                                <div class=\"widget stacked widget-table action-table\">\n" +
+                "                                    <div id='divAddSegment' class=\"widget-header\">\n" +
+                "                                        <h3>Segments</h3>\n" +
+                "                                    </div>\n" +
+                "                                    <div class=\"widget-content\">\n" +
+                "                                        <table class=\"table table-striped table-bordered\">\n" +
+                "                                            <thead>\n" +
+                "                                            <tr>\n" +
+                "                                                <th>Lable</th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
+                "                                            </tr>\n" +
+                "                                            </thead>\n" +
+                "                                            <tbody id=\"tableSegmentsTBody" + idInstitution + "\">\n" +
+                "                                            </tbody>\n" +
+                "                                        </table>\n" +
+                "                                    </div>\n" +
+                "                                </div>\n" +
+                "                            </div>" +
+                "</div>" +
+                "</div>";
+            tab.append(tabela);
+
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: "auditorium/getByInstitution/" + idInstitution,
+                dataType: "json",
+                success: function (data) {
+                    for (i = 0; i < data.length; i++) {
+                        newAuditorium = "<tr>"
+                            + "<td id='auditoriumName" + data[i].id + "'>" + data[i].name + "</td>"
+                            + "<td class=\"td-actions\">"
+                            + "<a href=\"#\" onclick=\"return editAuditorium(" + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
+                            + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                            + "</a>&nbsp;&nbsp;&nbsp;"
+                            + "<a href=\"#\" onclick=\"return deleteAuditorium(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-danger\">\n"
+                            + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                            + "</a>&nbsp;&nbsp;&nbsp;"
+                            + "<a href=\"#\" onclick=\"return showSegments(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-default\">"
+                            + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                            + "</a>&nbsp;&nbsp;&nbsp;"
+                            + "</td>"
+                            + "</tr>";
+
+                        $("#tableAuditoriumsTBody" + idInstitution).append(newAuditorium);
+                    }
+                }
+            });
+        }
+    });
+    return false;
+}
+
+function editAuditorium(idAuditorium) {
+    $("#idAuditoriuEdit").val(idAuditorium);
+    auditoriumName = $("#auditoriumName" + idAuditorium).text();
+    $("#nameAuditoriumEdit").val(auditoriumName);
+    $("#editAuditoriumModal").modal('toggle');
+    return false;
+}
+
+function deleteAuditorium(idInstitution, idAuditorium) {
+    $.ajax({
+        async: false,
+        type: "DELETE",
+        url: "auditorium/deleteAuditorium/" + idAuditorium,
+        dataType: "json",
+        success: function (data) {
+            $('#auditoriumName' + data.id).closest("tr").remove();
+        }
+    });
+    return false;
+}
+
+function addAuditorium(idInstitution) {
+    $('#addAuditoriumInstitutionId').val(idInstitution);
+    $('#addAuditoriumName').val('');
+    $("#addAuditoriumModal").modal('toggle');
+    return false;
+}
+
+function showSegments(idInstitution, idAuditorium) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "segment/getByAuditorium/" + idAuditorium,
+        dataType: "json",
+        success: function (data) {
+            $('#tableSegmentsTBody').empty();
+            for (i = 0; i < data.length; i++) {
+                newSegment = "<tr>"
+                    + "<td id='auditoriumName" + data[i].id + "'>" + data[i].label + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editSegment(" + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteSegment(" + data[i].id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+
+                $("#tableSegmentsTBody").append(newSegment);
+            }
+            $('#divAddSegment').empty();
+            var addButton =
+                "<a href=\"#\" onclick=\"return addSegment(" + idAuditorium + ");\" class=\"btn btn-small btn-success\">"
+                + "<i class=\"glyphicon glyphicon-plus\"></i>"
+                + "</a>&nbsp;&nbsp;&nbsp;<h3>Segments</h3>";
+
+            $('#divAddSegment').append(addButton);
+        }
+    });
+    return false;
+}
+
+function editSegment(idSegment) {
+    alert('edits' + idSegment);
+    return false;
+}
+
+function deleteSegment(idSegment) {
+    alert('deletes' + idSegment);
+    return false;
+}
+
+function addSegment(idAuditorium) {
+    alert('adds' + idAuditorium);
+    return false;
+}
 
 function tabCinemasClick() {
     $.ajax({
+        async: false,
+        type: "GET",
         url: "institution/getCinemas",
         dataType: "json",
         success: function (data) {
@@ -181,8 +432,7 @@ function configurationClick(idProjection) {
 
 }
 
-
-function tabCinemaSettingsClick() {
+/*function tabCinemaSettingsClick() {
     var tableCinemasTBody = $('#tableCinemasTBody');
     tableCinemasTBody.empty();
     $.ajax({
@@ -193,16 +443,16 @@ function tabCinemaSettingsClick() {
             cinemaDiv.empty();
             for (i = 0; i < data.length; i++) {
                 newCinema = "<tr>"
-                    + "<td>" + data[i].name + "</td>"
-                    + "<td>" + data[i].description + "</td>"
+                    + "<td id='cinemaName" + data[i].id + "'>" + data[i].name + "</td>"
+                    + "<td id='cinemaDescription" + data[i].id + "'>" + data[i].description + "</td>"
                     + "<td class=\"td-actions\">"
-                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-primary\">"
+                    + "<a href=\"#\" onclick=\"return editCinema(" + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
                     + "<i class=\"glyphicon glyphicon-pencil\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
-                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-danger\">\n"
+                    + "<a href=\"#\" onclick=\"return deleteCinema(" + data[i].id + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
-                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-default\">"
+                    + "<a href=\"#\" class=\"btn btn-small btn-default\">"
                     + "<i class=\"glyphicon glyphicon-film\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
                     + "</td>"
@@ -212,7 +462,7 @@ function tabCinemaSettingsClick() {
             }
         }
     });
-}
+}*/
 
 function tabFriendsClick() {
     var friendsDiv = $('#friendsDiv');
