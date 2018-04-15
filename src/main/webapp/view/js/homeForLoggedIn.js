@@ -97,3 +97,35 @@ function loadProjections(idShow, newShow) {
 function projectionClick(dateProjection, idShow) {
     alert(dateProjection + " " + idShow);
 }
+
+function tabCinemaSettingsClick() {
+    var tableCinemasTBody = $('#tableCinemasTBody');
+    tableCinemasTBody.empty();
+    $.ajax({
+        url: "institution/getCinemas",
+        dataType: "json",
+        success: function (data) {
+            var cinemaDiv = $('#cinemaDiv');
+            cinemaDiv.empty();
+            for (i = 0; i < data.length; i++) {
+                newCinema = "<tr>"
+                    + "<td>" + data[i].name + "</td>"
+                    + "<td>" + data[i].description + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-default\">"
+                    + "<i class=\"glyphicon glyphicon-film\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+
+                tableCinemasTBody.append(newCinema);
+            }
+        }
+    });
+}
