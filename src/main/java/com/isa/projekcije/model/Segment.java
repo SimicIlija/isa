@@ -11,6 +11,15 @@ public class Segment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+
+    @NotNull
+    @Column(nullable = false)
+    private int rowCount;
+
+    @NotNull
+    @Column(nullable = false)
+    private int seatsInRowCount;
+
     @NotNull
     @Column(nullable = false)
     private String label;
@@ -33,6 +42,14 @@ public class Segment {
         this.label = label;
         this.auditorium = auditorium;
         this.closed = closed;
+    }
+
+    public Segment(int rowCount, int seatsInRowCount, String label, boolean closed, Auditorium auditorium) {
+        this.rowCount = rowCount;
+        this.seatsInRowCount = seatsInRowCount;
+        this.label = label;
+        this.closed = closed;
+        this.auditorium = auditorium;
     }
 
     public Segment(String label, Auditorium auditorium, boolean closed, List<Seat> seats) {
@@ -80,5 +97,21 @@ public class Segment {
 
     public void setSeats(List<Seat> seats) {
         this.seats = seats;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getSeatsInRowCount() {
+        return seatsInRowCount;
+    }
+
+    public void setSeatsInRowCount(int seatsInRowCount) {
+        this.seatsInRowCount = seatsInRowCount;
     }
 }

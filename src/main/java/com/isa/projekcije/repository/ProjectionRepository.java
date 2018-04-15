@@ -21,5 +21,5 @@ public interface ProjectionRepository extends JpaRepository<Projection, Long> {
 
     Projection findById(Long id);
 
-
+    List<Projection> findByDateBetweenAndShowId(Date start, Date end, Long idShow);
 }
