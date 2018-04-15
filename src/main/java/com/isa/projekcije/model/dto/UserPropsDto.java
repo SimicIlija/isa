@@ -1,5 +1,6 @@
 package com.isa.projekcije.model.dto;
 
+import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.fanzone.UserProps;
 import com.isa.projekcije.model.fanzone.UserPropsState;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -42,12 +43,13 @@ public class UserPropsDto {
         this.endDate = endDate;
     }
 
-    public UserProps createUserProps() {
+    public UserProps createUserProps(User creator) {
         UserProps userProps = new UserProps();
         userProps.setState(UserPropsState.DENIED);
         userProps.setName(this.name);
         userProps.setDescription(this.description);
         userProps.setEndDate(this.endDate);
+        userProps.setCreator(creator);
         return userProps;
     }
 }
