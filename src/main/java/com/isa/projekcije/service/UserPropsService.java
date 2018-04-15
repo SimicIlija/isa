@@ -23,4 +23,8 @@ public class UserPropsService {
     public UserProps create(UserProps userProps) {
         return userPropsRepository.save(userProps);
     }
+
+    public UserProps update(UserProps userProps) {
+        return userPropsRepository.save(userProps);
+    }
 }

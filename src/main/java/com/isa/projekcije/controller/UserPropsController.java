@@ -3,6 +3,7 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.UserPropsDto;
 import com.isa.projekcije.model.fanzone.UserProps;
+import com.isa.projekcije.model.fanzone.UserPropsState;
 import com.isa.projekcije.service.UserPropsService;
 import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,25 @@ public class UserPropsController {
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
+
+    /**
+     * POST api/userprops/{id}
+     * Approve or deny user props by fan zone admin
+     * TODO : Check if admin of fun zone is sending request
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity acceptUserProps(@PathVariable long id, @RequestBody boolean approved) {
+        try {
+            UserProps userProps = userPropsService.findById(id);
+            userProps.setState(approved ? UserPropsState.APPROVED : UserPropsState.DENIED);
+            userProps = userPropsService.update(userProps);
+            return new ResponseEntity(userProps, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
     }
 }
