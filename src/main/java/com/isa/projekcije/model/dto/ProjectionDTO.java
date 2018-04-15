@@ -15,6 +15,11 @@ public class ProjectionDTO {
         this.date = date;
     }
 
+    public ProjectionDTO(Long id_show, String date) {
+        this.id_show = id_show;
+        this.date = date;
+    }
+
     public ProjectionDTO(Long id, Long id_show, Long id_auditorium, String date) {
         this.id = id;
         this.id_show = id_show;

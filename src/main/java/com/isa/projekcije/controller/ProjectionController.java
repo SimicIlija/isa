@@ -1,10 +1,12 @@
 package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.ProjectionDTOToProjection;
+import com.isa.projekcije.converters.ProjectionToConfigurationDTO;
 import com.isa.projekcije.converters.ProjectionToProjectionDTO;
 import com.isa.projekcije.model.Auditorium;
 import com.isa.projekcije.model.Projection;
 import com.isa.projekcije.model.Show;
+import com.isa.projekcije.model.dto.ConfigurationDTO;
 import com.isa.projekcije.model.dto.ProjectionDTO;
 import com.isa.projekcije.service.AuditoriumService;
 import com.isa.projekcije.service.InstitutionService;
@@ -15,6 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/projections")
@@ -37,6 +45,9 @@ public class ProjectionController {
 
     @Autowired
     private ProjectionToProjectionDTO projectionToProjectionDTO;
+
+    @Autowired
+    private ProjectionToConfigurationDTO projectionToConfigurationDTO;
 
     @RequestMapping(
             value = "/getByShow/{idShow}",
@@ -126,6 +137,39 @@ public class ProjectionController {
         ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(saved);
 
         return new ResponseEntity(projectionDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getProjectionByDate",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProjectionByDate(@RequestBody ProjectionDTO projectionDTO) {
+        try {
+            Date startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(projectionDTO.getDate() + " 00:00:00");
+            Date endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(projectionDTO.getDate() + " 23:59:59");
+            List<Projection> availableTime = projectionService.findByDate(startTime, endTime, projectionDTO.getId_show());
+            List<ProjectionDTO> available = projectionToProjectionDTO.convert(availableTime);
+            return new ResponseEntity(available, HttpStatus.OK);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(
+            value = "/getConfigurationForProjection/{idProjection}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getConfigurationForProjection(@PathVariable Long idProjection) {
+        Projection projection = projectionService.findById(idProjection);
+        if (projection != null) {
+            ConfigurationDTO configurationDTO = projectionToConfigurationDTO.convert(projection);
+            return new ResponseEntity(configurationDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
 

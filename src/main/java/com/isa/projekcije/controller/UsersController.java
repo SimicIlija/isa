@@ -23,12 +23,13 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasAuthority('ADMIN_SYS')")
+
     @RequestMapping("/getAllUsers")
     public ResponseEntity<?> getUsersPage() {
         LOGGER.debug("Users page triggered");
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
+
 
     @RequestMapping(
             value = "/registerInstitutionAdmin",

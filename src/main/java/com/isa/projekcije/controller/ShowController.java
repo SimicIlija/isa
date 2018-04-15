@@ -70,7 +70,7 @@ public class ShowController {
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/getById/{id}",
             method = RequestMethod.GET
     )
     public ResponseEntity<?> getById(@PathVariable Long id) {

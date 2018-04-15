@@ -27,7 +27,7 @@ public class UserServiceTest extends ProjekcijeApplicationTests {
 
     @Test
     public void createNewUserShouldReturnUser(){
-        final RegistrationDTO registrationDTO = new RegistrationDTO("Marko", "Markovic", "021/858-988", "marko@gmail.com", "newPassword", "newPassword");
+        final RegistrationDTO registrationDTO = new RegistrationDTO("Marko", "Markovic", "021/858-988", "markoa@gmail.com", "newPassword", "newPassword");
         final User createdUser = userService.createUser(registrationDTO);
         assertThat(createdUser).isNotNull();
         assertThat(createdUser.getRole()).isEqualTo(Role.REGISTERED);
@@ -50,7 +50,7 @@ public class UserServiceTest extends ProjekcijeApplicationTests {
 
     @Test
     public void loginWithNonExistingAccountShouldReturnNull(){
-        final LoginDTO loginDTO = new LoginDTO("marko@gmail.com","marko");
+        final LoginDTO loginDTO = new LoginDTO("markooo@gmail.com", "markooo");
         final User user = userService.findUser(loginDTO);
         assertThat(user).isNull();
     }

@@ -51,4 +51,8 @@ public class ProjectionService {
         projectionRepository.delete(projection);
         return projection;
     }
+
+    public List<Projection> findByDate(Date start, Date end, Long idShow) {
+        return projectionRepository.findByDateBetweenAndShowId(start, end, idShow);
+    }
 }

@@ -7,8 +7,10 @@ public class SegmentDTO {
     private boolean closed;
     private Long idAuditorium;
 
+
     public SegmentDTO() {
     }
+
 
     public SegmentDTO(Long id, String label, boolean closed, Long idAuditorium) {
         this.id = id;

@@ -8,38 +8,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/friendships")
 public class FriendshipController {
 
+
     @Autowired
     private FriendshipService friendshipService;
+
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserController userController;
 
     @RequestMapping(
-            value = "/create",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity create(@RequestBody User receiver) {
-        User user = (User) userController.getRequest().getSession().getAttribute("user");
-        // final Friendship friendship = friendshipService.create(sender, receiver.getId());
-        final Friendship friendship = new Friendship();
-
-
-        return new ResponseEntity<>(friendship, HttpStatus.CREATED);
+            value = "/create/{idCreate}",
+            method = RequestMethod.POST)
+    public ResponseEntity create(@PathVariable Long idCreate) {
+        User sender = (User) userService.getCurrentUser();
+        User receiver = userService.getUserById(idCreate);
+        final Friendship friendship = friendshipService.create(sender, receiver.getEmail());
+        if (friendship == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @RequestMapping(
+            value = "/accept/{senderId}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity accept(@PathVariable long senderId) {
+        final User receiver = (User) userService.getCurrentUser();
+        final Friendship updatedFriendship = friendshipService.accept(senderId, receiver.getId());
+
+        return new ResponseEntity<>(updatedFriendship, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getFriendsNotAccepted",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getFriendsNotAccepted() {
+        List<Friendship> friendships = friendshipService.getFriendsNotAccepted();
+        return new ResponseEntity<>(friendships, HttpStatus.OK);
+    }
 }
