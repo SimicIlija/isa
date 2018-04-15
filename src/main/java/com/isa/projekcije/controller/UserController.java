@@ -22,16 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/user")
 public class UserController {
 
-    public HttpServletRequest request;
 
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    public UserController(HttpServletRequest request) {
-        this.request = request;
-    }
 
     @RequestMapping(
             value = "/login",
@@ -43,7 +38,7 @@ public class UserController {
 
         if (user != null && user.getPassword().equals(loginDTO.getPassword())) {
             userService.setCurrentUser(user);
-            request.getSession().setAttribute("user", user);
+
             return new ResponseEntity(user, HttpStatus.OK);
         }
 
@@ -75,11 +70,5 @@ public class UserController {
 
     }
 
-    public HttpServletRequest getRequest() {
-        return request;
-    }
 
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-    }
 }

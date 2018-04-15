@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="view/style.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="view/toastr.min.js"></script>
+    <link href="view/toastr.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="row">
@@ -24,7 +26,7 @@
                     </li>
                     <li><a href="#tabTheatres" data-toggle="tab">Theatres</a></li>
                     <li><a href="#tabCinemas" data-toggle="tab" onclick='return tabCinemasClick()'>Cinemas</a></li>
-                    <li><a href="#tabFriends" data-toggle="tab">Friends</a></li>
+                    <li><a href="#tabFriends" data-toggle="tab" onclick='return tabFriendsClick()'>Friends</a></li>
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">Settings <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -44,6 +46,10 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="tabFriends">prijatelji</div>
+                    <div class="container" id="friendsDiv">
+                    </div>
+                    <div class="container" id="friendsDivAdded">
+                    </div>
                     <div class="tab-pane fade" id="tabSettingsTheatres">podesi pozoriste</div>
                     <div class="tab-pane fade" id="tabSettingsCinemas">
                         <div class="container" id="cinemaSettingDiv">

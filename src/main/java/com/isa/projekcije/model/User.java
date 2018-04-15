@@ -1,5 +1,6 @@
 package com.isa.projekcije.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.fanzone.Bid;
 import com.isa.projekcije.model.fanzone.UserProps;
@@ -8,10 +9,22 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+
 @Entity
 @Table(name = "user_table")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,9 +61,13 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private Set<UserProps> userProps;
 
+
     @JsonIgnore
     @OneToMany(mappedBy = "bidder")
     private Set<Bid> bids;
+
+    private GrantedAuthority authorities;
+
 
     public User() {
     }
@@ -65,8 +82,9 @@ public class User {
 
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
+
 
     public void setId(long id) {
         this.id = id;
@@ -129,6 +147,7 @@ public class User {
     }
 
     public User(String firstName, String lastName, String phoneNumber, String email, String password) {
+        //setCustomAuthorities("REGISTERED");
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

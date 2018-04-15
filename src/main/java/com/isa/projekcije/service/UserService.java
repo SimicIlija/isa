@@ -15,16 +15,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 @Service
 public class UserService {
-    @Autowired
+
+
     private UserRepository userRepository;
 
+
+    public HttpServletRequest request;
+
+    @Autowired
+    public UserService(UserRepository userRepository, HttpServletRequest request) {
+        this.userRepository = userRepository;
+        this.request = request;
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
@@ -51,8 +62,17 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        LOGGER.debug("Getting all users");
-        return userRepository.findAll(new Sort("email"));
+
+        List<User> users = userRepository.findAll(new Sort("email"));
+        /*User user = (User) request.getSession().getAttribute("user");
+            for(User u : users){
+                if(u.getEmail().equals(user.getEmail())){
+                    users.remove(u);
+                    break;
+                }
+            }*/
+        return users;
+
     }
 
     public User getUserById(Long id) {
@@ -73,20 +93,37 @@ public class UserService {
     }
 
     public void setCurrentUser(User user) {
-
-        final Collection<GrantedAuthority> authorities = new ArrayList<>();
+        request.getSession().setAttribute("user", user);
+        /* Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
-        final Authentication authentication = new PreAuthenticatedAuthenticationToken(user.getId(), null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+         Authentication authentication = new PreAuthenticatedAuthenticationToken(user.getId(), null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);*/
 
     }
 
     public User getCurrentUser() {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        try {
-            return userRepository.findById((Long) auth.getPrincipal());
-        } catch (Exception e) {
-            throw new RuntimeException();
+        return (User) request.getSession().getAttribute("user");
+         /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getName());
+        if(auth.getName().equals("anonymousUser")){
+            return null;
         }
+        try {
+            Long id = Long.parseLong(auth.getName());
+            return userRepository.findById(id);
+        } catch (Exception e) {
+           return null;
+        }*/
     }
+
+
+    public HttpServletRequest getRequest() {
+        return null;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+
 }

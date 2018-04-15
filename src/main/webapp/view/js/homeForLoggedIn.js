@@ -1,3 +1,13 @@
+function getFormData($form) {
+    var unordered_array = $form.serializeArray();
+    var ordered_array = {};
+
+    $.map(unordered_array, function (n, i) {
+        ordered_array[n['name']] = n['value'];
+    });
+    return ordered_array;
+}
+
 function tabCinemasClick() {
     $.ajax({
         url: "institution/getCinemas",
@@ -98,6 +108,7 @@ function projectionClick(dateProjection, idShow) {
     alert(dateProjection + " " + idShow);
 }
 
+
 function tabCinemaSettingsClick() {
     var tableCinemasTBody = $('#tableCinemasTBody');
     tableCinemasTBody.empty();
@@ -129,3 +140,72 @@ function tabCinemaSettingsClick() {
         }
     });
 }
+
+function tabFriendsClick() {
+    var friendsDiv = $('#friendsDiv');
+    addFriend = "<button type=\"button\" class=\"btn btn-primary\">Add friend</button>";
+    $.ajax({
+        url: "users/getAllUsers",
+        dataType: "json",
+        success: function (data) {
+
+            friendsDiv.empty();
+            for (i = 0; i < data.length; i++) {
+                newFriendship =
+                    "<div class='container'>"
+                    + "<div class='divFriendsToAdd'>"
+                    + "<p>" + data[i].firstName + " " + data[i].lastName + " " + data[i].email
+                    + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"dodajPrijatelja(" + data[i].id + ")\">Add friend</button></p>"
+                    + "</div>"
+                    + "</div>";
+                friendsDiv.append(newFriendship);
+            }
+        }
+    });
+
+
+}
+
+function dodajPrijatelja(idFriend) {
+
+    $.ajax({
+        async: false,
+        url: "friendships/create/" + idFriend,
+        type: "POST",
+
+        success: function (data) {
+            if (data != "") {
+                toastr["error"]("Failed to add friend");
+
+            } else {
+                $.ajax({
+                    url: "friendships/getFriendsNotAccepted",
+                    dataType: "json",
+                    success: function (data) {
+                        var friendsDiv = $('#friendsDivAdded');
+                        friendsDiv.empty();
+                        for (i = 0; i < data.length; i++) {
+                            newFriend =
+                                "<div class='container'>"
+                                + "<div class='divFriends'>"
+
+                                + "<p>" + data[i].receiver.firstName + " " + data[i].receiver.lastName + " " + data[i].receiver.email + "   "
+                                + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"obrisiZahtev(" + data[i].id + ")\">Cancel request</button>"
+                                + "</div>"
+                                + "</div>";
+                            friendsDiv.append(newFriend);
+                        }
+                    }
+                });
+                toastr["success"]("Friend request sent");
+
+            }
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+
+    });
+
+}
+
+
