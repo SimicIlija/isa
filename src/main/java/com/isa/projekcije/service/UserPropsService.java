@@ -27,4 +27,8 @@ public class UserPropsService {
     public UserProps update(UserProps userProps) {
         return userPropsRepository.save(userProps);
     }
+
+    public List<UserProps> findApproved() {
+        return userPropsRepository.findApproved();
+    }
 }

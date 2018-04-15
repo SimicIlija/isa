@@ -1,5 +1,6 @@
 package com.isa.projekcije.model.fanzone;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.User;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class UserProps {
     private String imageUrl;
 
     @OneToMany(mappedBy = "userProps")
+    @JsonIgnore
     private Set<Bid> bids;
 
     public UserProps() {

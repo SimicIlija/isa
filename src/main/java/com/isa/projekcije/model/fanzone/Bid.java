@@ -8,7 +8,10 @@ import javax.persistence.*;
 public class Bid {
     @EmbeddedId
     private BidId bidId;
+
     private double price;
+
+    @Enumerated(EnumType.STRING)
     private BidState bidState;
 
     @ManyToOne(fetch = FetchType.EAGER)

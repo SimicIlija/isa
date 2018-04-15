@@ -32,15 +32,27 @@ public class UserPropsController {
     private StorageService storageService;
 
     /**
-     * GET api/userprops
+     * GET api/userprops/all
      * Returns all user props
      */
-    @RequestMapping(method = RequestMethod.GET,
+    @RequestMapping(value = "/all", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAll() {
         List<UserProps> result = userPropsService.findAll();
         return new ResponseEntity(result, HttpStatus.OK);
     }
+
+    /**
+     * GET api/userprops
+     * Returns approved user props
+     */
+    @RequestMapping(method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getApproved() {
+        List<UserProps> result = userPropsService.findApproved();
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
 
     /**
      * GET api/userprops/{id}
