@@ -41,7 +41,7 @@ public class AuditoriumControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     public void testGetAllAuditoriumsFromInstitution() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/" + AuditoriumConstants.DB_INSTITUTION_ID))
+        mockMvc.perform(get(URL_PREFIX + "/getByInstitution/" + AuditoriumConstants.DB_INSTITUTION_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(AuditoriumConstants.DB_COUNT)))
@@ -61,7 +61,7 @@ public class AuditoriumControllerTest extends ProjekcijeApplicationTests {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(auditoriumDTO);
 
-        mockMvc.perform(post(URL_PREFIX).contentType(contentType).content(json)).andExpect(status().isCreated());
+        mockMvc.perform(post(URL_PREFIX + "/addAuditorium").contentType(contentType).content(json)).andExpect(status().isCreated());
     }
 
     @Test
@@ -76,20 +76,20 @@ public class AuditoriumControllerTest extends ProjekcijeApplicationTests {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(auditoriumDTO);
 
-        mockMvc.perform(put(URL_PREFIX + "/" + AuditoriumConstants.DB_ID).contentType(contentType).content(json)).andExpect(status().isOk());
+        mockMvc.perform(put(URL_PREFIX + "/editAuditorium/" + AuditoriumConstants.DB_ID).contentType(contentType).content(json)).andExpect(status().isOk());
     }
 
     @Test
     @Transactional
     @Rollback(true)
     public void testDeleteInstitutionOK() throws Exception {
-        mockMvc.perform(delete(URL_PREFIX + "/" + AuditoriumConstants.DB_ID_TO_DELETE)).andExpect(status().isOk());
+        mockMvc.perform(delete(URL_PREFIX + "/deleteAuditorium/" + AuditoriumConstants.DB_ID_TO_DELETE)).andExpect(status().isOk());
     }
 
     @Test
     @Transactional
     @Rollback(true)
     public void testDeleteInstitutionNotFound() throws Exception {
-        mockMvc.perform(delete(URL_PREFIX + "/" + AuditoriumConstants.DB_NON_EXISTING_ID)).andExpect(status().isNotFound());
+        mockMvc.perform(delete(URL_PREFIX + "/deleteAuditorium/" + AuditoriumConstants.DB_NON_EXISTING_ID)).andExpect(status().isNotFound());
     }
 }

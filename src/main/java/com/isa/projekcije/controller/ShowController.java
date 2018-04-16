@@ -70,6 +70,21 @@ public class ShowController {
     }
 
     @RequestMapping(
+            value = "/getAllByInstitution/{idInstitution}",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getAllByInstitution(@PathVariable Long idInstitution) {
+        Institution institution = institutionService.findOne(idInstitution);
+        if (institution == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (institution.getShows() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(showToShowDTOConverter.convert(institution.getShows()), HttpStatus.OK);
+    }
+
+    @RequestMapping(
             value = "/getById/{id}",
             method = RequestMethod.GET
     )
@@ -82,6 +97,7 @@ public class ShowController {
     }
 
     @RequestMapping(
+            value = "/addShow",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -91,7 +107,7 @@ public class ShowController {
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/editShow/{id}",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -111,7 +127,7 @@ public class ShowController {
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/deleteShow/{id}",
             method = RequestMethod.DELETE
     )
     public ResponseEntity<?> delete(@PathVariable Long id) {

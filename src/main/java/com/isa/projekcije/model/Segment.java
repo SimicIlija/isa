@@ -24,8 +24,6 @@ public class Segment {
     @Column(nullable = false)
     private String label;
 
-    @NotNull
-    @Column(nullable = false)
     private boolean closed;
 
     @ManyToOne(fetch = FetchType.EAGER)

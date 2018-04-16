@@ -27,7 +27,7 @@ public class SegmentController {
     private SegmentToSegmnetDTOConverter segmentToSegmnetDTOConverter;
 
     @RequestMapping(
-            value = "/{idAuditorium}",
+            value = "/getByAuditorium/{idAuditorium}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -37,6 +37,7 @@ public class SegmentController {
     }
 
     @RequestMapping(
+            value = "/addSegment",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -46,7 +47,7 @@ public class SegmentController {
     }
 
     @RequestMapping(
-            value = "{id}",
+            value = "/editSegment/{id}",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -57,12 +58,14 @@ public class SegmentController {
         }
         edited.setLabel(segmentDTO.getLabel());
         edited.setClosed(segmentDTO.isClosed());
+        edited.setRowCount(segmentDTO.getRowCount());
+        edited.setSeatsInRowCount(segmentDTO.getSeatsInRowCount());
         Segment newSegment = segmentService.save(edited);
         return new ResponseEntity<>(segmentToSegmnetDTOConverter.convert(newSegment), HttpStatus.OK);
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/deleteSegment/{id}",
             method = RequestMethod.DELETE
     )
     public ResponseEntity<?> delete(@PathVariable Long id) {

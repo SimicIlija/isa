@@ -1,26 +1,96 @@
 $(document).ready(function () {
+    theatresHome();
+});
+
+function theatresHome() {
     $.ajax({
         url: "institution/getTheatres",
         dataType: "json",
         success: function (data) {
             var theatreDiv = $('#theatreDiv');
+            theatreDiv.empty();
             for (i = 0; i < data.length; i++) {
                 newTheatre =
 
                     "<div class='container'>"
-                    + "<div class=\"p-3 mb-2 bg-light text-dark\">"
+                    + "<div class=\"divCinemaTheatre\">"
                     + "<h2>" + data[i].name + "</h2>"
                     + "<p>" + data[i].description + "</p>"
-                    + "<a class=\"btn btn-link\" href=\"register.html\" role=\"button\">Repertoar</a>"
+                    + "<button type=\"button\" class=\"btn btn-link\" onclick=\"theatreRepertoar(" + data[i].id + ")\">Repertoar</button>"
                     + "</div>"
-
-                    "<div>"
-                    + "<h2>" + data[i].name + "</h2>"
-                    + "<p>" + data[i].description + "</p>"
-
                     + "</div>";
                 theatreDiv.append(newTheatre);
             }
         }
     });
-});
+}
+
+function theatreRepertoar(idInstitution) {
+    $.ajax({
+        async: false,
+        url: "show/getByInstitution/" + idInstitution,
+        dataType: "json",
+        success: function (data) {
+            var theatreDiv = $('#theatreDiv');
+            theatreDiv.empty();
+            var newShow;
+            var i;
+            var idShow;
+            for (i = 0; i < data.length; i++) {
+                idShow = data[i].id;
+                newShow =
+                    "<div class='container'>"
+                    + "<div class=\"divCinemaTheatre\">"
+                    + "<h2>" + data[i].name + "</h2>"
+                    + "<p>"
+                    + "<b>Genre:</b> " + data[i].genre + "<br>"
+                    + "<b>Producer:</b> " + data[i].producer + "<br>"
+                    + "<b>Duration:</b> " + data[i].duration + "min." + "<br>"
+                    + "<b>Description:</b> " + data[i].description + "<br>"
+                    + "<b>Actors:</b> ";
+                newShow = loadActors(idShow, newShow);
+                newShow += "</p>";
+                newShow = loadProjections(idShow, newShow);
+                newShow += "</div>"
+                    + "</div>";
+                theatreDiv.append(newShow);
+            }
+        }
+    });
+}
+
+function loadActors(idShow, newShow) {
+    $.ajax({
+        async: false,
+        url: "actors/getByShow/" + idShow,
+        dataType: "json",
+        success: function (dataActors) {
+            for (j = 0; j < dataActors.length; j++) {
+                newShow += dataActors[j].name + " " + dataActors[j].lastname;
+                if (j < dataActors.length - 1) {
+                    newShow += ", "
+                }
+            }
+        }
+    });
+    return newShow;
+}
+
+function loadProjections(idShow, newShow) {
+    $.ajax({
+        async: false,
+        url: "projections/getByShow/" + idShow,
+        dataType: "json",
+        success: function (dataProjections) {
+            newShow += "<p>"
+                + "<b>Projections: </b><br> ";
+            for (k = 0; k < dataProjections.length; k++) {
+                var dateProjection = (dataProjections[k].date).substring(0, 10);
+                var timeProjection = (dataProjections[k].date).substring(10, 16);
+                newShow += "&thinsp;&thinsp;" + dateProjection + "&thinsp;&thinsp;" + timeProjection + "<br>";
+            }
+            newShow += "</p>";
+        }
+    });
+    return newShow;
+}

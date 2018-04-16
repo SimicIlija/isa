@@ -22,6 +22,7 @@ public class ActorToActorDTO implements Converter<Actor, ActorDTO> {
         actorDTO.setLastname(actor.getLastname());
         actorDTO.setId(actor.getId());
         actorDTO.setName(actor.getName());
+        actorDTO.setIdShow(actor.getShow().getId());
         return actorDTO;
     }
 

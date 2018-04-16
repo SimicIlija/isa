@@ -58,7 +58,7 @@ public class ActorController {
     }
 
     @RequestMapping(
-            value = "/{idActorToDelete}",
+            value = "/deleteActor/{idActorToDelete}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteActor(@PathVariable Long idActorToDelete) {
@@ -68,7 +68,7 @@ public class ActorController {
     }
 
     @RequestMapping(
-            value = "/{idActor}",
+            value = "/editActor/{idActor}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeActor(@PathVariable Long idActor, @RequestBody ActorDTO changedActorDTO) {
@@ -82,6 +82,6 @@ public class ActorController {
         Actor saved = actorService.save(actor);
         ActorDTO actorDTO = actorToActorDTO.convert(saved);
 
-        return new ResponseEntity(actor, HttpStatus.OK);
+        return new ResponseEntity(actorDTO, HttpStatus.OK);
     }
 }

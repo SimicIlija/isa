@@ -7,9 +7,258 @@ function getFormData($form) {
     });
     return ordered_array;
 }
+$(document).ready(function () {
+    /*$.ajax({
+        url: "institution/getInstitutionsByAdmin",
+        dataType: "json",
+        success: function (data) {
+            for(i = 0; i < data.length; i++) {
+                $(".nav nav-tabs").append("<li><a href=\"#tab" + data[i].id + "\" data-toggle=\"tab\">" + data[i].name + "</a></li>");
+                $(".tab-content").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
+            }
+        }
+    });*/
+
+    $.ajax({
+        async: false,
+        url: "institution/getInstitutions",
+        dataType: "json",
+        success: function (data) {
+            for (i = 0; i < data.length; i++) {
+                $("#tabovi").append("<li><a href=\"#tab" + data[i].id + "\" onclick='return showInstitution(" + data[i].id + ")' data-toggle=\"tab\">" + data[i].name + "</a></li>");
+                $("#divovi").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
+            }
+        }
+    });
+
+    $("#addAuditoriumButton").click(function () {
+        var idInstitution = $("#addAuditoriumInstitutionId").val();
+        auditoriumName = $("#addAuditoriumName").val();
+        var dataAuditorium = JSON.stringify({"name": auditoriumName, "idInstitution": idInstitution});
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "auditorium/addAuditorium/",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataAuditorium,
+            success: function (data) {
+                newAuditorium = "<tr>"
+                    + "<td id='auditoriumID" + data.id + "'>" + data.id + "</td>"
+                    + "<td id='auditoriumName" + data.id + "'>" + data.name + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editAuditorium(" + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteAuditorium(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showSegments(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+                $("#addAuditoriumModal").modal('toggle');
+                $("#tableAuditoriumsTBody" + idInstitution).append(newAuditorium);
+            }
+        });
+    });
+
+    $("#editAuditoriumButton").click(function () {
+        idAuditorium = $("#idAuditoriumEdit").val();
+        auditoriumName = $("#nameAuditoriumEdit").val();
+        var dataAuditorium = JSON.stringify({"name": auditoriumName});
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "auditorium/editAuditorium/" + idAuditorium,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataAuditorium,
+            success: function (data) {
+                $('#auditoriumName' + data.id).text(data.name);
+                $('#editAuditoriumModal').modal('toggle');
+            }
+        });
+    });
+
+    $("#editSegmentButton").click(function () {
+
+        idSegment = $("#idSegmentEdit").val();
+        label = $("#labelSegmentEdit").val();
+        rows = $("#rowsSegmentEdit").val();
+        seats = $("#seatsInRowSegmentEdit").val();
+        var idInstitution = $("#idInstitutionSegmentEdit").val();
+
+        var dataSegment = JSON.stringify({"label": label, "rowCount": rows, "seatsInRowCount": seats});
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "segment/editSegment/" + idSegment,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataSegment,
+            success: function (data) {
+                $('#segmentLabel' + data.id).text(data.label);
+                $('#segmentRowCount' + data.id).text(data.rowCount);
+                $('#segmentSeatsInRowCount' + data.id).text(data.seatsInRowCount);
+                $('#editSegmentModal').modal('toggle');
+            }
+        });
+    });
+
+    $("#addSegmentButton").click(function () {
+        var idInstitution = $("#addSegmentInstitutionId").val();
+        var idAuditorium = $("#addSegmentAuditoriumId").val();
+        label = $("#addSegmentLabel").val();
+        rows = $("#addSegmentRows").val();
+        seats = $("#addSegmentSeatsInRow").val();
+
+        var dataSegment = JSON.stringify({
+            "label": label,
+            "idAuditorium": idAuditorium,
+            "rowCount": rows,
+            "seatsInRowCount": seats
+        });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "segment/addSegment",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataSegment,
+            success: function (data) {
+                newSegment = "<tr>"
+                    + "<td id='segmentLabel" + data.id + "'>" + data.label + "</td>"
+                    + "<td id='segmentRowCount" + data.id + "'>" + data.rowCount + "</td>"
+                    + "<td id='segmentSeatsInRowCount" + data.id + "'>" + data.seatsInRowCount + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+                $("#addSegmentModal").modal('toggle');
+                $("#tableSegmentsTBody" + idInstitution).append(newSegment);
+            }
+        });
+    });
+
+
+    $("#addShowButton").click(function () {
+        var idInstitution = $("#addShowInstitutionId").val();
+        name = $("#addShowName").val();
+        description = $("#addShowDescription").val();
+        genre = $("#addShowGenre").val();
+        producer = $("#addShowProducer").val();
+        duration = $("#addShowDuration").val();
+        var dataShow = JSON.stringify({
+            "name": name,
+            "genre": genre,
+            "producer": producer,
+            "duration": duration,
+            "idInstitution": idInstitution,
+            "description": description
+        });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "show/addShow/",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataShow,
+            success: function (data) {
+                newShow = "<tr>"
+                    + "<td id='showID" + data.id + "'>" + data.id + "</td>"
+                    + "<td id='showName" + data.id + "'>" + data.name + "</td>"
+                    + "<td id='showDescription" + data.id + "'>" + data.description + "</td>"
+                    + "<td id='showGenre" + data.id + "'>" + data.genre + "</td>"
+                    + "<td id='showProducer" + data.id + "'>" + data.producer + "</td>"
+                    + "<td id='showDuration" + data.id + "'>" + data.duration + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editShow(" + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteShow(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showActorsAndProjections(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-default\" title=\"Show actors and projections\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+                $("#addShowModal").modal('toggle');
+                $("#tableShowsTBody" + idInstitution).append(newShow);
+            }
+        });
+    });
+
+    $("#addActorButton").click(function () {
+        var idInstitution = $("#addActorInstitutionId").val();
+        var idShow = $("#addActorShowId").val();
+        name = $("#addActorName").val();
+        lastname = $("#addActorLastname").val();
+
+        var dataActor = JSON.stringify({"name": name, "lastname": lastname, "idShow": idShow});
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "actors/addActor",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataActor,
+            success: function (data) {
+                newActor = "<tr>"
+                    + "<td id='actorName" + data.id + "'>" + data.name + "</td>"
+                    + "<td id='actorLastname" + data.id + "'>" + data.lastname + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editActor(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteActor(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+                $("#addActorModal").modal('toggle');
+                $("#tableActorsTBody" + idInstitution).append(newActor);
+            }
+        });
+    });
+
+
+    $("#editActorButton").click(function () {
+
+        idActor = $("#idActorEdit").val();
+        name = $("#nameActorEdit").val();
+        lastname = $("#lastnameActorEdit").val();
+
+        var dataActor = JSON.stringify({"name": name, "lastname": lastname});
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "actors/editActor/" + idActor,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataActor,
+            success: function (data) {
+                $('#actorName' + data.id).text(data.name);
+                $('#actorLastname' + data.id).text(data.lastname);
+                $('#editActorModal').modal('toggle');
+            }
+        });
+    });
+
+
+});
 
 function tabCinemasClick() {
     $.ajax({
+        async: false,
+        type: "GET",
         url: "institution/getCinemas",
         dataType: "json",
         success: function (data) {
@@ -123,6 +372,7 @@ function projectionClick(projectionYear, projectionMonth, projectionDay, idShow)
     var cinemaDiv = $('#cinemaDiv');
     cinemaDiv.empty();
     $.ajax({
+        async: false,
         url: "/projections/getProjectionByDate",
         type: "POST",
         dataType: "json",
@@ -156,6 +406,7 @@ function configurationClick(idProjection) {
     var configDiv = $('#configDiv');
     configDiv.empty();
     $.ajax({
+        async: false,
         url: "/projections/getConfigurationForProjection/" + idProjection,
         type: "GET",
         dataType: "json",
@@ -181,8 +432,7 @@ function configurationClick(idProjection) {
 
 }
 
-
-function tabCinemaSettingsClick() {
+/*function tabCinemaSettingsClick() {
     var tableCinemasTBody = $('#tableCinemasTBody');
     tableCinemasTBody.empty();
     $.ajax({
@@ -193,16 +443,16 @@ function tabCinemaSettingsClick() {
             cinemaDiv.empty();
             for (i = 0; i < data.length; i++) {
                 newCinema = "<tr>"
-                    + "<td>" + data[i].name + "</td>"
-                    + "<td>" + data[i].description + "</td>"
+                    + "<td id='cinemaName" + data[i].id + "'>" + data[i].name + "</td>"
+                    + "<td id='cinemaDescription" + data[i].id + "'>" + data[i].description + "</td>"
                     + "<td class=\"td-actions\">"
-                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-primary\">"
+                    + "<a href=\"#\" onclick=\"return editCinema(" + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
                     + "<i class=\"glyphicon glyphicon-pencil\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
-                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-danger\">\n"
+                    + "<a href=\"#\" onclick=\"return deleteCinema(" + data[i].id + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
-                    + "<a href=\"javascript:;\" class=\"btn btn-small btn-default\">"
+                    + "<a href=\"#\" class=\"btn btn-small btn-default\">"
                     + "<i class=\"glyphicon glyphicon-film\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
                     + "</td>"
@@ -212,12 +462,13 @@ function tabCinemaSettingsClick() {
             }
         }
     });
-}
+}*/
 
 function tabFriendsClick() {
     var friendsDiv = $('#friendsDiv');
     addFriend = "<button type=\"button\" class=\"btn btn-primary\">Add friend</button>";
     $.ajax({
+        async: false,
         url: "users/getAllUsers",
         dataType: "json",
         success: function (data) {
@@ -252,6 +503,7 @@ function dodajPrijatelja(idFriend) {
 
             } else {
                 $.ajax({
+                    async: false,
                     url: "friendships/getFriendsNotAccepted",
                     dataType: "json",
                     success: function (data) {

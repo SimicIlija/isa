@@ -27,7 +27,7 @@ public class AuditoriumController {
     private AuditoriumDTOToAuditoriumConverter auditoriumDTOToAuditoriumConverter;
 
     @RequestMapping(
-            value = "/{idInstitution}",
+            value = "/getByInstitution/{idInstitution}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -37,6 +37,7 @@ public class AuditoriumController {
     }
 
     @RequestMapping(
+            value = "addAuditorium",
             method = RequestMethod.POST,
             consumes = "application/json"
     )
@@ -46,7 +47,7 @@ public class AuditoriumController {
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/editAuditorium/{id}",
             method = RequestMethod.PUT,
             consumes = "application/json"
     )
@@ -61,7 +62,7 @@ public class AuditoriumController {
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/deleteAuditorium/{id}",
             method = RequestMethod.DELETE
     )
     public ResponseEntity<?> delete(@PathVariable Long id) {

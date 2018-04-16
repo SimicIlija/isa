@@ -26,6 +26,8 @@ public class Institution {
 
     private Boolean isCinema;
 
+    @ManyToMany(mappedBy = "institutions")
+    private List<InstitutionAdmin> institutionAdmins;
 
     @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
     private List<Show> shows;
@@ -59,6 +61,17 @@ public class Institution {
         this.latitude = latitude;
         this.description = description;
         this.isCinema = isCinema;
+    }
+
+    public Institution(String name, double longitude, double latitude, List<Auditorium> auditoriums, String description, Boolean isCinema, List<InstitutionAdmin> institutionAdmins, List<Show> shows) {
+        this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.auditoriums = auditoriums;
+        this.description = description;
+        this.isCinema = isCinema;
+        this.institutionAdmins = institutionAdmins;
+        this.shows = shows;
     }
 
     public Institution(String name, double longitude, double latitude, String description, List<Auditorium> auditoriums, boolean isCinema) {
@@ -124,5 +137,13 @@ public class Institution {
 
     public void setCinema(Boolean cinema) {
         isCinema = cinema;
+    }
+
+    public List<InstitutionAdmin> getInstitutionAdmins() {
+        return institutionAdmins;
+    }
+
+    public void setInstitutionAdmins(List<InstitutionAdmin> institutionAdmins) {
+        this.institutionAdmins = institutionAdmins;
     }
 }

@@ -4,14 +4,24 @@ public class ActorDTO {
     private Long id;
     private String name;
     private String lastname;
+    private Long idShow;
 
     public ActorDTO() {
     }
 
-    public ActorDTO(Long id, String name, String lastname) {
+    public ActorDTO(Long id, String name, String lastname, Long idShow) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
+        this.idShow = idShow;
+    }
+
+    public Long getIdShow() {
+        return idShow;
+    }
+
+    public void setIdShow(Long idShow) {
+        this.idShow = idShow;
     }
 
     public Long getId() {

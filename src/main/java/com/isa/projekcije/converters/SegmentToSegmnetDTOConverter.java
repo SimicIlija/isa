@@ -16,7 +16,7 @@ public class SegmentToSegmnetDTOConverter implements Converter<Segment, SegmentD
         if (segment == null) {
             return null;
         }
-        return new SegmentDTO(segment.getId(), segment.getLabel(), segment.isClosed(), segment.getAuditorium().getId());
+        return new SegmentDTO(segment.getId(), segment.getLabel(), segment.isClosed(), segment.getAuditorium().getId(), segment.getRowCount(), segment.getSeatsInRowCount());
     }
 
     public List<SegmentDTO> convert(List<Segment> segmentList) {
