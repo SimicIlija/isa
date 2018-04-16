@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="view/jquery-3.3.1.min.js"></script>
+    <script src="view/js/auditorium.js"></script>
+    <script src="view/js/segment.js"></script>
+    <script src="view/js/institution.js"></script>
+    <script src="view/js/show.js"></script>
+    <script src="view/js/actor.js"></script>
     <script src="view/js/homeForLoggedIn.js"></script>
     <link rel="stylesheet" type="text/css" href="view/style.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -90,14 +95,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit auditorium</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form id="editAuditoriumForm">
                 <div class="modal-body">
-                    <input type="hidden" name="id" id="idAuditoriuEdit"/>
+                    <input type="hidden" name="id" id="idAuditoriumEdit"/>
                     <p>
                         <label>Name</label> <input class="form-control" type="text" name="name"
                                                    id="nameAuditoriumEdit"/>
@@ -106,6 +111,42 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="editAuditoriumButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editSegmentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit segment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editSegmentForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="idSegmentEdit"/>
+                    <input type="hidden" name="id" id="idInstitutionSegmentEdit"/>
+                    <p>
+                        <label>Label</label> <input class="form-control" type="text" name="label"
+                                                    id="labelSegmentEdit"/>
+                    </p>
+                    <p>
+                        <label>Rows</label> <input class="form-control" type="text" name="label"
+                                                   id="rowsSegmentEdit"/>
+                    </p>
+                    <p>
+                        <label>Seats in row</label> <input class="form-control" type="text" name="label"
+                                                           id="seatsInRowSegmentEdit"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editSegmentButton">Confirm</button>
                 </div>
             </form>
         </div>
@@ -133,6 +174,193 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-success" id="addAuditoriumButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addSegmentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New segment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addSegmentForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addSegmentInstitutionId"/>
+                    <input type="hidden" name="id" id="addSegmentAuditoriumId"/>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Label"
+                               id="addSegmentLabel"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Rows"
+                               id="addSegmentRows"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Seats in row"
+                               id="addSegmentSeatsInRow"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addSegmentButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addShowModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New show</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addShowForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addShowInstitutionId"/>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Name"
+                               id="addShowName"/>
+                    </p>
+                    <p>
+                        <textarea class="form-control" name="name" placeholder=Description
+                                  id="addShowDescription"></textarea>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Genre"
+                               id="addShowGenre"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Producer"
+                               id="addShowProducer"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Duration"
+                               id="addShowDuration"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addShowButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editShowModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit show</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editShowForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="idShowEdit"/>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Name"
+                               id="editShowName"/>
+                    </p>
+                    <p>
+                        <textarea class="form-control" name="name" placeholder=Description
+                                  id="editShowDescription"></textarea>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Genre"
+                               id="editShowGenre"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Producer"
+                               id="editShowProducer"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Duration"
+                               id="editShowDuration"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editShowButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addActorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New actor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addActorForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addActorInstitutionId"/>
+                    <input type="hidden" name="id" id="addActorShowId"/>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Firstname"
+                               id="addActorName"/>
+                    </p>
+                    <p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Lastname"
+                               id="addActorLastname"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addActorButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editActorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit actor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editActorForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="idActorEdit"/>
+                    <input type="hidden" name="id" id="idInstitutionActorEdit"/>
+                    <p>
+                        <label>Label</label> <input class="form-control" type="text" name="label"
+                                                    id="nameActorEdit"/>
+                    </p>
+                    <p>
+                        <label>Rows</label> <input class="form-control" type="text" name="label"
+                                                   id="lastnameActorEdit"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editActorButton">Confirm</button>
                 </div>
             </form>
         </div>

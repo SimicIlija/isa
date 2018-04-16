@@ -1,8 +1,6 @@
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Jelena','Stanarevic','jelena@gmail.com', '596262652', 'jelena','REGISTERED');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Ilija','Simic','sima@gmail.com', '5558896', 'ilija','ADMIN_SYS');
-
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Marko','Markovic','marko@gmail.com', '5558896', 'marko','ADMIN_SYS');
-
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Smiljana','Dragoljevic','smiljana@gmail.com', '797679', 'smiljana','ADMIN_INST');
 
 insert into institution_admin (id) VALUES (3);
@@ -45,14 +43,10 @@ insert into show(name,genre,producer,duration, id_institution, description) valu
 insert into show(name,genre,producer,duration, id_institution, description) values ('Rampage 3D','action', 'Brad Peyton', 107, 1, 'vruihveuie');
 insert into show(name,genre,producer,duration, id_institution, description) values ('Gnome Alone 3D','comedy', 'Peter Lepeniotis', 89, 1, 'fjwruhfirhrue');
 
-insert into actor(name, lastname) values ('imeGlumca1', 'prezimeGlumca1');
-insert into actor(name, lastname) values ('imeGlumca2', 'prezimeGlumca2');
-insert into actor(name, lastname) values ('imeGlumca3', 'prezimeGlumca3');
-insert into actor(name, lastname) values ('imeGlumca4', 'prezimeGlumca4');
-
-insert into show_actor(show_id, actor_id) values (1, 1);
-insert into show_actor(show_id, actor_id) values (1, 2);
-insert into show_actor(show_id, actor_id) values (1, 3);
+insert into actor(name, lastname, id_show) values ('imeGlumca1', 'prezimeGlumca1', 1);
+insert into actor(name, lastname, id_show) values ('imeGlumca2', 'prezimeGlumca2', 1);
+insert into actor(name, lastname, id_show) values ('imeGlumca3', 'prezimeGlumca3', 1);
+insert into actor(name, lastname, id_show) values ('imeGlumca4', 'prezimeGlumca4', 1);
 
 insert into projection(id_show,date,id_auditorium) values (1,'2018-06-28 21:00:00',1);
 insert into projection(id_show,date,id_auditorium) values (1,'2018-06-28 20:00:00',2);

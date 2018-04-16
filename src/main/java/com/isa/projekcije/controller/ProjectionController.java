@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -139,6 +138,7 @@ public class ProjectionController {
         return new ResponseEntity(projectionDTO, HttpStatus.OK);
     }
 
+    //GET BY DATE AND SHOW
     @RequestMapping(
             value = "/getProjectionByDate",
             method = RequestMethod.POST,

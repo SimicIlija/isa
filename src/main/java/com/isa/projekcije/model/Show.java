@@ -13,7 +13,7 @@ public class Show {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany(mappedBy = "show")
+    @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
     private List<Projection> projections;
 
     private String name;
@@ -24,14 +24,10 @@ public class Show {
     private byte[] posterData;
     private String description;
 
-    @ManyToMany()
-    @JoinTable(name = "show_actor",
-            joinColumns = @JoinColumn(name = "show_id"),
-            inverseJoinColumns = @JoinColumn(name = "actor_id")
-    )
+    @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
     private List<Actor> actors;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "show")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "show", cascade = CascadeType.REMOVE)
     private Set<ThemeProps> themeProps;
 
     @ManyToOne(fetch = FetchType.EAGER)

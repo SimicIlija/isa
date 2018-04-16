@@ -2,7 +2,6 @@ package com.isa.projekcije.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 public class Actor {
@@ -19,8 +18,9 @@ public class Actor {
     @Column(nullable = false)
     private String lastname;
 
-    @ManyToMany(mappedBy = "actors")
-    private List<Show> shows;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_show")
+    private Show show;
 
     public Actor() {
     }
@@ -28,6 +28,20 @@ public class Actor {
     public Actor(String name, String lastname) {
         this.name = name;
         this.lastname = lastname;
+    }
+
+    public Actor(String name, String lastname, Show show) {
+        this.name = name;
+        this.lastname = lastname;
+        this.show = show;
+    }
+
+    public Show getShow() {
+        return show;
+    }
+
+    public void setShow(Show show) {
+        this.show = show;
     }
 
     public long getId() {

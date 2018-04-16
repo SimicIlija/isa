@@ -119,7 +119,8 @@ public class InstitutionController {
     public ResponseEntity getInstitutionsByAdmin() {
         User loggedIn = userService.getCurrentUser();
         if (loggedIn.getRole().equals(Role.ADMIN_INST)) {
-            if (((InstitutionAdmin) loggedIn).getInstitutions() != null) {
+            InstitutionAdmin user = (InstitutionAdmin) loggedIn;
+            if (user.getInstitutions() != null) {
                 return new ResponseEntity(institutionToInstitutionDTOConverter.convert(((InstitutionAdmin) loggedIn).getInstitutions()), HttpStatus.OK);
             }
         }

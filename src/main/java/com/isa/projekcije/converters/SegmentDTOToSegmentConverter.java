@@ -26,6 +26,8 @@ public class SegmentDTOToSegmentConverter implements Converter<SegmentDTO, Segme
         segment.setLabel(segmentDTO.getLabel());
         segment.setClosed(segmentDTO.isClosed());
         segment.setSeats(new ArrayList<Seat>());
+        segment.setRowCount(segmentDTO.getRowCount());
+        segment.setSeatsInRowCount(segmentDTO.getSeatsInRowCount());
         if (segmentDTO.getIdAuditorium() != null) {
             Auditorium auditorium = auditoriumService.findOne(segmentDTO.getIdAuditorium());
             segment.setAuditorium(auditorium);
