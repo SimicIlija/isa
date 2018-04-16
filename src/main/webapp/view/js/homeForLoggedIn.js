@@ -531,6 +531,19 @@ function dodajPrijatelja(idFriend) {
 
     });
 
+
 }
 
+function signout() {
+    $.ajax({
+        url: "user/signout",
+        type: "POST",
+        contentType: "application/json",
+        success: function () {
+            toastr["success"]("signed out");
+        }, error: function () {
+            toastr["error"]("Username/password is incorrect,doesn't exist or empty");
+        }
 
+    });
+}

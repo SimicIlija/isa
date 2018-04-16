@@ -2,6 +2,7 @@ package com.isa.projekcije.controller;
 
 import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.dto.ThemePropsDTO;
+import com.isa.projekcije.model.dto.ThemePropsGetDto;
 import com.isa.projekcije.model.fanzone.ThemeProps;
 import com.isa.projekcije.service.ShowService;
 import com.isa.projekcije.service.StorageService;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/themeprops")
@@ -37,8 +39,10 @@ public class ThemePropsController {
      */
     @RequestMapping(value = "all", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ThemeProps>> getAll() {
-        List<ThemeProps> retVal = themePropsService.getAll();
+    public ResponseEntity getAll() {
+        List<ThemeProps> list = themePropsService.getAll();
+        List<ThemePropsGetDto> retVal = list.stream().map(ThemePropsGetDto::new)
+                .collect(Collectors.toList());
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
@@ -48,8 +52,10 @@ public class ThemePropsController {
      */
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ThemeProps>> getAvailable() {
-        List<ThemeProps> retVal = themePropsService.getAvailable();
+    public ResponseEntity getAvailable() {
+        List<ThemeProps> list = themePropsService.getAvailable();
+        List<ThemePropsGetDto> retVal = list.stream().map(ThemePropsGetDto::new)
+                .collect(Collectors.toList());
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
@@ -65,7 +71,8 @@ public class ThemePropsController {
             Show show = showService.findById(themePropsDTO.getShowId());
             ThemeProps themeProps = themePropsDTO.createThemeProps(show);
             themeProps = themePropsService.create(themeProps);
-            return new ResponseEntity(themeProps, HttpStatus.CREATED);
+            ThemePropsGetDto retVal = new ThemePropsGetDto(themeProps);
+            return new ResponseEntity<>(retVal, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -119,15 +126,15 @@ public class ThemePropsController {
      */
     @RequestMapping(value = "/{id}/image", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity uploadFile(@PathVariable long id, @RequestParam("file") MultipartFile file){
-        try{
+    public ResponseEntity uploadFile(@PathVariable long id, @RequestParam("file") MultipartFile file) {
+        try {
             ThemeProps themeProps = themePropsService.findById(id);
             String imageUrl = storageService.store(file);
             themeProps.setImageUrl(imageUrl);
             themePropsService.update(themeProps);
             return new ResponseEntity(HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -136,16 +143,16 @@ public class ThemePropsController {
      * Download image for theme props with path variable id
      */
     @RequestMapping(value = "/{id}/image", method = RequestMethod.GET)
-    public ResponseEntity<Resource> getFile(@PathVariable long id){
-        try{
+    public ResponseEntity<Resource> getFile(@PathVariable long id) {
+        try {
             ThemeProps themeProps = themePropsService.findById(id);
             String imageUrl = themeProps.getImageUrl();
             Resource resource = storageService.loadFile(imageUrl);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
-        }catch (Exception e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

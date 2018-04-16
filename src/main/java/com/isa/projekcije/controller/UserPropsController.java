@@ -39,7 +39,7 @@ public class UserPropsController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAll() {
         List<UserProps> result = userPropsService.findAll();
-        return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
