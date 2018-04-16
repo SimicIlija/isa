@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class Bid {
     @EmbeddedId
-    private BidId bidId;
+    private BidId bidId = new BidId();
 
     private double price;
 

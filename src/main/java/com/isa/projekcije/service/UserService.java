@@ -1,6 +1,7 @@
 package com.isa.projekcije.service;
 
-import com.isa.projekcije.model.*;
+import com.isa.projekcije.model.InstitutionAdmin;
+import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
 import com.isa.projekcije.repository.UserRepository;
@@ -8,17 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -123,6 +116,10 @@ public class UserService {
 
     public void setRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+    public User findById(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException());
     }
 
 
