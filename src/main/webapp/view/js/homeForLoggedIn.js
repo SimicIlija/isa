@@ -412,18 +412,38 @@ function configurationClick(idProjection) {
         dataType: "json",
         success: function (dataConfig) {
 
-            var newConfig = "<p>";
+            var startString = "<br/><br/>";
+            configDiv.append(startString);
+            var newConfig = "";
             for (k = 0; k < dataConfig.segments.length; k++) {
-                var segment = (dataConfig.segments[k]);
                 newConfig += "<p>";
-                for (i = 0; i < segment.seatTicketDTOList.length; i++) {
-                    var seat = segment.seatTicketDTOList[i];
-                    newConfig += "<button type=\"button\" class=\"btn btn-primary\" onclick='reserveSeat("
-                        + seat.idTicket + ")'>" + seat.seatNumber + "</button>&thinsp;&thinsp;";
+                var segment = (dataConfig.segments[k]);
+                for (j = 1; j < segment.rowCount; j++) {
+
+                    newConfig += "<p>";
+                    for (i = 0; i < segment.seatTicketDTOList.length; i++) {
+                        var seat = segment.seatTicketDTOList[i];
+                        if (seat.row == j) {
+                            if (seat.reserved == false) {
+                                newConfig += "<button type=\"button\" class=\"btn btn-primary\" onclick='reserveSeat("
+                                    + seat.idTicket + ")'>" + seat.seatNumber + "</button>&thinsp;&thinsp;"
+                            } else {
+                                newConfig += "<button type=\"button\" class=\"btn btn-danger\" >" + seat.seatNumber +
+                                    "</button>&thinsp;&thinsp;"
+                            }
+
+                        } else {
+                            continue;
+                        }
+
+                    }
+                    newConfig += "</p>";
+
+
                 }
-                newConfig += "</p>";
+                newConfig += "</p><br/>";
             }
-            newConfig += "</p>";
+
 
             configDiv.append(newConfig);
         }
@@ -432,7 +452,16 @@ function configurationClick(idProjection) {
 
 }
 
+
+
+function reserveSeat(idSeat) {
+
+
+}
+
+
 /*function tabCinemaSettingsClick() {
+
     var tableCinemasTBody = $('#tableCinemasTBody');
     tableCinemasTBody.empty();
     $.ajax({
@@ -465,30 +494,177 @@ function configurationClick(idProjection) {
 }*/
 
 function tabFriendsClick() {
+
+    var profileDiv = $('#profileDiv');
+    profileDiv.empty();
     var friendsDiv = $('#friendsDiv');
     addFriend = "<button type=\"button\" class=\"btn btn-primary\">Add friend</button>";
     $.ajax({
         async: false,
-        url: "users/getAllUsers",
+        url: "friendships/getAllUsersExceptLoggedIn",
         dataType: "json",
         success: function (data) {
 
-            friendsDiv.empty();
-            for (i = 0; i < data.length; i++) {
-                newFriendship =
-                    "<div class='container'>"
-                    + "<div class='divFriendsToAdd'>"
-                    + "<p>" + data[i].firstName + " " + data[i].lastName + " " + data[i].email
-                    + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"dodajPrijatelja(" + data[i].id + ")\">Add friend</button></p>"
-                    + "</div>"
-                    + "</div>";
-                friendsDiv.append(newFriendship);
-            }
+            $.ajax({
+                url: "friendships/getAllFriendships",
+                type: "POST",
+                dataType: "json",
+                success: function (dataFriends) {
+                    friendsDiv.empty();
+                    for (i = 0; i < data.length; i++) {
+                        newFriendship =
+                            "<div class='container'>"
+                            + "<div class='divFriendsToAdd'>"
+                            + "<p>" + data[i].firstName + " " + data[i].lastName + " " + data[i].email
+                            + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"dodajPrijatelja(" + data[i].id + ")\">Add friend</button></p>"
+                            + "</div>"
+                            + "</div>";
+                        friendsDiv.append(newFriendship);
+                    }
+
+                    if (dataFriends.length > 0) {
+                        for (i = 0; i < dataFriends.length; i++) {
+
+                            newFriendship =
+                                "<div class='container'>"
+                                + "<div class='divFriendsToAdd'>"
+                            if (dataFriends[i].sent == true && dataFriends[i].accepted == false) {
+                                newFriendship += "<p>" + dataFriends[i].receiver.firstName + " " + dataFriends[i].receiver.lastName + " " + dataFriends[i].receiver.email
+
+                                newFriendship += "<button type=\"button\" class=\"btn btn-warning\" onclick=\"ukloniPrijatelja(" + dataFriends[i].receiver.id + ")\">Cancel request</button>"
+
+                            }
+
+
+                        }
+                        friendsDiv.append(newFriendship);
+
+                    }
+                    $.ajax({
+                        url: "friendships/getRequests",
+                        type: "POST",
+                        dataType: "json",
+                        success: function (dataFriends) {
+                            if (dataFriends.length > 0) {
+                                newFriendship1 = "<br/><br/><p><h2> Request list:</h2></p>";
+
+                                for (i = 0; i < dataFriends.length; i++) {
+
+                                    newFriendship1 += "<div class='container'>"
+                                        + "<div class='divFriendsToAdd'>"
+                                        + "<p>" + dataFriends[i].sender.firstName + " " + dataFriends[i].sender.lastName + " " + dataFriends[i].sender.email
+
+                                    newFriendship1 += "<button type=\"button\" class=\"btn btn-success\" onclick=\"prihvatiPrijatelja(" + dataFriends[i].sender.id + ")\">Accept </button></p>"
+                                    newFriendship1 += "<button type=\"button\" class=\"btn btn-warning\" onclick=\"ukloniPrijatelja(" + dataFriends[i].sender.id + ")\">Decline </button></p>"
+
+
+                                }
+                                newFriendship1 += "</div>"
+                                    + "</div>";
+                                friendsDiv.append(newFriendship1);
+                            }
+                        }
+                    });
+
+                    $.ajax({
+                        url: "friendships/getConfirmed",
+                        type: "POST",
+                        dataType: "json",
+                        success: function (dataFriends) {
+                            if (dataFriends.length > 0) {
+                                newFriendship2 = "<br/><br/><p><h2> Friend list:</h2></p>";
+
+                                for (i = 0; i < dataFriends.length; i++) {
+
+                                    newFriendship2 += "<div class='container'>"
+                                        + "<div class='divFriendsToAdd'>"
+                                        + "<p>" + dataFriends[i].firstName + " " + dataFriends[i].lastName + " " + dataFriends[i].email
+
+                                    newFriendship2 += "<button type=\"button\" class=\"btn btn-danger\" onclick=\"ukloniPrijatelja(" + dataFriends[i].id + ")\">Remove friend</button></p>"
+
+
+                                }
+                                newFriendship2 += "</div>"
+                                    + "</div>";
+                                friendsDiv.append(newFriendship2);
+                            }
+                        }
+                    });
+
+                }, error: function (jqxhr, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+
+
+
         }
     });
 
 
 }
+
+
+function prihvatiPrijatelja(idFriend) {
+    $.ajax({
+        async: false,
+        url: "friendships/accept/" + idFriend,
+        type: "PUT",
+        dataType: "json",
+        success: function (data) {
+            if (data == null) {
+                toastr["error"]("Failed to remove friend");
+
+            } else {
+                tabFriendsClick();
+                toastr["success"]("Friend request accepted");
+
+            }
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+
+    });
+
+}
+
+function ukloniPrijatelja(idFriend) {
+    $.ajax({
+        async: false,
+        url: "friendships/removeFriend/" + idFriend,
+        type: "DELETE",
+        success: function (data) {
+            if (data != "") {
+                toastr["error"]("Failed to remove friend");
+
+            } else {
+                tabFriendsClick();
+                toastr["success"]("Friend deleted");
+
+            }
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+
+    });
+}
+
+function logout() {
+    $.ajax({
+        url: "user/logout",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            if (data == true) {
+                top.location.href = "login.html";
+            } else {
+                toastr["error"]("Failed to logout");
+            }
+
+        }
+    });
+}
+
 
 function dodajPrijatelja(idFriend) {
 
@@ -502,6 +678,7 @@ function dodajPrijatelja(idFriend) {
                 toastr["error"]("Failed to add friend");
 
             } else {
+
                 $.ajax({
                     async: false,
                     url: "friendships/getFriendsNotAccepted",
@@ -524,6 +701,10 @@ function dodajPrijatelja(idFriend) {
                 });
                 toastr["success"]("Friend request sent");
 
+                tabFriendsClick();
+                //toastr["success"]("Friend request sent");
+
+
             }
         }, error: function (jqxhr, textStatus, errorThrown) {
             alert(errorThrown);
@@ -533,6 +714,7 @@ function dodajPrijatelja(idFriend) {
 
 
 }
+
 
 function signout() {
     $.ajax({
@@ -544,6 +726,238 @@ function signout() {
         }, error: function () {
             toastr["error"]("Username/password is incorrect,doesn't exist or empty");
         }
+
+    });
+}
+
+function myProfile() {
+    var friendsDiv = $('#friendsDiv');
+    friendsDiv.empty();
+    var divHome = $('#tabHomeMyProfile');
+    divHome.empty();
+    $.ajax({
+        url: "user/getLoggedInUser",
+        dataType: "json",
+        type: "POST",
+        success: function (data) {
+            var profileDiv = $('#profileDiv');
+            profileDiv.empty();
+
+            currentUser =
+                "<div class='container'>"
+                + "<div class='divFriends'>"
+
+                + "<p> Name: " + data.firstName + "  <button type=\"button\" class=\"btn btn-primary\" onclick=\"changeFirstName()\">Change</button></p>"
+                + "<p> Surname: " + data.lastName + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"changeLastName()\">Change</button></p>"
+                + "<p> Email: " + data.email + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"changeEmail()\">Change</button></p>"
+                + "<p> Phone number: " + data.phoneNumber + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"changePhoneNumber()\">Change</button></p>"
+                + "<a href=\"changePassword.html\">Change password</a>"
+                + "</div>"
+                + "</div>";
+            profileDiv.append(currentUser);
+
+        }
+
+
+    });
+}
+
+function changeFirstName() {
+    $.ajax({
+        url: "user/getLoggedInUser",
+        type: "POST",
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            changeFistName =
+                "<div class='container'>"
+                + "<div class='changeInformationDiv'>"
+
+                + "<p> Change first name: </p>"
+                + "<form id=\"changeFirstNameForm\" method=\"POST\"><input class=\"form-control\" type=\"text\" id=\"firstName\" name=\"firstName\"\n" +
+                "                               value=\"" + data.firstName + "\"><br/></form>"
+                + "  <button type=\"button\" class=\"btn btn-primary\" onclick='changeFirstNameConfirm()'\">Confirm</button>"
+                + "</div>"
+                + "</div>";
+            changeInformationDiv.append(changeFistName);
+
+        }
+
+
+    });
+}
+
+function changeLastName() {
+    $.ajax({
+        url: "user/getLoggedInUser",
+        type: "POST",
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            changeLastName =
+                "<div class='container'>"
+                + "<div class='changeInformationDiv'>"
+
+                + "<p> Change last name: </p>"
+                + "<form id=\"changeLastNameForm\" method=\"POST\"><input class=\"form-control\" type=\"text\" id=\"lastName\" name=\"lastName\"\n" +
+                "                               value=\"" + data.lastName + "\"><br/></form>"
+                + "  <button type=\"button\" class=\"btn btn-primary\" onclick='changeLastNameConfirm()'\">Confirm</button>"
+                + "</div>"
+                + "</div>";
+            changeInformationDiv.append(changeLastName);
+
+        }
+
+
+    });
+}
+
+function changeEmail() {
+    $.ajax({
+        url: "user/getLoggedInUser",
+        type: "POST",
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            changeEmail =
+                "<div class='container'>"
+                + "<div class='changeInformationDiv'>"
+
+                + "<p> Change email: </p>"
+                + "<form id=\"changeEmailForm\" method=\"POST\"><input class=\"form-control\" type=\"text\" id=\"email\" name=\"email\"\n" +
+                "                               value=\"" + data.email + "\"><br/></form>"
+                + "  <button type=\"button\" class=\"btn btn-primary\" onclick='changeEmailConfirm()'\">Confirm</button>"
+                + "</div>"
+                + "</div>";
+            changeInformationDiv.append(changeEmail);
+
+        }
+
+
+    });
+}
+
+function changePhoneNumber() {
+    $.ajax({
+        url: "user/getLoggedInUser",
+        type: "POST",
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            changePhoneNumber =
+                "<div class='container'>"
+                + "<div class='changeInformationDiv'>"
+
+                + "<p> Change phone number: </p>"
+                + "<form id=\"changePhoneNumberForm\" method=\"POST\"><input class=\"form-control\" type=\"text\" id=\"phoneNumber\" name=\"phoneNumber\"\n" +
+                "                               value=\"" + data.phoneNumber + "\"><br/></form>"
+                + "  <button type=\"button\" class=\"btn btn-primary\" onclick='changePhoneNumberConfirm()'\">Confirm</button>"
+                + "</div>"
+                + "</div>";
+            changeInformationDiv.append(changePhoneNumber);
+
+        }
+
+
+    });
+}
+
+function changeFirstNameConfirm() {
+    $form = $("#changeFirstNameForm");
+    var data = getFormData($form);
+    var s = JSON.stringify(data);
+    $.ajax({
+        url: "user/changeFirstName",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: s,
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            myProfile();
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Could not change firstName");
+        }
+
+
+    });
+}
+
+function changeLastNameConfirm() {
+    $form = $("#changeLastNameForm");
+    var data = getFormData($form);
+    var s = JSON.stringify(data);
+    $.ajax({
+        url: "user/changeLastName",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: s,
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            myProfile();
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Could not change last name");
+        }
+
+
+    });
+}
+
+function changeEmailConfirm() {
+    $form = $("#changeEmailForm");
+    var data = getFormData($form);
+    var s = JSON.stringify(data);
+    $.ajax({
+        url: "user/changeEmail",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: s,
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            myProfile();
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Email already exists on a different account");
+        }
+
+
+    });
+}
+
+function changePhoneNumberConfirm() {
+    $form = $("#changePhoneNumberForm");
+    var data = getFormData($form);
+    var s = JSON.stringify(data);
+    $.ajax({
+        url: "user/changePhoneNumber",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: s,
+        success: function (data) {
+            var changeInformationDiv = $('#changeInformationDiv');
+            changeInformationDiv.empty();
+
+            myProfile();
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Could not change phone number");
+        }
+
 
     });
 }

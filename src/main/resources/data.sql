@@ -1,4 +1,4 @@
-insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Jelena','Stanarevic','jelena@gmail.com', '596262652', 'jelena','REGISTERED');
+insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Jelena','Stanarevic','js.lenchi@gmail.com', '596262652', 'jelena','REGISTERED');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Ilija','Simic','sima@gmail.com', '5558896', 'ilija','ADMIN_SYS');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Marko','Markovic','marko@gmail.com', '5558896', 'marko','ADMIN_SYS');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Smiljana','Dragoljevic','smiljana@gmail.com', '797679', 'smiljana','ADMIN_INST');
@@ -55,7 +55,7 @@ insert into projection(id_show,date,id_auditorium) values (2,'2018-06-28 21:00:0
 insert into projection(id_show,date,id_auditorium) values (3,'2018-06-28 22:00:00',1);
 insert into projection(id_show,date,id_auditorium) values (4,'2018-06-28 23:00:00',1);
 
-insert into ticket(price,id_seat,id_projection,reserved) values('220.00',1,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('220.00',1,1,true);
 insert into ticket(price,id_seat,id_projection,reserved) values('240.00',2,1,false);
 insert into ticket(price,id_seat,id_projection,reserved) values('220.00',3,1,false);
 insert into ticket(price,id_seat,id_projection,reserved) values('240.00',4,1,false);

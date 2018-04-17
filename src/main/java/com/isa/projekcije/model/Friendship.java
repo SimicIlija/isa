@@ -16,6 +16,7 @@ public class Friendship {
     private User receiver;
 
     private boolean accepted;
+    private boolean sent;
 
     public Friendship() {
     }
@@ -23,6 +24,8 @@ public class Friendship {
     public Friendship(User sender, User receiver) {
         this.sender = sender;
         this.receiver = receiver;
+        this.accepted = false;
+        this.sent = false;
     }
 
     public Long getId() {
@@ -57,5 +60,11 @@ public class Friendship {
         this.accepted = accepted;
     }
 
+    public boolean isSent() {
+        return sent;
+    }
 
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
 }

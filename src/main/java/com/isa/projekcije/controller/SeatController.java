@@ -3,8 +3,10 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.SeatDTOToSeat;
 import com.isa.projekcije.converters.SeatToSeatDTO;
 import com.isa.projekcije.model.Seat;
+import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.SeatDTO;
 import com.isa.projekcije.service.SeatService;
+import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +27,9 @@ public class SeatController {
 
     @Autowired
     private SeatToSeatDTO seatToSeatDTO;
+
+    @Autowired
+    UserService userService;
 
     //fali deo za segmente
     @RequestMapping(
@@ -75,6 +80,18 @@ public class SeatController {
         SeatDTO seatDTO = seatToSeatDTO.convert(saved);
 
         return new ResponseEntity(seatDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/reserveSeat/{idSeat}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeSeat(@PathVariable Long idSeat) {
+        Seat seat = seatService.findById(idSeat);
+        User reserver = userService.getCurrentUser();
+
+
+        return new ResponseEntity(seat, HttpStatus.OK);
     }
 
 }

@@ -25,8 +25,14 @@
                     <li class="active dropdown">
                         <a href="#" data-toggle="dropdown">Home <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
+
                             <li><a href="#tabHomeMyProfile" data-toggle="tab">My profile</a></li>
                             <li><a href="#tabHomeLogout" data-toggle="tab" onclick='return signout()'>Logout</a></li>
+
+                            <li><a href="#tabHomeMyProfile" data-toggle="tab" onclick='return myProfile()'>My
+                                profile</a></li>
+                            <li><a href="#tabHomeLogout" data-toggle="tab" onclick='return logout()'>Logout</a></li>
+
                         </ul>
                     </li>
                     <li><a href="#tabTheatres" data-toggle="tab">Theatres</a></li>
@@ -43,8 +49,18 @@
                 </ul>
             </div>
             <div class="panel-body">
-                <div id="divovi" , class="tab-content">
-                    <div class="tab-pane fade in active" id="tabHomeMyProfile">profil</div>
+
+               <!--<div id="divovi" , class="tab-content">
+                    <div class="tab-pane fade in active" id="tabHomeMyProfile">profil</div>-->
+
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="tabHomeMyProfile">
+                    </div>
+                    <div class="container" id="profileDiv">
+                    </div>
+                    <div class="container" id="changeInformationDiv">
+                    </div>
+
                     <div class="tab-pane fade" id="tabTheatres">pozorista</div>
                     <div class="tab-pane fade" id="tabCinemas">
                         <div class="container" id="cinemaDiv">
