@@ -1,31 +1,25 @@
-package com.isa.projekcije.model;
+package com.isa.projekcije.model.dto;
 
-import javax.persistence.*;
+import com.isa.projekcije.model.Friendship;
 
-@Entity
-public class Friendship {
+public class FriendshipDTO {
 
-    @Id
-    @GeneratedValue
     private Long id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User sender;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User receiver;
+    private UserDTO sender;
+    private UserDTO receiver;
 
     private boolean accepted;
     private boolean sent;
 
-    public Friendship() {
+    public FriendshipDTO() {
     }
 
-    public Friendship(User sender, User receiver) {
+    public FriendshipDTO(Long id, UserDTO sender, UserDTO receiver, boolean accepted, boolean sent) {
+        this.id = id;
         this.sender = sender;
         this.receiver = receiver;
-        this.accepted = false;
-        this.sent = false;
+        this.accepted = accepted;
+        this.sent = sent;
     }
 
     public Long getId() {
@@ -36,19 +30,19 @@ public class Friendship {
         this.id = id;
     }
 
-    public User getSender() {
+    public UserDTO getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(UserDTO sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public UserDTO getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(UserDTO receiver) {
         this.receiver = receiver;
     }
 

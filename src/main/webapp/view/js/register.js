@@ -29,7 +29,7 @@ function registerUser() {
     var LN = document.forms["registracija"]["lastName"].value;
 
 
-    if ((x == "" || y == "" || z == "" || phone == "" || FN == "" || LN == "") || (x == "" && y == "" && z == "" && phone == "" && FN == "" && LN == "")) {
+    if ((z == "" || phone == "" || FN == "" || LN == "") || (x == "" && y == "" && z == "" && phone == "" && FN == "" && LN == "")) {
         toastr["error"]("You have to fill out all input fields", "Registration failed");
 
     } else {
@@ -37,7 +37,7 @@ function registerUser() {
         var ok = re.test(z);
 
         var reUs = new RegExp("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$");
-        var okUs = reUs.test(x);
+        // var okUs = reUs.test(x);
 
 
         var reFN = /^[A-Z][a-zA-Z]+[']*[0-9]{0}/;
@@ -46,20 +46,20 @@ function registerUser() {
         var okLN = reLN.test(LN);
 
         var rePass = new RegExp("(?=.*[a-z0-9])[0-9a-zA-Z!@#$%]{8,}");
-        var okPass = rePass.test(y);
+        // var okPass = rePass.test(y);
 
 
         var rePh = new RegExp("[(]{1}[0-9]{3}[)]{1}[0-9]{3,4}[-]{1}[0-9]{3}");
         var okPh = rePh.test(phone);
 
-        if (ok == false || okUs == false || okFN == false || okLN == false || okPh == false || okPass == false) {
+        if (ok == false || okFN == false || okLN == false || okPh == false) {
             if (ok == false) {
                 $("#spanEmail").html("<label style=\"color:red\">Invalid input for email field</label>");
             }
-            if (okUs == false) {
-                $("#spanPasswordConfirm").html("<label style=\"color:red\">Invalid input for username field</label>");
+            /* if (okUs == false) {
+                 $("#spanPasswordConfirm").html("<label style=\"color:red\">Invalid input for username field</label>");
 
-            }
+             }*/
             if (okFN == false) {
                 $("#spanFirstName").html("<label style=\"color:red\">Invalid input for first name field</label>");
 
@@ -68,10 +68,10 @@ function registerUser() {
                 $("#spanLastName").html("<label style=\"color:red\">Invalid input for last name field</label>");
 
             }
-            if (okPass == false) {
+            /*if (okPass == false) {
                 $("#spanPassword").html("<label style=\"color:red\">Invalid input for password field</label>");
 
-            }
+            }*/
             if (okPh == false) {
                 $("#spanPhoneNumber").html("<label style=\"color:red\">Invalid input for phone number field</label>");
 

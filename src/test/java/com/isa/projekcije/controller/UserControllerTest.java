@@ -45,7 +45,7 @@ public class UserControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     public void signupWithMandatoryFieldEmptyShouldReturnBadRequest1() throws Exception {
-        final RegistrationDTO registerDTO = new RegistrationDTO("Marko", "Markovic", "021/858-988", "marko.markovic@gmail.com", "newPassword", "");
+        final RegistrationDTO registerDTO = new RegistrationDTO("Marko", "Markovic", "", "021/858-988");
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -71,7 +71,7 @@ public class UserControllerTest extends ProjekcijeApplicationTests {
 
     }
 
-
+/*
     @Test
     public void signupWithUnmatchedPasswordsShouldReturnBadRequest() throws Exception {
         final RegistrationDTO registerDTO =
@@ -85,7 +85,7 @@ public class UserControllerTest extends ProjekcijeApplicationTests {
                 .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isBadRequest());
         res.andDo(MockMvcResultHandlers.print());
-    }
+    }*/
 
     @Test
     public void registerWithValidDataShouldReturnCreated() throws Exception {
@@ -105,7 +105,7 @@ public class UserControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     public void loginWithValidCredentialsShouldReturnOk() throws Exception {
-        final LoginDTO loginDto = new LoginDTO("jelena@gmail.com", "jelena");
+        final LoginDTO loginDto = new LoginDTO("js.lenchi@gmail.com", "jelena");
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

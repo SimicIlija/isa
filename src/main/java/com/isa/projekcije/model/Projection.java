@@ -24,6 +24,10 @@ public class Projection {
     @OneToMany(mappedBy = "projection", cascade = CascadeType.REMOVE)
     private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "projection", cascade = CascadeType.REMOVE)
+    private List<Reservation> reservations;
+
+
     public Projection() {
     }
 
@@ -71,5 +75,13 @@ public class Projection {
 
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

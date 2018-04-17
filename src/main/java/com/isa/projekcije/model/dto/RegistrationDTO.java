@@ -15,6 +15,12 @@ public class RegistrationDTO {
 
     public RegistrationDTO(){}
 
+    //za promenu passworda
+    public RegistrationDTO(String password, String passwordConfirm) {
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
+    }
+
     public RegistrationDTO(String firstName, String lastName, String phoneNumber, String email, String password, String passwordConfirm) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +28,14 @@ public class RegistrationDTO {
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public RegistrationDTO(String firstName, String lastName, String email, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+
     }
 
     public User createNewUser() {
@@ -33,8 +47,8 @@ public class RegistrationDTO {
     }
     public boolean isEmpty(){
 
-        return "".equals(password) || "".equals(passwordConfirm) || "".equals(email) || "".equals(firstName) || "".equals(lastName) || "".equals(phoneNumber)
-                || password==null || email==null || passwordConfirm==null || firstName==null || lastName==null || phoneNumber==null;
+        return "".equals(email) || "".equals(firstName) || "".equals(lastName) || "".equals(phoneNumber)
+                || email == null || firstName == null || lastName == null || phoneNumber == null;
     }
 
     public boolean correctPassword(){

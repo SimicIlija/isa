@@ -19,7 +19,7 @@ public class UserServiceTest extends ProjekcijeApplicationTests {
 
     @Test
     public void emailAlreadyInUseShouldReturnTrue(){
-        final RegistrationDTO registrationDTO = new RegistrationDTO("Marko", "Markovic", "021/858-988", "jelena@gmail.com", "newPassword", "newPassword");
+        final RegistrationDTO registrationDTO = new RegistrationDTO("Marko", "Markovic", "021/858-988", "js.lenchi@gmail.com", "newPassword", "newPassword");
         final boolean emailInUse = userService.emailExists(registrationDTO);
         assertThat(emailInUse).isEqualTo(true);
 
@@ -40,7 +40,7 @@ public class UserServiceTest extends ProjekcijeApplicationTests {
 
     @Test
     public void loginWithExistingAccountSchouldReturnUser(){
-        final LoginDTO loginDTO = new LoginDTO("jelena@gmail.com","jelena");
+        final LoginDTO loginDTO = new LoginDTO("js.lenchi@gmail.com", "jelena");
         final User foundUser = userService.findUser(loginDTO);
         assertThat(foundUser).isNotNull();
         assertThat(foundUser.getPassword()).isEqualTo(loginDTO.getPassword());

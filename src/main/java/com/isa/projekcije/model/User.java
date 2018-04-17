@@ -57,6 +57,12 @@ public class User implements Serializable {
     @Column(nullable = false)
     protected String password;
 
+    @OneToMany(mappedBy = "reserver", cascade = CascadeType.REMOVE)
+    private List<Reservation> reservations;
+
+    @ManyToMany(mappedBy = "invited_friends", fetch = FetchType.EAGER)
+    private List<Reservation> reservation_invited;
+
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
     private Set<UserProps> userProps;
@@ -70,6 +76,20 @@ public class User implements Serializable {
 
 
     public User() {
+    }
+
+    public User(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public User(String firstName, String lastName, String phoneNumber, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.role = Role.REGISTERED;
+
     }
 
     public long getId() {
@@ -146,13 +166,5 @@ public class User implements Serializable {
         this.bids = bids;
     }
 
-    public User(String firstName, String lastName, String phoneNumber, String email, String password) {
-        //setCustomAuthorities("REGISTERED");
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-        this.role = Role.REGISTERED;
-    }
+
 }

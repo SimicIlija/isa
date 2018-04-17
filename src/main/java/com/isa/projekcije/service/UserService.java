@@ -1,5 +1,6 @@
 package com.isa.projekcije.service;
 
+import com.isa.projekcije.model.Friendship;
 import com.isa.projekcije.model.InstitutionAdmin;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
@@ -35,6 +36,7 @@ public class UserService {
     public UserService(UserRepository userRepository, HttpServletRequest request) {
         this.userRepository = userRepository;
         this.request = request;
+
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
@@ -116,4 +118,18 @@ public class UserService {
     }
 
 
+    public User save(User usr) {
+        return userRepository.save(usr);
+    }
+
+
+
+    public Boolean logout() {
+        request.getSession().invalidate();
+        return true;
+    }
+
+    public List<User> findAll(Sort email) {
+        return userRepository.findAll();
+    }
 }

@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -28,6 +29,12 @@ public class Ticket {
     @JoinColumn(name = "id_projection")
     private Projection projection;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_reservation")
+    private Reservation reservation;
+
+
+
     private boolean reserved;
 
     public Ticket() {
@@ -37,6 +44,14 @@ public class Ticket {
         this.price = price;
         this.seat = seat;
         this.projection = projection;
+        this.reserved = reserved;
+    }
+
+    public Ticket(BigDecimal price, Seat seat, Projection projection, Reservation reservation, boolean reserved) {
+        this.price = price;
+        this.seat = seat;
+        this.projection = projection;
+        this.reservation = reservation;
         this.reserved = reserved;
     }
 
