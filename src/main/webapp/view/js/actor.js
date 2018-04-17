@@ -34,16 +34,21 @@ function showActorsAndProjections(idInstitution, idShow) {
         success: function (data) {
             $('#tableProjectionsTBody' + idInstitution).empty();
             for (i = 0; i < data.length; i++) {
+                date = data[i].date.substring(0, 16);
                 newProjection = "<tr>"
-                    + "<td id='projectionDate" + data[i].id + "'>" + data[i].date + "</td>"
+                    + "<td id='projectionID" + data[i].id + "'>" + data[i].id + "</td>"
+                    + "<td id='projectionDate" + data[i].id + "'>" + date + "</td>"
                     + "<td id='projectionAuditoriumId" + data[i].id + "'>" + data[i].id_auditorium + "</td>"
                     + "<td class=\"td-actions\">"
-                    + "<a href=\"#\" onclick=\"return editProjection(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<a href=\"#\" onclick=\"return editProjection(" + idInstitution + ", " + idShow + ", " + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
                     + "<i class=\"glyphicon glyphicon-pencil\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
-                    + "<a href=\"#\" onclick=\"return deleteProjection(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<a href=\"#\" onclick=\"return deleteProjection(" + idInstitution + ", " + idShow + ", " + data[i].id + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showSegmentsForProjection(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>"
                     + "</td>"
                     + "</tr>";
 
@@ -54,19 +59,25 @@ function showActorsAndProjections(idInstitution, idShow) {
 
     var divAddActor = $('#divAddActor' + idInstitution);
     divAddActor.empty();
-    var addButton =
+    var addButton1 =
         "<a href=\"#\" onclick=\"return addActor(" + idInstitution + ", " + idShow + ");\" class=\"btn btn-small btn-success\">"
         + "<i class=\"glyphicon glyphicon-plus\"></i>"
-        + "</a>&nbsp;&nbsp;&nbsp;<h3>Actors for show with ID " + idShow + "</h3>";
-    divAddActor.append(addButton);
+        + "</a>&nbsp;&nbsp;&nbsp;<h3>Actors in show #" + idShow + "</h3>";
+    divAddActor.append(addButton1);
 
     var divAddProjection = $('#divAddProjection' + idInstitution);
     divAddProjection.empty();
-    var addButton =
+    var addButton2 =
         "<a href=\"#\" onclick=\"return addProjection(" + idInstitution + ", " + idShow + ");\" class=\"btn btn-small btn-success\">"
         + "<i class=\"glyphicon glyphicon-plus\"></i>"
-        + "</a>&nbsp;&nbsp;&nbsp;<h3>Projections for show with ID " + idShow + "</h3>";
-    divAddProjection.append(addButton);
+        + "</a>&nbsp;&nbsp;&nbsp;<h3>Projections for show #" + idShow + "</h3>";
+    divAddProjection.append(addButton2);
+
+    var divAddSegmentProjection = $('#divAddSegmentProjection' + idInstitution);
+    divAddSegmentProjection.empty();
+    var addButton3 = "<h3>Segments</h3>";
+    divAddSegmentProjection.append(addButton3);
+    $('#tableSegmentProjectionTBody' + idInstitution).empty();
 
     return false;
 }
@@ -103,10 +114,5 @@ function deleteActor(idInstitution, idActor) {
             $('#actorName' + data.id).closest("tr").remove();
         }
     });
-    return false;
-}
-
-function addProjection(idInstitution, idShow) {
-    alert(idInstitution + ' add p ' + idShow);
     return false;
 }

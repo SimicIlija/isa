@@ -21,7 +21,6 @@ public class Show {
     private String producer;
     private int duration;
     private String posterFileName;
-    private byte[] posterData;
     private String description;
 
     @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
@@ -51,13 +50,12 @@ public class Show {
         this.description = description;
     }
 
-    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, Institution institution, String description) {
+    public Show(String name, String genre, String producer, int duration, String posterFileName, Institution institution, String description) {
         this.name = name;
         this.genre = genre;
         this.producer = producer;
         this.duration = duration;
         this.posterFileName = posterFileName;
-        this.posterData = posterData;
         this.institution = institution;
         this.description = description;
     }
@@ -73,13 +71,12 @@ public class Show {
         this.description = description;
     }
 
-    public Show(String name, String genre, String producer, int duration, String posterFileName, byte[] posterData, String description) {
+    public Show(String name, String genre, String producer, int duration, String posterFileName, String description) {
         this.name = name;
         this.genre = genre;
         this.producer = producer;
         this.duration = duration;
         this.posterFileName = posterFileName;
-        this.posterData = posterData;
         this.description = description;
     }
 
@@ -137,14 +134,6 @@ public class Show {
 
     public void setPosterFileName(String posterFileName) {
         this.posterFileName = posterFileName;
-    }
-
-    public byte[] getPosterData() {
-        return posterData;
-    }
-
-    public void setPosterData(byte[] posterData) {
-        this.posterData = posterData;
     }
 
     public List<Actor> getActors() {

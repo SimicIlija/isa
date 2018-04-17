@@ -107,7 +107,7 @@ public class ProjectionController {
 
 
     @RequestMapping(
-            value = "/{idProjectionToDelete}",
+            value = "/deleteProjection/{idProjectionToDelete}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProjection(@PathVariable Long idProjectionToDelete) {
@@ -117,7 +117,7 @@ public class ProjectionController {
     }
 
     @RequestMapping(
-            value = "/{idProjection}",
+            value = "editProjection/{idProjection}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeProjection(@PathVariable Long idProjection, @RequestBody ProjectionDTO changedProjectionDTO) {

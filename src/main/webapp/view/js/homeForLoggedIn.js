@@ -138,7 +138,7 @@ $(document).ready(function () {
                     + "</a>&nbsp;&nbsp;&nbsp;"
                     + "<a href=\"#\" onclick=\"return deleteSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
-                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</a>"
                     + "</td>"
                     + "</tr>";
                 $("#addSegmentModal").modal('toggle');
@@ -178,6 +178,11 @@ $(document).ready(function () {
                     + "<td id='showGenre" + data.id + "'>" + data.genre + "</td>"
                     + "<td id='showProducer" + data.id + "'>" + data.producer + "</td>"
                     + "<td id='showDuration" + data.id + "'>" + data.duration + "</td>"
+                    + "<td id='showImage" + data[i].id + "'>"
+                    + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data[i].id + ");\" class=\"btn btn-small btn-default\">"
+                    + "<i class=\"glyphicon glyphicon-upload\"></i>"
+                    + "</a>"
+                    + "</td>"
                     + "<td class=\"td-actions\">"
                     + "<a href=\"#\" onclick=\"return editShow(" + data.id + ");\" class=\"btn btn-small btn-primary\">"
                     + "<i class=\"glyphicon glyphicon-pencil\"></i>"
@@ -187,7 +192,7 @@ $(document).ready(function () {
                     + "</a>&nbsp;&nbsp;&nbsp;"
                     + "<a href=\"#\" onclick=\"return showActorsAndProjections(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-default\" title=\"Show actors and projections\">"
                     + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
-                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</a>"
                     + "</td>"
                     + "</tr>";
                 $("#addShowModal").modal('toggle');
@@ -220,7 +225,7 @@ $(document).ready(function () {
                     + "</a>&nbsp;&nbsp;&nbsp;"
                     + "<a href=\"#\" onclick=\"return deleteActor(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
-                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</a>"
                     + "</td>"
                     + "</tr>";
                 $("#addActorModal").modal('toggle');
@@ -250,6 +255,222 @@ $(document).ready(function () {
                 $('#editActorModal').modal('toggle');
             }
         });
+    });
+
+
+    $("#addProjectionButton").click(function () {
+        var idInstitution = $("#addProjectionInstitutionId").val();
+        var idShow = $("#addProjectionShowId").val();
+        date = $("#addProjectionDate").val();
+        idAuditorium = $("#addProjectionAuditorium").find('option:selected').val();
+
+        var dataProjection = JSON.stringify({
+            "id_show": idShow,
+            "id_auditorium": idAuditorium,
+            "date": date
+        });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "projections/addProjection",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataProjection,
+            success: function (data) {
+                date = data.date.substring(0, 16);
+                newProjection = "<tr>"
+                    + "<td id='projectionID" + data.id + "'>" + data.id + "</td>"
+                    + "<td id='projectionDate" + data.id + "'>" + date + "</td>"
+                    + "<td id='projectionAuditoriumId" + data.id + "'>" + data.id_auditorium + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editProjection(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteProjection(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showSegmentsForProjection(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>"
+                    + "</td>"
+                    + "</tr>";
+                $("#addProjectionModal").modal('toggle');
+                $("#tableProjectionsTBody" + idInstitution).append(newProjection);
+            }
+        });
+    });
+
+    $("#editProjectionButton").click(function () {
+
+        var idInstitution = $("#idInstitutionProjectionEdit").val();
+        var idProjection = $("#idPrjectionEdit").val();
+        var idShow = $("#idShowProjectionEdit").val();
+        date = $("#editProjectionDate").val();
+        var idAuditorium = $("#editProjectionAuditorium").find('option:selected').val();
+
+        var dataProjection = JSON.stringify({
+            "id_show": idShow,
+            "id_auditorium": idAuditorium,
+            "date": date
+        });
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "projections/editProjection/" + idProjection,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataProjection,
+            success: function (data) {
+                date = data.date.substring(0, 16);
+                $('#projectionDate' + data.id).text(date);
+                $('#projectionAuditoriumId' + data.id).text(data.id_auditorium);
+                $('#editProjectionModal').modal('toggle');
+            }
+        });
+    });
+
+
+    $("#addSegmentProjectionButton").click(function () {
+        var idInstitution = $("#addSegmentProjectionInstitutionId").val();
+        var idProjection = $("#addSegmentProjectionProjectionId").val();
+        price = $("#addSegmentProjectionPrice").val();
+        idSegment = $("#addSegmentProjectionSegment").find('option:selected').val();
+
+        var dataSegmentProjection = JSON.stringify({
+            "idSegment": idSegment,
+            "idProjection": idProjection,
+            "price": price
+        });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "tickets/addTicketsForSegment",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataSegmentProjection,
+            success: function (data) {
+                newSegment = "<tr>"
+                    + "<td id='segmentProjectionSegmentID" + data.idSegment + "'>" + data.idSegment + "</td>"
+                    + "<td id='segmentProjectionPrice" + data.idSegment + "'>" + data.price + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editSegmentProjection(" + idInstitution + ", " + idProjection + ", " + data.idSegment + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteSegmentProjection(" + idInstitution + ", " + idProjection + ", " + data.idSegment + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>"
+                    + "</td>"
+                    + "</tr>";
+                $("#addSegmentProjectionModal").modal('toggle');
+                $("#tableSegmentProjectionTBody" + idInstitution).append(newSegment);
+            }
+        });
+    });
+
+    $("#editSegmentProjectionButton").click(function () {
+
+        var idInstitution = $("#editSegmentProjectionInstitutionId").val();
+        var idProjection = $("#editSegmentProjectionProjectionId").val();
+        var idSegment = $("#editSegmentProjectionSegmentId").val();
+        price = $("#priceSegmentProjectionEdit").val();
+
+        var dataSegmentProjection = JSON.stringify({
+            "idSegment": idSegment,
+            "idProjection": idProjection,
+            "price": price
+        });
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "tickets/editTicketsForSegment",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataSegmentProjection,
+            success: function (data) {
+                $('#segmentProjectionSegmentID' + data.idSegment).text(data.idSegment);
+                $('#segmentProjectionPrice' + data.idSegment).text(data.price);
+                $('#editSegmentProjectionModal').modal('toggle');
+            }
+        });
+    });
+
+
+    $("#editInstitutionButton").click(function () {
+
+        var idInstitution = $("#editInstitutionId").val();
+        var name = $("#nameInstitutionEdit").val();
+        var description = $("#descriptionInstitutionEdit").val();
+
+        var geocoder = new google.maps.Geocoder();
+        var address = $("#addressInstitutionEdit").val();
+        var latitude;
+        var longitude;
+
+        FindLatLong(address, function (data) {
+            var dataInstitution = JSON.stringify({
+                "name": name,
+                "longitude": data.Longitude,
+                "latitude": data.Latitude,
+                "description": description
+            });
+            $.ajax({
+                async: false,
+                type: "PUT",
+                url: "institution/editInstitution/" + idInstitution,
+                dataType: "json",
+                contentType: "application/json",
+                data: dataInstitution,
+                success: function (data) {
+                    $('#institutionName' + data.id).text(data.name);
+                    $('#institutionDescription' + data.id).text(data.description);
+                    $('#editInstitutionModal').modal('toggle')
+
+                    var geocoder = new google.maps.Geocoder();             // create a geocoder object
+                    var location = new google.maps.LatLng(data.latitude, data.longitude);    // turn coordinates into an object
+                    geocoder.geocode({'latLng': location}, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {           // if geocode success
+                            // if address found, pass to processing function
+                            $('#instisutionAdress' + idInstitution).empty();
+                            $('#instisutionAdress' + idInstitution).append(results[0].formatted_address);
+
+                        }
+                    });
+
+
+                    map = new google.maps.Map(document.getElementById('map' + idInstitution), {
+                        center: {lat: data.latitude, lng: data.longitude},
+                        zoom: 17
+                    });
+                    var marker = new google.maps.Marker({
+                        position: {lat: data.latitude, lng: data.longitude},
+                        map: map
+                    });
+                }
+            });
+        });
+    });
+
+
+    $("#uploadShowImageButton").click(function () {
+
+        idShow = $("#uploadShowImageIdShow").val();
+        input = $("#uploadShowImageInput");
+        var file;
+        file = input[0].files[0];
+        /*$.ajax({
+            async: false,
+            type: "POST",
+            url: "show/addImage/" + idShow + "/image",
+            data: file,
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $('#actorName' + data.id).text(data.name);
+                $('#actorLastname' + data.id).text(data.lastname);
+
+            }
+        });*/
+        $('#editActorModal').modal('toggle');
     });
 
 
@@ -935,6 +1156,16 @@ function changePhoneNumberConfirm() {
             toastr["error"]("Could not change phone number");
         }
 
+    });
+}
+function FindLatLong(address, callback) {
+    var geocoder = new google.maps.Geocoder();
 
+    geocoder.geocode({'address': address}, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var lat = results[0].geometry.location.lat();
+            var lng = results[0].geometry.location.lng();
+            callback({Status: "OK", Latitude: lat, Longitude: lng});
+        }
     });
 }

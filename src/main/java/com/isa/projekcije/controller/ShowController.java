@@ -11,11 +11,15 @@ import com.isa.projekcije.model.dto.ShowDTO;
 import com.isa.projekcije.service.ActorService;
 import com.isa.projekcije.service.InstitutionService;
 import com.isa.projekcije.service.ShowService;
+import com.isa.projekcije.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,11 +41,15 @@ public class ShowController {
     private ActorService actorService;
 
     @Autowired
+    private StorageService storageService;
+
+    @Autowired
     private ShowDTOToShowConverter showDTOToShowConverter;
 
     @Autowired
     private ShowToShowDTOConverter showToShowDTOConverter;
 
+    //aktuelni filmovi/predstave
     @RequestMapping(
             value = "/getByInstitution/{idInstitution}",
             method = RequestMethod.GET
@@ -69,6 +77,7 @@ public class ShowController {
         return new ResponseEntity<>(showToShowDTOConverter.convert(shows), HttpStatus.OK);
     }
 
+    //svi filmovi/predstave
     @RequestMapping(
             value = "/getAllByInstitution/{idInstitution}",
             method = RequestMethod.GET
@@ -121,7 +130,6 @@ public class ShowController {
         edited.setProducer(showDTO.getProducer());
         edited.setDuration(showDTO.getDuration());
         edited.setPosterFileName(showDTO.getPosterFileName());
-        edited.setPosterData(showDTO.getPosterData());
         Show newShow = showService.save(edited);
         return new ResponseEntity<>(showToShowDTOConverter.convert(newShow), HttpStatus.OK);
     }
@@ -152,5 +160,33 @@ public class ShowController {
         show.getActors().add(actor);
         Show saved = showService.save(show);
         return new ResponseEntity<>(showToShowDTOConverter.convert(saved), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "addImage/{idShow}/image", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity uploadFile(@PathVariable long idShow, @RequestParam("file") MultipartFile file) {
+        try {
+            Show show = showService.findById(idShow);
+            String imageUrl = storageService.store(file);
+            show.setPosterFileName(imageUrl);
+            showService.save(show);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "getImage/{idShow}/image", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getFile(@PathVariable long idShow) {
+        try {
+            Show show = showService.findById(idShow);
+            String imageUrl = show.getPosterFileName();
+            Resource resource = storageService.loadFile(imageUrl);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 }
