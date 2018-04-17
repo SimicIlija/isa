@@ -83,7 +83,7 @@ public class InstitutionController {
     }
 
     @RequestMapping(
-            value = "/{id}",
+            value = "/editInstitution/{id}",
             method = RequestMethod.PUT,
             consumes = "application/json"
     )

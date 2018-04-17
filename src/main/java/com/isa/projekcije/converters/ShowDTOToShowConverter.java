@@ -29,7 +29,6 @@ public class ShowDTOToShowConverter implements Converter<ShowDTO, Show> {
         show.setProducer(showDTO.getProducer());
         show.setDuration(showDTO.getDuration());
         show.setPosterFileName(showDTO.getPosterFileName());
-        show.setPosterData(showDTO.getPosterData());
         show.setActors(new ArrayList<Actor>());
         show.setProjections(new ArrayList<Projection>());
         show.setDescription(showDTO.getDescription());

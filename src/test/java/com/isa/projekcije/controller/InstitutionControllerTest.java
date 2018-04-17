@@ -82,7 +82,7 @@ public class InstitutionControllerTest extends ProjekcijeApplicationTests {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(institutionDTO);
 
-        mockMvc.perform(put(URL_PREFIX + "/" + InstitutionConstants.DB_ID).contentType(contentType).content(json)).andExpect(status().isOk());
+        mockMvc.perform(put(URL_PREFIX + "/editInstitution/" + InstitutionConstants.DB_ID).contentType(contentType).content(json)).andExpect(status().isOk());
     }
 
     @Test

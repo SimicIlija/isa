@@ -1,7 +1,6 @@
 package com.isa.projekcije.converters;
 
 import com.isa.projekcije.model.Projection;
-import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.model.dto.ProjectionDTO;
 import com.isa.projekcije.service.AuditoriumService;
@@ -42,7 +41,7 @@ public class ProjectionDTOToProjection implements Converter<ProjectionDTO, Proje
             projection.setShow(showService.findOne(projectionDTO.getId_show()));
         }
 
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
             date = formatter.parse(projectionDTO.getDate());

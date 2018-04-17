@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,9 @@ public class ProjectionToProjectionDTO implements Converter<Projection, Projecti
         if (projection.getShow() != null) {
             projectionDTO.setId_show(projection.getShow().getId());
         }
-        projectionDTO.setDate(projection.getDate().toString());
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        projectionDTO.setDate(formatter.format(projection.getDate()));
 
 
         return projectionDTO;

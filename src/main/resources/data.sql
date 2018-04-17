@@ -6,7 +6,7 @@ insert into user_table (first_name, last_name, email, phone_number, password, ro
 insert into institution_admin (id) VALUES (3);
 
 
-insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'ArenaCineplex', 1.0, 1.0, true);
+insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'ArenaCineplex', 19.853547, 45.254313, true);
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'Cinestar', 1.0, 1.0, true);
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opissss...', 'SNP', 2.0, 2.0, false);
 
@@ -58,18 +58,18 @@ insert into projection(id_show,date,id_auditorium) values (4,'2018-06-28 23:00:0
 insert into ticket(price,id_seat,id_projection,reserved) values('220.00',1,1,true);
 insert into ticket(price,id_seat,id_projection,reserved) values('240.00',2,1,false);
 insert into ticket(price,id_seat,id_projection,reserved) values('220.00',3,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',4,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',5,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',6,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('220.00',7,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',8,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('220.00',9,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',10,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('220.00',11,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',12,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',13,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',14,1,false);
-insert into ticket(price,id_seat,id_projection,reserved) values('240.00',15,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('220.00',4,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('220.00',5,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('220.00',6,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',7,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',8,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',9,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',10,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',11,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',12,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',13,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',14,1,false);
+insert into ticket(price,id_seat,id_projection,reserved) values('200.00',15,1,false);
 
 insert into theme_props (name, description, amount, price, image_url, show_id) values ('igracka', 'opis', 20, 50, 'url', 1);
 insert into theme_props (name, description, amount, price, image_url, show_id) values ('igracka', 'opis', 0, 50, 'url', 1);

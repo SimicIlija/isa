@@ -52,3 +52,9 @@ function deleteShow(idInstitution, isShow) {
     });
     return false;
 }
+
+function uploadImageForShow(idShow) {
+    $('#uploadShowImageIdShow').val(idShow);
+    $('#uploadShowImageModal').modal('toggle');
+    return false;
+}

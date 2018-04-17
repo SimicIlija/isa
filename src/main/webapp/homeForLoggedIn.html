@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" href="view/style.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="view/jquery-3.3.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="view/js/auditorium.js"></script>
     <script src="view/js/segment.js"></script>
     <script src="view/js/institution.js"></script>
     <script src="view/js/show.js"></script>
     <script src="view/js/actor.js"></script>
+    <script src="view/js/projection.js"></script>
     <script src="view/js/homeForLoggedIn.js"></script>
-    <link rel="stylesheet" type="text/css" href="view/style.css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-D8WTGSqD_mFTqks7-mbFmpwdSFnAKA0"></script>
     <script src="view/toastr.min.js"></script>
     <link href="view/toastr.min.css" rel="stylesheet"/>
 </head>
@@ -337,7 +341,6 @@
                                id="addActorName"/>
                     </p>
                     <p>
-                    <p>
                         <input class="form-control" type="text" name="name" placeholder="Lastname"
                                id="addActorLastname"/>
                     </p>
@@ -377,6 +380,221 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="editActorButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addProjectionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New projection</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addProjectionForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addProjectionInstitutionId"/>
+                    <input type="hidden" name="id" id="addProjectionShowId"/>
+                    <p>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' id="addProjectionDate" class="form-control"
+                                   placeholder="Date yyyy-MM-dd HH:mm:ss"/>
+                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        /*$(function () {
+                            $('#datetimepicker1').datepicker();
+                        });*/
+                    </script>
+                    </p>
+                    <p>
+                        <select class="form-control" id="addProjectionAuditorium">
+                            <option value="" disabled selected hidden>Select auditorium</option>
+                        </select>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addProjectionButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editProjectionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit projection</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editProjectionForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="idPrjectionEdit"/>
+                    <input type="hidden" name="id" id="idShowProjectionEdit"/>
+                    <input type="hidden" name="id" id="idInstitutionProjectionEdit"/>
+                    <p>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker2'>
+                            <input type='text' id="editProjectionDate" class="form-control"
+                                   placeholder="Date yyyy-MM-dd HH:mm:ss"/>
+                            <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        /*$(function () {
+                            $('#datetimepicker2').datepicker();
+                        });*/
+                    </script>
+                    </p>
+                    <p>
+                        <select class="form-control" id="editProjectionAuditorium">
+                            <option value="" disabled selected hidden>Select auditorium</option>
+                        </select>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editProjectionButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addSegmentProjectionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add segment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addSegmentProjectionForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addSegmentProjectionInstitutionId"/>
+                    <input type="hidden" name="id" id="addSegmentProjectionProjectionId"/>
+                    <p>
+                        <select class="form-control" id="addSegmentProjectionSegment">
+                            <option value="" disabled selected hidden>Select segment</option>
+                        </select>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Price"
+                               id="addSegmentProjectionPrice"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addSegmentProjectionButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editSegmentProjectionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit segment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editSegmentProjectionForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="editSegmentProjectionInstitutionId"/>
+                    <input type="hidden" name="id" id="editSegmentProjectionProjectionId"/>
+                    <input type="hidden" name="id" id="editSegmentProjectionSegmentId"/>
+                    <p>
+                        <label>Price</label> <input class="form-control" type="text" name="label"
+                                                    id="priceSegmentProjectionEdit"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editSegmentProjectionButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editInstitutionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit institution</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editInstitutionForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="editInstitutionId"/>
+                    <p>
+                        <label>Name</label> <input class="form-control" type="text" name="label"
+                                                   id="nameInstitutionEdit"/>
+                    </p>
+                    <p>
+                        <label>Description</label> <textarea class="form-control" name="label"
+                                                             id="descriptionInstitutionEdit"></textarea>
+                    </p>
+                    <p>
+                        <label>Adress</label> <input class="form-control" type="text" name="label"
+                                                     id="addressInstitutionEdit"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editInstitutionButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="uploadShowImageModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="uploadShowImageForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="uploadShowImageIdShow"/>
+                    <p>
+                        <label>Name</label> <input id="uploadShowImageInput" class="form-control" name="FileUpload"
+                                                   multiple="" type="file"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="uploadShowImageButton">Confirm</button>
                 </div>
             </form>
         </div>

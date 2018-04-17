@@ -3,8 +3,8 @@ package com.isa.projekcije.constants;
 public class InstitutionConstants {
     public static final Long DB_ID = 1L;
     public static final String DB_NAME = "ArenaCineplex";
-    public static final double DB_LONGITUDE = 1.0;
-    public static final double DB_LATITUDE = 1.0;
+    public static final double DB_LONGITUDE = 19.853547;
+    public static final double DB_LATITUDE = 45.254313;
     public static final Boolean DB_ISCINEMA = true;
 
     public static final String NEW_NAME = "NoviBioskop";

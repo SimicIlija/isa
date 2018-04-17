@@ -1,4 +1,6 @@
 function showInstitution(idInstitution) {
+    var longitude;
+    var latitude;
     $.ajax({
         async: false,
         type: "GET",
@@ -9,10 +11,17 @@ function showInstitution(idInstitution) {
             tab.empty();
             newInstitution =
                 "<div>"
-                + "<h2>" + data.name + "</h2>"
-                + "<p>" + data.description + "</p>"
+                + "<a href=\"#\" onclick=\"return editInstitution(" + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                + "</a>"
+                + "<div class='row'><div class='col-lg-6'>"
+                + "<h2 id='institutionName" + data.id + "'>" + data.name + "</h2>"
+                + "<p id='institutionDescription" + data.id + "'>" + data.description + "</p>"
+                + "<p id='instisutionAdress" + data.id + "'></p>"
+                + "</div><div class='col-lg-6'><div id='map" + data.id + "' style='width: 100%;height:400px;'></div></div></div></div><br><br>\n";
+            longitude = data.longitude;
+            latitude = data.latitude;
 
-                + "</div><br><br>";
             tab.append(newInstitution);
             tabela =
                 "<div class=\"panel panel-default\">\n" +
@@ -99,6 +108,7 @@ function showInstitution(idInstitution) {
                 "                                                <th>Genre</th>\n" +
                 "                                                <th>Producer</th>\n" +
                 "                                                <th>Duration</th>\n" +
+                "                                                <th>Poster</th>\n" +
                 "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
                 "                                            </tr>\n" +
                 "                                            </thead>\n" +
@@ -108,8 +118,8 @@ function showInstitution(idInstitution) {
                 "                                    </div>\n" +
                 "                                </div>\n" +
                 "                            </div><br><br>" +
-                "<div class='container'>" +
-                "<div class='col-lg-6'>" +
+                "<div class='row'>" +
+                "<div class='col-lg-4'>" +
                 "<div class=\"span7\">\n" +
                 "                                <div class=\"widget stacked widget-table action-table\">\n" +
                 "                                    <div id='divAddActor" + idInstitution + "' class=\"widget-header\">\n" +
@@ -121,7 +131,7 @@ function showInstitution(idInstitution) {
                 "                                            <tr>\n" +
                 "                                                <th>First name</th>\n" +
                 "                                                <th>Last name</th>\n" +
-                "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:130px\"></th>\n" +
                 "                                            </tr>\n" +
                 "                                            </thead>\n" +
                 "                                            <tbody id=\"tableActorsTBody" + idInstitution + "\">" +
@@ -131,7 +141,7 @@ function showInstitution(idInstitution) {
                 "                                </div>\n" +
                 "                            </div>" +
                 "</div>" +
-                "<div class='col-lg-6'>" +
+                "<div class='col-lg-5'>" +
 
                 "<div class=\"span7\">\n" +
                 "                                <div class=\"widget stacked widget-table action-table\">\n" +
@@ -142,12 +152,37 @@ function showInstitution(idInstitution) {
                 "                                        <table class=\"table table-striped table-bordered\">\n" +
                 "                                            <thead>\n" +
                 "                                            <tr>\n" +
+                "                                                <th>ID</th>\n" +
                 "                                                <th>Date</th>\n" +
                 "                                                <th>Auditorium ID</th>\n" +
-                "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:170px\"></th>\n" +
                 "                                            </tr>\n" +
                 "                                            </thead>\n" +
                 "                                            <tbody id=\"tableProjectionsTBody" + idInstitution + "\">\n" +
+                "                                            </tbody>\n" +
+                "                                        </table>\n" +
+                "                                    </div>\n" +
+                "                                </div>\n" +
+                "                            </div>" +
+                "</div>" +
+
+                "<div class='col-lg-3'>" +
+
+                "<div class=\"span7\">\n" +
+                "                                <div class=\"widget stacked widget-table action-table\">\n" +
+                "                                    <div id='divAddSegmentProjection" + idInstitution + "' class=\"widget-header\">\n" +
+                "                                        <h3>Segments</h3>\n" +
+                "                                    </div>\n" +
+                "                                    <div class=\"widget-content\">\n" +
+                "                                        <table class=\"table table-striped table-bordered\">\n" +
+                "                                            <thead>\n" +
+                "                                            <tr>\n" +
+                "                                                <th>Segment ID</th>\n" +
+                "                                                <th>Price</th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:120px\"></th>\n" +
+                "                                            </tr>\n" +
+                "                                            </thead>\n" +
+                "                                            <tbody id=\"tableSegmentProjectionTBody" + idInstitution + "\">\n" +
                 "                                            </tbody>\n" +
                 "                                        </table>\n" +
                 "                                    </div>\n" +
@@ -180,7 +215,7 @@ function showInstitution(idInstitution) {
                             + "</a>&nbsp;&nbsp;&nbsp;"
                             + "<a href=\"#\" onclick=\"return showSegments(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
                             + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
-                            + "</a>&nbsp;&nbsp;&nbsp;"
+                            + "</a>"
                             + "</td>"
                             + "</tr>";
 
@@ -203,6 +238,11 @@ function showInstitution(idInstitution) {
                             + "<td id='showGenre" + data[i].id + "'>" + data[i].genre + "</td>"
                             + "<td id='showProducer" + data[i].id + "'>" + data[i].producer + "</td>"
                             + "<td id='showDuration" + data[i].id + "'>" + data[i].duration + "</td>"
+                            + "<td id='showImage" + data[i].id + "'>"
+                            + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data[i].id + ");\" class=\"btn btn-small btn-default\">"
+                            + "<i class=\"glyphicon glyphicon-upload\"></i>"
+                            + "</a>"
+                            + "</td>"
                             + "<td class=\"td-actions\">"
                             + "<a href=\"#\" onclick=\"return editShow(" + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
                             + "<i class=\"glyphicon glyphicon-pencil\"></i>"
@@ -212,7 +252,7 @@ function showInstitution(idInstitution) {
                             + "</a>&nbsp;&nbsp;&nbsp;"
                             + "<a href=\"#\" onclick=\"return showActorsAndProjections(" + idInstitution + ", " + data[i].id + ");\" class=\"btn btn-small btn-default\" title=\"Show actors and projections\">"
                             + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
-                            + "</a>&nbsp;&nbsp;&nbsp;"
+                            + "</a>"
                             + "</td>"
                             + "</tr>";
 
@@ -223,5 +263,38 @@ function showInstitution(idInstitution) {
 
         }
     });
+
+    var geocoder = new google.maps.Geocoder();             // create a geocoder object
+    var location = new google.maps.LatLng(latitude, longitude);    // turn coordinates into an object
+    geocoder.geocode({'latLng': location}, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {           // if geocode success
+                                                                 // if address found, pass to processing function
+            $('#instisutionAdress' + idInstitution).append(results[0].formatted_address);
+
+        }
+    });
+
+    map = new google.maps.Map(document.getElementById('map' + idInstitution), {
+        center: {lat: latitude, lng: longitude},
+        zoom: 17
+    });
+    var marker = new google.maps.Marker({
+        position: {lat: latitude, lng: longitude},
+        map: map
+    });
+    return false;
+}
+
+function editInstitution(idInstitution) {
+    var name = $('#institutionName' + idInstitution).text();
+    var description = $('#institutionDescription' + idInstitution).text();
+    var address = $('#instisutionAdress' + idInstitution).text();
+
+    $("#editInstitutionId").val(idInstitution);
+    $("#nameInstitutionEdit").val(name);
+    $("#descriptionInstitutionEdit").val(description);
+    $("#addressInstitutionEdit").val(address);
+
+    $("#editInstitutionModal").modal('toggle');
     return false;
 }
