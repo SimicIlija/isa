@@ -532,12 +532,12 @@ function tabFriendsClick() {
                                 newFriendship += "<p>" + dataFriends[i].receiver.firstName + " " + dataFriends[i].receiver.lastName + " " + dataFriends[i].receiver.email
 
                                 newFriendship += "<button type=\"button\" class=\"btn btn-warning\" onclick=\"ukloniPrijatelja(" + dataFriends[i].receiver.id + ")\">Cancel request</button>"
-
+                                friendsDiv.append(newFriendship);
                             }
 
 
                         }
-                        friendsDiv.append(newFriendship);
+
 
                     }
                     $.ajax({
@@ -652,7 +652,7 @@ function ukloniPrijatelja(idFriend) {
 function logout() {
     $.ajax({
         url: "user/logout",
-        type: "GET",
+        type: "POST",
         dataType: "json",
         success: function (data) {
             if (data == true) {
@@ -679,31 +679,8 @@ function dodajPrijatelja(idFriend) {
 
             } else {
 
-                $.ajax({
-                    async: false,
-                    url: "friendships/getFriendsNotAccepted",
-                    dataType: "json",
-                    success: function (data) {
-                        var friendsDiv = $('#friendsDivAdded');
-                        friendsDiv.empty();
-                        for (i = 0; i < data.length; i++) {
-                            newFriend =
-                                "<div class='container'>"
-                                + "<div class='divFriends'>"
-
-                                + "<p>" + data[i].receiver.firstName + " " + data[i].receiver.lastName + " " + data[i].receiver.email + "   "
-                                + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"obrisiZahtev(" + data[i].id + ")\">Cancel request</button>"
-                                + "</div>"
-                                + "</div>";
-                            friendsDiv.append(newFriend);
-                        }
-                    }
-                });
-                toastr["success"]("Friend request sent");
 
                 tabFriendsClick();
-                //toastr["success"]("Friend request sent");
-
 
             }
         }, error: function (jqxhr, textStatus, errorThrown) {

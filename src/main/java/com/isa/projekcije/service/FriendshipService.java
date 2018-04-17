@@ -1,7 +1,12 @@
 package com.isa.projekcije.service;
 
+import com.isa.projekcije.converters.FriendshipToFriendshipDTO;
+import com.isa.projekcije.converters.UserDTOToUser;
+import com.isa.projekcije.converters.UserToUserDTO;
 import com.isa.projekcije.model.Friendship;
 import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.dto.FriendshipDTO;
+import com.isa.projekcije.model.dto.UserDTO;
 import com.isa.projekcije.repository.FriendshipRepository;
 import com.isa.projekcije.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,12 @@ public class FriendshipService {
     @Autowired
     private FriendshipRepository friendshipRepository;
 
+    @Autowired
+    private UserToUserDTO userToUserDTO;
+    @Autowired
+    FriendshipToFriendshipDTO friendshipToFriendshipDTO;
+    @Autowired
+    private UserDTOToUser userDTOToUser;
 
     @Autowired
     private UserService userService;
@@ -49,18 +60,18 @@ public class FriendshipService {
     }
 
 
-    public List<Friendship> getAllFriendships() {
+    public List<FriendshipDTO> getAllFriendships() {
         List<Friendship> friendships = friendshipRepository.findBySenderId(userService.getCurrentUser().getId());
+        List<FriendshipDTO> friendshipDTOList = friendshipToFriendshipDTO.convert(friendships);
 
-
-        return friendships;
+        return friendshipDTOList;
     }
 
     public List<Friendship> findBySenderId(long id) {
         return friendshipRepository.findBySenderId(id);
     }
 
-    public List<Friendship> getAllRequests() {
+    public List<FriendshipDTO> getAllRequests() {
         User loggedIn = userService.getCurrentUser();
         List<Friendship> friendships = friendshipRepository.findByReceiverId(loggedIn.getId());
         List<Friendship> accepted = new ArrayList<Friendship>();
@@ -71,7 +82,11 @@ public class FriendshipService {
             }
         }
         friendships.removeAll(accepted);
-        return friendships;
+        List<FriendshipDTO> friendshipDTOList = new ArrayList<FriendshipDTO>();
+        if (friendships != null) {
+            friendshipDTOList = friendshipToFriendshipDTO.convert(friendships);
+        }
+        return friendshipDTOList;
     }
 
     public List<Friendship> findBySenderIdOrReceiverId(long id, long id1) {
@@ -95,7 +110,7 @@ public class FriendshipService {
         return friendship;
     }
 
-    public List<User> getAllUsersExceptLoggedIn() {
+    public List<UserDTO> getAllUsersExceptLoggedIn() {
         List<User> users = userService.findAll(new Sort("email"));
         User user = userService.getCurrentUser();
         for (User u : users) {
@@ -117,12 +132,17 @@ public class FriendshipService {
         }
 
         User userReceiver = null;
-        List<Friendship> userReceiverFriendships = getAllRequests();
-        List<User> requestRemove = new ArrayList<User>();
-        for (Friendship friend : userReceiverFriendships) {
+        List<FriendshipDTO> userReceiverFriendships = getAllRequests();
+        List<UserDTO> requestRemove = new ArrayList<UserDTO>();
+        for (FriendshipDTO friend : userReceiverFriendships) {
             if (friend.getReceiver().getEmail().equals(user.getEmail())) {
                 requestRemove.add(friend.getSender());
             }
+        }
+
+        if (requestRemove != null) {
+            List<User> requestRemoveUser = userDTOToUser.convert(requestRemove);
+            users.removeAll(requestRemoveUser);
         }
         List<Friendship> confirmedFriendships = findBySenderIdOrReceiverId(user.getId(), user.getId());
         List<User> confirmRemove = new ArrayList<User>();
@@ -134,9 +154,10 @@ public class FriendshipService {
             }
         }
 
-        users.removeAll(requestRemove);
+
         users.removeAll(toRemove);
         users.removeAll(confirmRemove);
-        return users;
+        List<UserDTO> usersDTOs = userToUserDTO.convert(users);
+        return usersDTOs;
     }
 }

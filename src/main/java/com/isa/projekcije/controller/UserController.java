@@ -2,6 +2,7 @@ package com.isa.projekcije.controller;
 
 
 import com.isa.projekcije.converters.RegistrationDTOToUser;
+import com.isa.projekcije.converters.UserToUserDTO;
 import com.isa.projekcije.model.ServletContextImpl;
 
 import com.isa.projekcije.model.User;
@@ -9,6 +10,7 @@ import com.isa.projekcije.model.dto.ChangePasswordDTO;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
 
+import com.isa.projekcije.model.dto.UserDTO;
 import com.isa.projekcije.service.UserService;
 
 import com.isa.projekcije.service.EmailService;
@@ -45,6 +47,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserToUserDTO userToUserDTO;
+
 
     @Autowired
     private EmailService emailService;
@@ -59,8 +64,8 @@ public class UserController {
 
         if (user != null) {
             userService.setCurrentUser(user);
-
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserDTO userDTO = userToUserDTO.convert(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }
 
         return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -102,7 +107,7 @@ public class UserController {
             emailService.sendNotificaitionAsync(registeredUser);
 
             retRegisteredUser = userService.createUser(registrationDTO);
-
+            UserDTO retRegisteredUserDTO = userToUserDTO.convert(retRegisteredUser);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -125,7 +130,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
+    /*@RequestMapping(
             value = "/logout",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -136,8 +141,8 @@ public class UserController {
         } else {
             return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
         }
-    }
-
+    }*/
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/changeFirstName",
             method = RequestMethod.POST,
@@ -149,12 +154,14 @@ public class UserController {
             usr.setFirstName(user.getFirstName());
             User u = userService.save(usr);
             userService.setCurrentUser(u);
-            return new ResponseEntity<>(u, HttpStatus.OK);
+            UserDTO dto = userToUserDTO.convert(u);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/changeLastName",
             method = RequestMethod.POST,
@@ -166,7 +173,8 @@ public class UserController {
             usr.setLastName(user.getLastName());
             User u = userService.save(usr);
             userService.setCurrentUser(u);
-            return new ResponseEntity<>(u, HttpStatus.OK);
+            UserDTO dto = userToUserDTO.convert(u);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -174,12 +182,21 @@ public class UserController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/signout")
+    @RequestMapping(
+            value = "/logout",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity signout() {
         SecurityContextHolder.clearContext();
-        return new ResponseEntity(HttpStatus.OK);
+        Boolean success = userService.logout();
+        if (success == true) {
+            return new ResponseEntity<>(success, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+        }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/changeEmail",
             method = RequestMethod.POST,
@@ -197,12 +214,14 @@ public class UserController {
             usr.setEmail(user.getEmail());
             User u = userService.save(usr);
             userService.setCurrentUser(u);
-            return new ResponseEntity<>(u, HttpStatus.OK);
+            UserDTO dto = userToUserDTO.convert(u);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/changePhoneNumber",
             method = RequestMethod.POST,
@@ -214,12 +233,14 @@ public class UserController {
             usr.setPhoneNumber(user.getPhoneNumber());
             User u = userService.save(usr);
             userService.setCurrentUser(u);
-            return new ResponseEntity<>(u, HttpStatus.OK);
+            UserDTO dto = userToUserDTO.convert(u);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/sendEmail",
             method = RequestMethod.POST,
@@ -243,7 +264,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/changePassword",
             method = RequestMethod.POST,

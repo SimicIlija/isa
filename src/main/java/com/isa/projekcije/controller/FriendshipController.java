@@ -1,7 +1,11 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.converters.FriendshipToFriendshipDTO;
+import com.isa.projekcije.converters.UserToUserDTO;
 import com.isa.projekcije.model.Friendship;
 import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.dto.FriendshipDTO;
+import com.isa.projekcije.model.dto.UserDTO;
 import com.isa.projekcije.service.FriendshipService;
 import com.isa.projekcije.service.UserService;
 import org.slf4j.Logger;
@@ -26,7 +30,11 @@ public class FriendshipController {
 
     @Autowired
     private FriendshipService friendshipService;
+    @Autowired
+    private FriendshipToFriendshipDTO friendshipToFriendshipDTO;
 
+    @Autowired
+    private UserToUserDTO userToUserDTO;
 
     @Autowired
     private UserService userService;
@@ -76,8 +84,8 @@ public class FriendshipController {
     public ResponseEntity accept(@PathVariable long senderId) {
         final User receiver = (User) userService.getCurrentUser();
         final Friendship updatedFriendship = friendshipService.accept(senderId, receiver.getId());
-
-        return new ResponseEntity<>(updatedFriendship, HttpStatus.OK);
+        FriendshipDTO updatedFriendshipDTO = friendshipToFriendshipDTO.convert(updatedFriendship);
+        return new ResponseEntity<>(updatedFriendshipDTO, HttpStatus.OK);
     }
 
 
@@ -87,8 +95,7 @@ public class FriendshipController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> getAllFriendships() {
-        List<Friendship> friendships = friendshipService.getAllFriendships();
-
+        List<FriendshipDTO> friendships = friendshipService.getAllFriendships();
 
         return new ResponseEntity<>(friendships, HttpStatus.OK);
     }
@@ -99,7 +106,7 @@ public class FriendshipController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> getRequests() {
-        List<Friendship> friendships = friendshipService.getAllRequests();
+        List<FriendshipDTO> friendships = friendshipService.getAllRequests();
 
         return new ResponseEntity<>(friendships, HttpStatus.OK);
     }
@@ -133,8 +140,9 @@ public class FriendshipController {
             }
 
         }
+        List<UserDTO> userDTOS = userToUserDTO.convert(users);
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
 
