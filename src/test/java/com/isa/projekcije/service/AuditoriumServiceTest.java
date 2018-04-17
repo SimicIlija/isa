@@ -24,7 +24,7 @@ public class AuditoriumServiceTest extends ProjekcijeApplicationTests {
     @Test
     public void testFindAll() {
         List<Auditorium> institutions = auditoriumService.findAll();
-        assertThat(institutions).hasSize(AuditoriumConstants.DB_COUNT);
+        assertThat(institutions).hasSize(AuditoriumConstants.DB_COUNT_ALL);
     }
 
     @Test

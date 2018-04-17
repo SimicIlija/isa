@@ -27,6 +27,8 @@ public class Projection {
     @OneToMany(mappedBy = "projection", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
+    @OneToMany(mappedBy = "projection", cascade = CascadeType.REMOVE)
+    private List<ProjectionRating> projectionRatings;
 
     public Projection() {
     }
@@ -83,5 +85,13 @@ public class Projection {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<ProjectionRating> getProjectionRatings() {
+        return projectionRatings;
+    }
+
+    public void setProjectionRatings(List<ProjectionRating> projectionRatings) {
+        this.projectionRatings = projectionRatings;
     }
 }

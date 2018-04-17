@@ -8,6 +8,7 @@ public class InstitutionDTO {
     private double latitude;
     private String description;
     private Boolean isCinema;
+    private Double rating;
 
     public InstitutionDTO() {
     }
@@ -19,6 +20,14 @@ public class InstitutionDTO {
         this.latitude = latitude;
         this.description = description;
         this.isCinema = isCinema;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public Long getId() {

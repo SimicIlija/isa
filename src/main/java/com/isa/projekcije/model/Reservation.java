@@ -1,14 +1,9 @@
 package com.isa.projekcije.model;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 public class Reservation {
@@ -86,5 +81,21 @@ public class Reservation {
 
     public void setTickets_reserved(List<Ticket> tickets_reserved) {
         this.tickets_reserved = tickets_reserved;
+    }
+
+    public Projection getProjection() {
+        return projection;
+    }
+
+    public void setProjection(Projection projection) {
+        this.projection = projection;
+    }
+
+    public List<User> getInvited_friends() {
+        return invited_friends;
+    }
+
+    public void setInvited_friends(List<User> invited_friends) {
+        this.invited_friends = invited_friends;
     }
 }

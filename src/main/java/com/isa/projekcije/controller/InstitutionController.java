@@ -2,12 +2,10 @@ package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.InstitutionDTOToInstitutionConverter;
 import com.isa.projekcije.converters.InstitutionToInstitutionDTOConverter;
-import com.isa.projekcije.model.Institution;
-import com.isa.projekcije.model.InstitutionAdmin;
-import com.isa.projekcije.model.Role;
-import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.*;
 import com.isa.projekcije.model.dto.InstitutionDTO;
 import com.isa.projekcije.service.InstitutionService;
+import com.isa.projekcije.service.ProjectionRatingService;
 import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +29,9 @@ public class InstitutionController {
     private InstitutionDTOToInstitutionConverter institutionDTOToInstitutionConverter;
 
     @Autowired
+    private ProjectionRatingService projectionRatingService;
+
+    @Autowired
     private UserService userService;
 
     @RequestMapping(
@@ -43,7 +44,15 @@ public class InstitutionController {
         if (institution == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(institution), HttpStatus.OK);
+        InstitutionDTO institutionDTO = institutionToInstitutionDTOConverter.convert(institution);
+        List<ProjectionRating> projectionRatings = projectionRatingService.findByInstitution(idInstitution);
+        double rating = 0;
+        for (ProjectionRating projectionRating : projectionRatings) {
+            rating += projectionRating.getInstitutionRating();
+        }
+        rating = rating / projectionRatings.size();
+        institutionDTO.setRating(rating);
+        return new ResponseEntity<>(institutionDTO, HttpStatus.OK);
     }
 
     @RequestMapping(

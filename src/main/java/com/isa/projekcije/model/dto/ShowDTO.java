@@ -10,6 +10,7 @@ public class ShowDTO {
     private String posterFileName;
     private Long idInstitution;
     private String description;
+    private double rating;
 
     public Long getIdInstitution() {
         return idInstitution;
@@ -97,5 +98,13 @@ public class ShowDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }
