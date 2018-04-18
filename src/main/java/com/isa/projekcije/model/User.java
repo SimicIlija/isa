@@ -62,9 +62,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<ProjectionRating> projectionRatings;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<InstitutionRating> institutionRatings;
-
     @JsonIgnore
     @OneToMany(mappedBy = "bidder")
     private Set<Bid> bids;
@@ -169,14 +166,6 @@ public class User implements Serializable {
 
     public void setProjectionRatings(List<ProjectionRating> projectionRatings) {
         this.projectionRatings = projectionRatings;
-    }
-
-    public List<InstitutionRating> getInstitutionRatings() {
-        return institutionRatings;
-    }
-
-    public void setInstitutionRatings(List<InstitutionRating> institutionRatings) {
-        this.institutionRatings = institutionRatings;
     }
 
     public List<Reservation> getReservations() {

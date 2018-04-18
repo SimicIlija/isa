@@ -1,13 +1,9 @@
 package com.isa.projekcije.controller;
 
-import com.isa.projekcije.converters.InstitutionRatingDTOToInstitutionRating;
-import com.isa.projekcije.converters.InstitutionRatingToInstitutionRatingDTO;
 import com.isa.projekcije.converters.ProjectionRatingDTOToProjectionRating;
 import com.isa.projekcije.converters.ProjectionRatingToProjectionRatingDTO;
-import com.isa.projekcije.model.InstitutionRating;
 import com.isa.projekcije.model.ProjectionRating;
 import com.isa.projekcije.model.dto.ProjectionRatingDTO;
-import com.isa.projekcije.service.InstitutionRatingService;
 import com.isa.projekcije.service.ProjectionRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,19 +20,10 @@ public class RatingController {
     private ProjectionRatingService projectionRatingService;
 
     @Autowired
-    private InstitutionRatingService institutionRatingService;
-
-    @Autowired
     private ProjectionRatingDTOToProjectionRating projectionRatingDTOToProjectionRating;
 
     @Autowired
     private ProjectionRatingToProjectionRatingDTO projectionRatingToProjectionRatingDTO;
-
-    @Autowired
-    private InstitutionRatingToInstitutionRatingDTO institutionRatingToInstitutionRatingDTO;
-
-    @Autowired
-    private InstitutionRatingDTOToInstitutionRating institutionRatingDTOToInstitutionRating;
 
     @RequestMapping(
             value = "/getByProjection/{idProjection}",
@@ -45,15 +32,6 @@ public class RatingController {
     public ResponseEntity<?> getByProjection(@PathVariable Long idProjection) {
         List<ProjectionRating> projectionRatingList = projectionRatingService.getByProjection(idProjection);
         return new ResponseEntity<>(projectionRatingToProjectionRatingDTO.convert(projectionRatingList), HttpStatus.OK);
-    }
-
-    @RequestMapping(
-            value = "/getByInstitution/{idInstitution}",
-            method = RequestMethod.GET
-    )
-    public ResponseEntity<?> getByInstitution(@PathVariable Long idInstitution) {
-        List<InstitutionRating> institutionRatingList = institutionRatingService.getByProjection(idInstitution);
-        return new ResponseEntity<>(institutionRatingToInstitutionRatingDTO.convert(institutionRatingList), HttpStatus.OK);
     }
 
     @RequestMapping(
