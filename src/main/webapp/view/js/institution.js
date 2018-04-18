@@ -8,6 +8,16 @@ function showInstitution(idInstitution) {
         dataType: "json",
         success: function (data) {
             var tab = $('#tab' + idInstitution);
+            var rating = Math.round(data.rating * 100) / 100;
+            var ratingDiv = "";
+            for (i = 1; i <= Math.round(rating); i++) {
+                ratingDiv += "<span class=\"glyphicon glyphicon-star\"></span>";
+            }
+            for (i = Math.round(rating) + 1; i <= 5; i++) {
+                ratingDiv += "<span class=\"glyphicon glyphicon-star-empty\"></span>";
+            }
+            $('#friendsDiv').empty();
+            $('#cinemaDiv').empty();
             tab.empty();
             newInstitution =
                 "<div>"
@@ -16,8 +26,10 @@ function showInstitution(idInstitution) {
                 + "</a>"
                 + "<div class='row'><div class='col-lg-6'>"
                 + "<h2 id='institutionName" + data.id + "'>" + data.name + "</h2>"
-                + "<p id='institutionDescription" + data.id + "'>" + data.description + "</p>"
-                + "<p id='instisutionAdress" + data.id + "'></p>"
+                + "<p id='instisutionAdress" + data.id + "'></p><br>"
+                + "<p id='institutionDescription" + data.id + "'>" + data.description + "</p><br>"
+                + "<p id='institutionRating" + data.id + "'><h4>Rating: " + rating + "</h4></p>"
+                + ratingDiv
                 + "</div><div class='col-lg-6'><div id='map" + data.id + "' style='width: 100%;height:400px;'></div></div></div></div><br><br>\n";
             longitude = data.longitude;
             latitude = data.latitude;
@@ -109,6 +121,7 @@ function showInstitution(idInstitution) {
                 "                                                <th>Producer</th>\n" +
                 "                                                <th>Duration</th>\n" +
                 "                                                <th>Poster</th>\n" +
+                "                                                <th>Rating</th>\n" +
                 "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
                 "                                            </tr>\n" +
                 "                                            </thead>\n" +
@@ -231,6 +244,11 @@ function showInstitution(idInstitution) {
                 dataType: "json",
                 success: function (data) {
                     for (i = 0; i < data.length; i++) {
+                        var rating = data[i].rating;
+                        if (isNaN(rating)) {
+                            rating = 0;
+                        }
+                        rating = Math.round(rating * 100) / 100;
                         newShow = "<tr>"
                             + "<td id='showID" + data[i].id + "'>" + data[i].id + "</td>"
                             + "<td id='showName" + data[i].id + "'>" + data[i].name + "</td>"
@@ -239,6 +257,7 @@ function showInstitution(idInstitution) {
                             + "<td id='showProducer" + data[i].id + "'>" + data[i].producer + "</td>"
                             + "<td id='showDuration" + data[i].id + "'>" + data[i].duration + "</td>"
                             + "<td id='showImage" + data[i].id + "'>"
+                            + "<td id='showRating" + data[i].id + "'>" + rating + "</td>"
                             + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data[i].id + ");\" class=\"btn btn-small btn-default\">"
                             + "<i class=\"glyphicon glyphicon-upload\"></i>"
                             + "</a>"

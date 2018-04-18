@@ -8,18 +8,18 @@ function getFormData($form) {
     return ordered_array;
 }
 $(document).ready(function () {
-    /*$.ajax({
+    $.ajax({
         url: "institution/getInstitutionsByAdmin",
         dataType: "json",
         success: function (data) {
             for(i = 0; i < data.length; i++) {
-                $(".nav nav-tabs").append("<li><a href=\"#tab" + data[i].id + "\" data-toggle=\"tab\">" + data[i].name + "</a></li>");
-                $(".tab-content").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
+                $("#tabovi").append("<li><a href=\"#tab" + data[i].id + "\" onclick='return showInstitution(" + data[i].id + ")' data-toggle=\"tab\">" + data[i].name + "</a></li>");
+                $("#divovi").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
             }
         }
-    });*/
+    });
 
-    $.ajax({
+    /*$.ajax({
         async: false,
         url: "institution/getInstitutions",
         dataType: "json",
@@ -29,7 +29,7 @@ $(document).ready(function () {
                 $("#divovi").append("<div class=\"tab-pane fade\" id=\"tab" + data[i].id + "\">" + data[i].name + "</div>");
             }
         }
-    });
+    });*/
 
     $("#addAuditoriumButton").click(function () {
         var idInstitution = $("#addAuditoriumInstitutionId").val();
@@ -171,6 +171,11 @@ $(document).ready(function () {
             contentType: "application/json",
             data: dataShow,
             success: function (data) {
+                var rating = data.rating;
+                if (isNaN(rating)) {
+                    rating = 0;
+                }
+                rating = Math.round(rating * 100) / 100;
                 newShow = "<tr>"
                     + "<td id='showID" + data.id + "'>" + data.id + "</td>"
                     + "<td id='showName" + data.id + "'>" + data.name + "</td>"
@@ -178,8 +183,9 @@ $(document).ready(function () {
                     + "<td id='showGenre" + data.id + "'>" + data.genre + "</td>"
                     + "<td id='showProducer" + data.id + "'>" + data.producer + "</td>"
                     + "<td id='showDuration" + data.id + "'>" + data.duration + "</td>"
-                    + "<td id='showImage" + data[i].id + "'>"
-                    + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data[i].id + ");\" class=\"btn btn-small btn-default\">"
+                    + "<td id='showImage" + data.id + "'>"
+                    + "<td id='showRating" + data.id + "'>" + rating + "</td>"
+                    + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data.id + ");\" class=\"btn btn-small btn-default\">"
                     + "<i class=\"glyphicon glyphicon-upload\"></i>"
                     + "</a>"
                     + "</td>"

@@ -13,4 +13,5 @@ public class AuditoriumConstants {
     public static final Long DB_NON_EXISTING_ID = 200L;
 
     public static final int DB_COUNT = 3;
+    public static final int DB_COUNT_ALL = 5;
 }

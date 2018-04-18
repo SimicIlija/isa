@@ -4,21 +4,13 @@ package com.isa.projekcije.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.fanzone.Bid;
 import com.isa.projekcije.model.fanzone.UserProps;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
-
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -67,6 +59,11 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "creator")
     private Set<UserProps> userProps;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<ProjectionRating> projectionRatings;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<InstitutionRating> institutionRatings;
 
     @JsonIgnore
     @OneToMany(mappedBy = "bidder")
@@ -166,5 +163,35 @@ public class User implements Serializable {
         this.bids = bids;
     }
 
+    public List<ProjectionRating> getProjectionRatings() {
+        return projectionRatings;
+    }
 
+    public void setProjectionRatings(List<ProjectionRating> projectionRatings) {
+        this.projectionRatings = projectionRatings;
+    }
+
+    public List<InstitutionRating> getInstitutionRatings() {
+        return institutionRatings;
+    }
+
+    public void setInstitutionRatings(List<InstitutionRating> institutionRatings) {
+        this.institutionRatings = institutionRatings;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public List<Reservation> getReservation_invited() {
+        return reservation_invited;
+    }
+
+    public void setReservation_invited(List<Reservation> reservation_invited) {
+        this.reservation_invited = reservation_invited;
+    }
 }

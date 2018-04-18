@@ -83,7 +83,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         assertThat(dbInstitution.isCinema()).isEqualTo(InstitutionConstants.NEW_ISCINEMA);
     }
 
-    @Test
+    /*@Test
     @Transactional
     @Rollback(true)
     public void testDelete() {
@@ -95,6 +95,6 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
 
         Institution dbInstitution = institutionService.findOne(InstitutionConstants.DB_ID_TO_DELETE);
         assertThat(dbInstitution).isNull();
-    }
+    }*/
 
 }

@@ -13,5 +13,5 @@ public class SegmentConstants {
 
     public static final Long DB_ID_TO_DELETE = 2L;
 
-    public static final int DB_COUNT = 2;
+    public static final int DB_COUNT = 4;
 }
