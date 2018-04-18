@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -297,27 +298,30 @@ public class UserController {
         }
         for (Reservation reservation : loggedIn.getReservations()) {
             if (!projectionIds.contains(reservation.getProjection().getId())) {
-                VisitDTO visitDTO = new VisitDTO(reservation.getProjection().getAuditorium().getInstitution().getId(),
-                        reservation.getProjection().getAuditorium().getInstitution().getName(),
-                        reservation.getProjection().getShow().getId(),
-                        reservation.getProjection().getShow().getName(),
-                        reservation.getProjection().getId(), loggedIn.getId());
+                Date todayDate = new Date();
+                if (todayDate.after(reservation.getProjection().getDate())) {
+                    VisitDTO visitDTO = new VisitDTO(reservation.getProjection().getAuditorium().getInstitution().getId(),
+                            reservation.getProjection().getAuditorium().getInstitution().getName(),
+                            reservation.getProjection().getShow().getId(),
+                            reservation.getProjection().getShow().getName(),
+                            reservation.getProjection().getId(), loggedIn.getId());
 
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                visitDTO.setDate(formatter.format(reservation.getProjection().getDate()));
+                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    visitDTO.setDate(formatter.format(reservation.getProjection().getDate()));
 
-                ProjectionRating projectionRating = projectionRatingService.getByUserAndProjection(loggedIn.getId(),
-                        reservation.getProjection().getId());
-                if (projectionRating != null) {
-                    visitDTO.setMyProjectionRating(projectionRating.getProjectionRating());
-                    visitDTO.setMyInstitutionRating(projectionRating.getInstitutionRating());
-                    visitDTO.setIdRating(projectionRating.getId());
-                } else {
-                    visitDTO.setMyProjectionRating(-1);
-                    visitDTO.setIdRating(-1L);
+                    ProjectionRating projectionRating = projectionRatingService.getByUserAndProjection(loggedIn.getId(),
+                            reservation.getProjection().getId());
+                    if (projectionRating != null) {
+                        visitDTO.setMyProjectionRating(projectionRating.getProjectionRating());
+                        visitDTO.setMyInstitutionRating(projectionRating.getInstitutionRating());
+                        visitDTO.setIdRating(projectionRating.getId());
+                    } else {
+                        visitDTO.setMyProjectionRating(-1);
+                        visitDTO.setIdRating(-1L);
+                    }
+                    visitDTOList.add(visitDTO);
+                    projectionIds.add(reservation.getProjection().getId());
                 }
-                visitDTOList.add(visitDTO);
-                projectionIds.add(reservation.getProjection().getId());
             }
         }
         return new ResponseEntity<>(visitDTOList, HttpStatus.OK);

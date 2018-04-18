@@ -63,8 +63,8 @@ insert into actor(name, lastname, id_show) values ('imeGlumca3', 'prezimeGlumca3
 insert into actor(name, lastname, id_show) values ('imeGlumca4', 'prezimeGlumca4', 1);
 
 insert into projection(id_show,date,id_auditorium) values (1,'2018-06-28 21:00:00',1);
-insert into projection(id_show,date,id_auditorium) values (1,'2018-06-28 20:00:00',2);
-insert into projection(id_show,date,id_auditorium) values (2,'2018-06-14 19:30:00',3);
+insert into projection(id_show,date,id_auditorium) values (1,'2018-02-28 20:00:00',2);
+insert into projection(id_show,date,id_auditorium) values (2,'2018-04-18 10:30:00',3);
 insert into projection(id_show,date,id_auditorium) values (2,'2018-06-28 21:00:00',1);
 insert into projection(id_show,date,id_auditorium) values (3,'2018-06-28 22:00:00',1);
 insert into projection(id_show,date,id_auditorium) values (4,'2018-06-28 23:00:00',1);
