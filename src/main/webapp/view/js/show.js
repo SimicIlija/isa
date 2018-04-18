@@ -5,6 +5,7 @@ function addShow(idInstitution) {
     $('#addShowGenre').val('');
     $('#addShowProducer').val('');
     $('#addShowDuration').val('');
+    $('#addShowImageURL').val('');
     $("#addShowModal").modal('toggle');
     return false;
 }
@@ -17,12 +18,14 @@ function editShow(idShow) {
     showGenre = $("#showGenre" + idShow).text();
     showProducer = $("#showProducer" + idShow).text();
     showDuration = $("#showDuration" + idShow).text();
+    showImageURL = $("#showImageURL" + idShow).text();
 
     $("#editShowName").val(showName);
     $("#editShowDescription").val(showDescription);
     $("#editShowGenre").val(showGenre);
     $("#editShowProducer").val(showProducer);
     $("#editShowDuration").val(showDuration);
+    $("#editShowImageURL").val(showImageURL);
 
     $("#editShowModal").modal('toggle');
     return false;
@@ -56,5 +59,14 @@ function deleteShow(idInstitution, isShow) {
 function uploadImageForShow(idShow) {
     $('#uploadShowImageIdShow').val(idShow);
     $('#uploadShowImageModal').modal('toggle');
+    return false;
+}
+
+function showImage(url) {
+    $('#showImageModal').modal('toggle');
+    div = $('#showImageModalDiv');
+    div.empty();
+    image = "<a href=\"" + url + "\">Show</a>";
+    div.append(image);
     return false;
 }

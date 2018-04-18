@@ -102,12 +102,20 @@ insert into user_props (name, description, end_date, state, creator_id, image_ur
 insert into bid (bid_state, price, bidder_id, user_props_id) values ('DEFAULT', 245, 1, 1);
 
 insert into reservation (date, id_projection, id_reserver) values ('2018-01-28 21:00:00', 1, 4);
-insert into reservation (date, id_projection, id_reserver) values ('2018-05-25 21:00:00', 3, 4);
-insert into reservation (date, id_projection, id_reserver) values ('2018-01-22 21:00:00', 2, 4);
-insert into reservation (date, id_projection, id_reserver) values ('2018-02-21 21:00:00', 2, 1);
+insert into reservation (date, id_projection, id_reserver) values ('2018-05-25 21:00:00', 1, 4);
+insert into reservation (date, id_projection, id_reserver) values ('2018-01-22 21:00:00', 1, 4);
+insert into reservation (date, id_projection, id_reserver) values ('2018-02-21 21:00:00', 1, 1);
 
 insert into reservation (date, id_projection, id_reserver) values ('2018-01-22 21:00:00', 7, 4);
 insert into reservation (date, id_projection, id_reserver) values ('2018-02-21 21:00:00', 7, 4);
+
+update ticket set id_reservation=1 where id = 1;
+update ticket set id_reservation=2 where id = 2;
+update ticket set id_reservation=3 where id = 3;
+update ticket set id_reservation=4 where id = 4;
+
+update ticket set id_reservation=5 where id = 5;
+update ticket set id_reservation=6 where id = 6;
 
 insert into projection_rating (id_projection, id_user, projection_rating, institution_rating) values (1, 4, 5, 2);
 insert into projection_rating (id_projection, id_user, projection_rating, institution_rating) values (3, 4, 5, 3);

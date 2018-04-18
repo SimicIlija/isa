@@ -257,11 +257,12 @@ function showInstitution(idInstitution) {
                             + "<td id='showProducer" + data[i].id + "'>" + data[i].producer + "</td>"
                             + "<td id='showDuration" + data[i].id + "'>" + data[i].duration + "</td>"
                             + "<td id='showImage" + data[i].id + "'>"
-                            + "<td id='showRating" + data[i].id + "'>" + rating + "</td>"
-                            + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data[i].id + ");\" class=\"btn btn-small btn-default\">"
-                            + "<i class=\"glyphicon glyphicon-upload\"></i>"
+                            + "<a href=\"#\" id='clickImage" + data[i].id + "' onclick=\"return showImage(" + data[i].posterFileName + ");\" class=\"btn btn-small btn-default\">"
+                            + "<i class=\"glyphicon glyphicon-eye-open\"></i>"
                             + "</a>"
+                            + "<input type='hidden' id='showImageURL" + data[i].id + "'>"
                             + "</td>"
+                            + "<td id='showRating" + data[i].id + "'>" + rating + "</td>"
                             + "<td class=\"td-actions\">"
                             + "<a href=\"#\" onclick=\"return editShow(" + data[i].id + ");\" class=\"btn btn-small btn-primary\">"
                             + "<i class=\"glyphicon glyphicon-pencil\"></i>"
@@ -279,6 +280,40 @@ function showInstitution(idInstitution) {
                     }
                 }
             });
+            income = "<div class='container'>"
+                + "<div class='row'>"
+                + "<div class='col-lg-5'>"
+                + "<form id='showIncomeForm" + idInstitution + "'>" +
+                "<div class=\"form-group\">\n" +
+                "<label>From: </label><div class='input-group date'>\n" +
+                "                            <input type='text' id=\"showIncomeDate1" + idInstitution + "\" class=\"form-control\"\n" +
+                "                                   placeholder=\"Date yyyy-MM-dd HH:mm:ss\"/>\n" +
+                "                            <span class=\"input-group-addon\">\n" +
+                "                                    <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
+                "                                </span>\n" +
+                "                        </div>\n" +
+                "<label>To: </label><div class='input-group date'>\n" +
+                "                            <input type='text' id=\"showIncomeDate2" + idInstitution + "\" class=\"form-control\"\n" +
+                "                                   placeholder=\"Date yyyy-MM-dd HH:mm:ss\"/>\n" +
+                "                            <span class=\"input-group-addon\">\n" +
+                "                                    <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
+                "                                </span>\n" +
+                "                        </div>\n"
+                + "<br><button type=\"button\" class=\"btn btn-primary\" onclick='showIncomeClick(" + idInstitution + ")'>Show</button>"
+                + "</form>"
+                + "</div>"
+                + "</div>"
+                + "<div class='col-lg-7' id='divShowIncome" + idInstitution + "'>"
+                + "</div>"
+                + "</div>"
+                + "</div>";
+            tab.append(income);
+            chartButton = "<br><br><br><div class='row'></div><button type=\"button\" class=\"btn btn-default\" onclick='prikazi(" + idInstitution + ")'>Show statistics</button></div><br><br><br>";
+            tab.append(chartButton);
+            chart = "<div class='container'><div class='row'><canvas id=\"graphDay" + idInstitution + "\" width=\"500\" height=\"200\"></canvas><canvas id=\"graphWeek" + idInstitution + "\" width=\"600\" height=\"200\"></canvas></div>"
+                + "<div class='row'><canvas id=\"graphMonth" + idInstitution + "\" width=\"900\" height=\"200\"></canvas></div></div>";
+            tab.append(chart);
+
 
         }
     });

@@ -17,6 +17,8 @@
     <script src="view/js/projection.js"></script>
     <script src="view/js/visitRating.js"></script>
     <script src="view/js/homeForLoggedIn.js"></script>
+    <script src="view/js/income.js"></script>
+    <script src="view/js/chart.js"></script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-D8WTGSqD_mFTqks7-mbFmpwdSFnAKA0"></script>
     <script src="view/toastr.min.js"></script>
@@ -289,6 +291,10 @@
                         <input class="form-control" type="text" name="name" placeholder="Duration"
                                id="addShowDuration"/>
                     </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Image URL"
+                               id="addShowImageURL"/>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -331,6 +337,10 @@
                     <p>
                         <input class="form-control" type="text" name="name" placeholder="Duration"
                                id="editShowDuration"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Image URL"
+                               id="editShowImageURL"/>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -617,6 +627,26 @@
                     <button type="button" class="btn btn-primary" id="uploadShowImageButton">Confirm</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="showImageModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="showImageModalDiv">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

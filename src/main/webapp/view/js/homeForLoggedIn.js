@@ -160,13 +160,15 @@ $(document).ready(function () {
         genre = $("#addShowGenre").val();
         producer = $("#addShowProducer").val();
         duration = $("#addShowDuration").val();
+        posterFileName = $("#addShowImageURL").val();
         var dataShow = JSON.stringify({
             "name": name,
             "genre": genre,
             "producer": producer,
             "duration": duration,
             "idInstitution": idInstitution,
-            "description": description
+            "description": description,
+            "posterFileName": posterFileName
         });
         $.ajax({
             async: false,
@@ -189,11 +191,12 @@ $(document).ready(function () {
                     + "<td id='showProducer" + data.id + "'>" + data.producer + "</td>"
                     + "<td id='showDuration" + data.id + "'>" + data.duration + "</td>"
                     + "<td id='showImage" + data.id + "'>"
-                    + "<td id='showRating" + data.id + "'>" + rating + "</td>"
-                    + "<a href=\"#\" onclick=\"return uploadImageForShow(" + data.id + ");\" class=\"btn btn-small btn-default\">"
-                    + "<i class=\"glyphicon glyphicon-upload\"></i>"
+                    + "<a href=\"#\" onclick=\"return showImage(" + data.posterFileName + ");\" class=\"btn btn-small btn-default\">"
+                    + "<i class=\"glyphicon glyphicon-eye-open\"></i>"
                     + "</a>"
+                    + "<input type='hidden' id='showImageURL" + data.id + "'>"
                     + "</td>"
+                    + "<td id='showRating" + data.id + "'>" + rating + "</td>"
                     + "<td class=\"td-actions\">"
                     + "<a href=\"#\" onclick=\"return editShow(" + data.id + ");\" class=\"btn btn-small btn-primary\">"
                     + "<i class=\"glyphicon glyphicon-pencil\"></i>"
@@ -208,6 +211,41 @@ $(document).ready(function () {
                     + "</tr>";
                 $("#addShowModal").modal('toggle');
                 $("#tableShowsTBody" + idInstitution).append(newShow);
+            }
+        });
+    });
+
+    $("#editShowButton").click(function () {
+        var idShow = $("#idShowEdit").val();
+        name = $("#editShowName").val();
+        description = $("#editShowDescription").val();
+        genre = $("#editShowGenre").val();
+        producer = $("#editShowProducer").val();
+        duration = $("#editShowDuration").val();
+        posterFileName = $("#editShowImageURL").val();
+        var dataShow = JSON.stringify({
+            "name": name,
+            "genre": genre,
+            "producer": producer,
+            "duration": duration,
+            "description": description,
+            "posterFileName": posterFileName
+        });
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "show/editShow/" + idShow,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataShow,
+            success: function (data) {
+                $('#showName' + data.id).text(data.name);
+                $('#showDescription' + data.id).text(data.description);
+                $('#showGenre' + data.id).text(data.genre);
+                $('#showProducer' + data.id).text(data.producer);
+                $('#showDuration' + data.id).text(data.duration);
+                $("#clickImage" + data.id).attr("onclick", "return showImage(" + data.posterFileName + ")");
+                $('#editShowModal').modal('toggle');
             }
         });
     });
@@ -307,6 +345,8 @@ $(document).ready(function () {
                     + "</tr>";
                 $("#addProjectionModal").modal('toggle');
                 $("#tableProjectionsTBody" + idInstitution).append(newProjection);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"]("Wrong date format.");
             }
         });
     });
