@@ -32,9 +32,6 @@ public class Institution {
     @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
     private List<Show> shows;
 
-    @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
-    private List<InstitutionRating> institutionRatings;
-
     public List<Show> getShows() {
         return shows;
     }
@@ -148,13 +145,5 @@ public class Institution {
 
     public void setInstitutionAdmins(List<InstitutionAdmin> institutionAdmins) {
         this.institutionAdmins = institutionAdmins;
-    }
-
-    public List<InstitutionRating> getInstitutionRatings() {
-        return institutionRatings;
-    }
-
-    public void setInstitutionRatings(List<InstitutionRating> institutionRatings) {
-        this.institutionRatings = institutionRatings;
     }
 }
