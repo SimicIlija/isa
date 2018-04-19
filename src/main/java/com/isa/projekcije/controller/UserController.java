@@ -37,7 +37,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class UserController {
 
 
-
     @Autowired
     RegistrationDTOToUser registrationDTOToUser;
 
@@ -99,10 +98,9 @@ public class UserController {
         /*if(!(registrationDTO.correctPassword())){
             return new ResponseEntity(new RuntimeException("Passwords do not match!"),HttpStatus.BAD_REQUEST);
         }*/
-      if (userService.emailExists(registrationDTO)) {
+        if (userService.emailExists(registrationDTO)) {
             return new ResponseEntity(new RuntimeException("Email already exists!"), HttpStatus.BAD_REQUEST);
         }
-
 
 
         RandomString gen = new RandomString(10, ThreadLocalRandom.current());
@@ -131,8 +129,10 @@ public class UserController {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getLoggedInUser() {
-        if (userService.getCurrentUser() != null) {
-            return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            RoleDto roleDto = RoleDto.createRoleDto(currentUser);
+            return new ResponseEntity<>(roleDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -196,12 +196,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity signout() {
         SecurityContextHolder.clearContext();
-        Boolean success = userService.logout();
-        if (success == true) {
-            return new ResponseEntity<>(success, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")

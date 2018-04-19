@@ -1,6 +1,7 @@
 package com.isa.projekcije.service;
 
 import com.isa.projekcije.model.InstitutionAdmin;
+import com.isa.projekcije.model.SystemAdmin;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,16 +26,11 @@ import java.util.List;
 @Service
 public class UserService {
 
-
     private UserRepository userRepository;
 
-
-    public HttpServletRequest request;
-
     @Autowired
-    public UserService(UserRepository userRepository, HttpServletRequest request) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.request = request;
 
     }
 
@@ -52,10 +47,7 @@ public class UserService {
     }
 
     public boolean emailExists(RegistrationDTO registrationDTO) {
-        if (userRepository.findByEmail(registrationDTO.getEmail()) != null) {
-            return true;
-        }
-        return false;
+        return userRepository.findByEmail(registrationDTO.getEmail()) != null;
     }
 
     public User findUser(LoginDTO loginDTO) {
@@ -64,10 +56,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-
-        List<User> users = userRepository.findAll(new Sort("email"));
-        return users;
-
+        return userRepository.findAll(new Sort("email"));
     }
 
     public User getUserById(Long id) {
@@ -81,10 +70,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User createInstitutionAdmin(RegistrationDTO registrationDTO) {
-        InstitutionAdmin institutionAdmin = registrationDTO.createNewInstitutionAdmin();
-        System.out.println(institutionAdmin.getFirstName());
-        return userRepository.save(institutionAdmin);
+    public InstitutionAdmin createInstitutionAdmin(RegistrationDTO registrationDTO) {
+        InstitutionAdmin institutionAdmin = InstitutionAdmin.createNewInstitutionAdmin(registrationDTO);
+        return (InstitutionAdmin) userRepository.save(institutionAdmin);
     }
 
     public void setCurrentUser(User user) {
@@ -100,17 +88,8 @@ public class UserService {
             Long id = Long.parseLong(auth.getName());
             return userRepository.findById(id).orElseThrow(RuntimeException::new);
         } catch (Exception e) {
-           return null;
+            return null;
         }
-    }
-
-
-    public HttpServletRequest getRequest() {
-        return null;
-    }
-
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
     }
 
     public User findById(long id) {
@@ -122,13 +101,6 @@ public class UserService {
         return userRepository.save(usr);
     }
 
-
-
-    public Boolean logout() {
-        request.getSession().invalidate();
-        return true;
-    }
-
     public List<User> findAll(Sort email) {
         return userRepository.findAll();
     }
@@ -136,5 +108,10 @@ public class UserService {
     public FanZoneAdmin createFanZoneAdmin(RegistrationDTO registrationDTO) {
         FanZoneAdmin fanZoneAdmin = FanZoneAdmin.createFromUser(registrationDTO);
         return (FanZoneAdmin) userRepository.save(fanZoneAdmin);
+    }
+
+    public SystemAdmin createSystemAdmin(RegistrationDTO registrationDTO) {
+        SystemAdmin systemAdmin = SystemAdmin.createFromDto(registrationDTO);
+        return (SystemAdmin) userRepository.save(systemAdmin);
     }
 }
