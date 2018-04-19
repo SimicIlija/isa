@@ -3,6 +3,7 @@ package com.isa.projekcije.model;
 import com.isa.projekcije.model.fanzone.ThemeProps;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -16,12 +17,23 @@ public class Show {
     @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
     private List<Projection> projections;
 
+    @NotNull
+    @Column(nullable = false)
     private String name;
+
+    @NotNull
+    @Column(nullable = false)
     private String genre;
+
+    @NotNull
+    @Column(nullable = false)
     private String producer;
+
     private int duration;
+
     private String posterFileName;
     private String description;
+
 
     @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
     private List<Actor> actors;

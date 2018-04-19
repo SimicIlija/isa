@@ -92,6 +92,9 @@ function showSegmentsForProjection(idInstitution, idProjection) {
                     + "<a href=\"#\" onclick=\"return deleteSegmentProjection(" + idInstitution + ", " + idProjection + ", " + data[i].idSegment + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showOnSaleTickets(" + idInstitution + ", " + idProjection + ', ' + data[i].idSegment + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>"
                     + "</td>"
                     + "</tr>";
 
@@ -114,7 +117,7 @@ function addSegmentProjection(idInstitution, idProjection) {
     $('#addSegmentProjectionInstitutionId').val(idInstitution);
     $('#addSegmentProjectionProjectionId').val(idProjection);
     $('#addSegmentProjectionPrice').val('');
-    var addSegmentProjectionSegment = $("#addSegmentProjectionSegment")
+    var addSegmentProjectionSegment = $("#addSegmentProjectionSegment");
     addSegmentProjectionSegment.empty();
     addSegmentProjectionSegment.append("<option value=\"\" disabled selected hidden>Select segment</option>");
 
@@ -162,8 +165,82 @@ function deleteSegmentProjection(idInstitution, idProjection, idSegment) {
             $('#segmentProjectionSegmentID' + data.idSegment).closest("tr").remove();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            toastr["error"]("Can't delete segment");
+            toastr["error"](jqXHR.responseText);
         }
     });
     return false;
+}
+
+function addSegmentClick() {
+    var idInstitution = $("#addSegmentInstitutionId").val();
+    var idAuditorium = $("#addSegmentAuditoriumId").val();
+    label = $("#addSegmentLabel").val();
+    rows = $("#addSegmentRows").val();
+    seats = $("#addSegmentSeatsInRow").val();
+
+    if (isNaN(rows) || isNaN(seats)) {
+        toastr["error"]("Rows and seats number must be numbers.");
+    } else {
+
+        var dataSegment = JSON.stringify({
+            "label": label,
+            "idAuditorium": idAuditorium,
+            "rowCount": rows,
+            "seatsInRowCount": seats
+        });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "segment/addSegment",
+            dataType: "json",
+            contentType: "application/json",
+            data: dataSegment,
+            success: function (data) {
+                newSegment = "<tr>"
+                    + "<td id='segmentLabel" + data.id + "'>" + data.label + "</td>"
+                    + "<td id='segmentRowCount" + data.id + "'>" + data.rowCount + "</td>"
+                    + "<td id='segmentSeatsInRowCount" + data.id + "'>" + data.seatsInRowCount + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>"
+                    + "</td>"
+                    + "</tr>";
+                $("#addSegmentModal").modal('toggle');
+                $("#tableSegmentsTBody" + idInstitution).append(newSegment);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
+            }
+        });
+    }
+}
+
+function editSegmentClick() {
+    $("#friendsDiv").empty();
+    idSegment = $("#idSegmentEdit").val();
+    label = $("#labelSegmentEdit").val();
+    rows = $("#rowsSegmentEdit").val();
+    seats = $("#seatsInRowSegmentEdit").val();
+    var idInstitution = $("#idInstitutionSegmentEdit").val();
+
+    var dataSegment = JSON.stringify({"label": label, "rowCount": rows, "seatsInRowCount": seats});
+    $.ajax({
+        async: false,
+        type: "PUT",
+        url: "segment/editSegment/" + idSegment,
+        dataType: "json",
+        contentType: "application/json",
+        data: dataSegment,
+        success: function (data) {
+            $('#segmentLabel' + data.id).text(data.label);
+            $('#segmentRowCount' + data.id).text(data.rowCount);
+            $('#segmentSeatsInRowCount' + data.id).text(data.seatsInRowCount);
+            $('#editSegmentModal').modal('toggle');
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"](jqxhr.responseText);
+        }
+    });
 }

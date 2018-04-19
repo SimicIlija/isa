@@ -1,6 +1,5 @@
 package com.isa.projekcije.repository;
 
-import com.isa.projekcije.model.Projection;
 import com.isa.projekcije.model.Seat;
 import com.isa.projekcije.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +23,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findAll();
 
+    Ticket findByProjectionIdAndSeatSegmentIdAndSeatRowAndSeatSeatNumber(Long idProjection, Long idSegment, int row, int seatNumber);
 
 }

@@ -42,6 +42,9 @@ public class AuditoriumController {
             consumes = "application/json"
     )
     public ResponseEntity<?> addAuditorium(@RequestBody AuditoriumDTO auditoriumDTO) {
+        if (auditoriumDTO.getName() == null || auditoriumDTO.getName().equals("")) {
+            return new ResponseEntity<>("Fill in all fields.", HttpStatus.OK);
+        }
         Auditorium auditorium = auditoriumService.save(auditoriumDTOToAuditoriumConverter.convert(auditoriumDTO));
         return new ResponseEntity<>(auditoriumToAuditoriumDTOConverter.convert(auditorium), HttpStatus.CREATED);
     }
@@ -52,6 +55,9 @@ public class AuditoriumController {
             consumes = "application/json"
     )
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody AuditoriumDTO auditoriumDTO) {
+        if (auditoriumDTO.getName() == null || auditoriumDTO.getName().equals("")) {
+            return new ResponseEntity<>("Fill in all fields.", HttpStatus.OK);
+        }
         Auditorium edited = auditoriumService.findOne(id);
         if (edited == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -4,12 +4,11 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = {
+/*@Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"id_seat", "id_projection"})
-})
+})*/
 public class Ticket {
 
     @Id
@@ -33,7 +32,8 @@ public class Ticket {
     @JoinColumn(name = "id_reservation")
     private Reservation reservation;
 
-
+    @OneToOne(mappedBy = "ticket", cascade = CascadeType.REMOVE)
+    private OnSaleTicket onSaleTicket;
 
     private boolean reserved;
 
@@ -61,12 +61,21 @@ public class Ticket {
         this.reserved = reserved;
     }
 
-    public long getId() {
-        return id;
+    public Ticket(BigDecimal price, Seat seat, Projection projection, Reservation reservation, OnSaleTicket onSaleTicket, boolean reserved) {
+        this.price = price;
+        this.seat = seat;
+        this.projection = projection;
+        this.reservation = reservation;
+        this.onSaleTicket = onSaleTicket;
+        this.reserved = reserved;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public OnSaleTicket getOnSaleTicket() {
+        return onSaleTicket;
+    }
+
+    public void setOnSaleTicket(OnSaleTicket onSaleTicket) {
+        this.onSaleTicket = onSaleTicket;
     }
 
     public BigDecimal getPrice() {
@@ -107,5 +116,13 @@ public class Ticket {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

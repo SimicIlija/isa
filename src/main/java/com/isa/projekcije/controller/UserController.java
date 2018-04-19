@@ -321,6 +321,7 @@ public class UserController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/getMyVisits",
             method = RequestMethod.GET

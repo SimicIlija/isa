@@ -1,6 +1,5 @@
 package com.isa.projekcije.service;
 
-import com.isa.projekcije.model.Projection;
 import com.isa.projekcije.model.Seat;
 import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.repository.TicketRepository;
@@ -56,5 +55,11 @@ public class TicketService {
         }
         ticketRepository.delete(ticket);
         return ticket;
+    }
+
+    public Ticket findByProjectionIdAndSeatSegmentIdAndSeatRowAndSeatSeatNumber(Long idProjection,
+                                                                                Long idSegment, int row, int seatNumber) {
+        return ticketRepository.findByProjectionIdAndSeatSegmentIdAndSeatRowAndSeatSeatNumber(idProjection,
+                idSegment, row, seatNumber);
     }
 }

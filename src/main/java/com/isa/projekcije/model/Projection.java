@@ -1,6 +1,7 @@
 package com.isa.projekcije.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -12,13 +13,15 @@ public class Projection {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_show")
+    @JoinColumn(name = "id_show", nullable = false)
     private Show show;
 
+    @NotNull
+    @Column(nullable = false)
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_auditorium")
+    @JoinColumn(name = "id_auditorium", nullable = false)
     private Auditorium auditorium;
 
     @OneToMany(mappedBy = "projection", cascade = CascadeType.REMOVE)

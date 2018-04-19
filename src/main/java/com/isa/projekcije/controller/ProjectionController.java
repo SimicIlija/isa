@@ -6,20 +6,20 @@ import com.isa.projekcije.converters.ProjectionToProjectionDTO;
 import com.isa.projekcije.model.Auditorium;
 import com.isa.projekcije.model.Projection;
 import com.isa.projekcije.model.Show;
+import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.model.dto.ConfigurationDTO;
 import com.isa.projekcije.model.dto.ProjectionDTO;
-import com.isa.projekcije.service.AuditoriumService;
-import com.isa.projekcije.service.InstitutionService;
-import com.isa.projekcije.service.ProjectionService;
-import com.isa.projekcije.service.ShowService;
+import com.isa.projekcije.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +35,9 @@ public class ProjectionController {
 
     @Autowired
     private AuditoriumService auditoriumService;
+
+    @Autowired
+    private TicketService ticketService;
 
     @Autowired
     private InstitutionService institutionService;
@@ -59,6 +62,29 @@ public class ProjectionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(projectionToProjectionDTO.convert(show.getProjections()), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getByShowCurrent/{idShow}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getByShowCurrent(@PathVariable Long idShow) {
+        Show show = showService.findOne(idShow);
+        if (show == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<ProjectionDTO> projectionDTOS = new ArrayList<ProjectionDTO>();
+        for (Projection projection : show.getProjections()) {
+            Date projectionDate = projection.getDate();
+            Date todayDate = new Date();
+            if (projectionDate.before(todayDate))
+                continue;
+            projectionDTOS.add(projectionToProjectionDTO.convert(projection));
+            break;
+        }
+        return new ResponseEntity<>(projectionDTOS, HttpStatus.OK);
     }
 
     /*@RequestMapping(
@@ -98,22 +124,42 @@ public class ProjectionController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addProjection(@RequestBody ProjectionDTO projectionToAdd) {
 
+        if ((projectionToAdd.getDate() == null) || projectionToAdd.getDate().equals("")) {
+            return new ResponseEntity<>("Insert date.", HttpStatus.BAD_REQUEST);
+        }
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = formatter.parse(projectionToAdd.getDate());
+        } catch (ParseException e) {
+            return new ResponseEntity<>("Wrong date format.", HttpStatus.BAD_REQUEST);
+        }
         Projection projection = projectionDTOToProjection.convert(projectionToAdd);
-        Projection addedProjection = projectionService.save(projection);
-        ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(addedProjection);
+        try {
+            Projection addedProjection = projectionService.save(projection);
+            ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(addedProjection);
 
-        return new ResponseEntity(projectionDTO, HttpStatus.OK);
+            return new ResponseEntity<>(projectionDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fill in all fields.", HttpStatus.BAD_REQUEST);
+        }
     }
 
 
     @RequestMapping(
             value = "/deleteProjection/{idProjectionToDelete}",
-            method = RequestMethod.DELETE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteProjection(@PathVariable Long idProjectionToDelete) {
+        List<Ticket> tickets = ticketService.findByProjectionId(idProjectionToDelete);
+
+        for (Ticket ticket : tickets) {
+            if (ticket.isReserved()) {
+                return new ResponseEntity<>("Some tickets for projection are reserved.", HttpStatus.BAD_REQUEST);
+            }
+        }
         Projection projection = projectionService.delete(idProjectionToDelete);
         ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(projection);
-        return new ResponseEntity(projectionDTO, HttpStatus.OK);
+        return new ResponseEntity<>(projectionDTO, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -135,7 +181,7 @@ public class ProjectionController {
         Projection saved = projectionService.save(projection);
         ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(saved);
 
-        return new ResponseEntity(projectionDTO, HttpStatus.OK);
+        return new ResponseEntity<>(projectionDTO, HttpStatus.OK);
     }
 
     //GET BY DATE AND SHOW

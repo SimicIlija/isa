@@ -3,9 +3,13 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.InstitutionDTOToInstitutionConverter;
 import com.isa.projekcije.converters.InstitutionToInstitutionDTOConverter;
 import com.isa.projekcije.model.*;
+import com.isa.projekcije.model.dto.ChartDTO;
+import com.isa.projekcije.model.dto.ChartValueDTO;
+import com.isa.projekcije.model.dto.IncomeDTO;
 import com.isa.projekcije.model.dto.InstitutionDTO;
 import com.isa.projekcije.service.InstitutionService;
 import com.isa.projekcije.service.ProjectionRatingService;
+import com.isa.projekcije.service.ReservationsService;
 import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/institution")
@@ -30,6 +39,9 @@ public class InstitutionController {
 
     @Autowired
     private ProjectionRatingService projectionRatingService;
+
+    @Autowired
+    private ReservationsService reservationsService;
 
     @Autowired
     private UserService userService;
@@ -125,15 +137,105 @@ public class InstitutionController {
             value = "/getInstitutionsByAdmin",
             method = RequestMethod.GET
     )
-    public ResponseEntity getInstitutionsByAdmin() {
+    public ResponseEntity<?> getInstitutionsByAdmin() {
         User loggedIn = userService.getCurrentUser();
         if (loggedIn.getRole().equals(Role.ADMIN_INST)) {
             InstitutionAdmin user = (InstitutionAdmin) loggedIn;
+            List<InstitutionDTO> institutionDTOList = institutionToInstitutionDTOConverter.convert(user.getInstitutions());
             if (user.getInstitutions() != null) {
-                return new ResponseEntity(institutionToInstitutionDTOConverter.convert(((InstitutionAdmin) loggedIn).getInstitutions()), HttpStatus.OK);
+                return new ResponseEntity<>(institutionDTOList, HttpStatus.OK);
             }
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+    }
+
+    @RequestMapping(
+            value = "/getCharts/{idInstitution}",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> idInstitution(@PathVariable Long idInstitution) {
+        HashMap<String, Integer> dayChart = new HashMap<String, Integer>();
+        HashMap<String, Integer> weekChart = new HashMap<String, Integer>();
+        HashMap<String, Integer> monthChart = new HashMap<String, Integer>();
+        for (int i = 10; i < 23; i++) {
+            dayChart.put(i + "h", 0);
+        }
+        List<String> weekdays = Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
+        for (String weekday : weekdays) {
+            weekChart.put(weekday, 0);
+        }
+        List<String> months = Arrays.asList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
+        for (String month : months) {
+            monthChart.put(month, 0);
+        }
+        List<Reservation> reservations = reservationsService.findByInstitution(idInstitution);
+        for (Reservation reservation : reservations) {
+            Date projectionDate = reservation.getProjection().getDate();
+            LocalDateTime localDate = projectionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+            int hourNumber = dayChart.get(localDate.getHour() + "h");
+            hourNumber += reservation.getTickets_reserved().size();
+            dayChart.put(localDate.getHour() + "h", hourNumber);
+
+            int weekNumber = weekChart.get(localDate.getDayOfWeek().toString());
+            weekNumber += reservation.getTickets_reserved().size();
+            weekChart.put(localDate.getDayOfWeek().toString(), weekNumber);
+
+            int monthNumber = monthChart.get(localDate.getMonth().toString());
+            monthNumber += reservation.getTickets_reserved().size();
+            monthChart.put(localDate.getMonth().toString(), monthNumber);
+        }
+
+        List<ChartDTO> chartDTOS = new ArrayList<ChartDTO>();
+        ChartDTO dayChartDTO = new ChartDTO(new ArrayList<ChartValueDTO>());
+        ChartDTO weekChartDTO = new ChartDTO(new ArrayList<ChartValueDTO>());
+        ChartDTO monthChartDTO = new ChartDTO(new ArrayList<ChartValueDTO>());
+
+        for (int i = 10; i < 23; i++) {
+            ChartValueDTO chartValueDTO = new ChartValueDTO(i + "h", dayChart.get(i + "h"));
+            dayChartDTO.getValues().add(chartValueDTO);
+        }
+        for (int i = 0; i < weekdays.size(); i++) {
+            ChartValueDTO chartValueDTO = new ChartValueDTO(weekdays.get(i), weekChart.get(weekdays.get(i)));
+            weekChartDTO.getValues().add(chartValueDTO);
+        }
+        for (int i = 0; i < months.size(); i++) {
+            ChartValueDTO chartValueDTO = new ChartValueDTO(months.get(i), monthChart.get(months.get(i)));
+            monthChartDTO.getValues().add(chartValueDTO);
+        }
+        chartDTOS.add(dayChartDTO);
+        chartDTOS.add(weekChartDTO);
+        chartDTOS.add(monthChartDTO);
+
+        return new ResponseEntity<>(chartDTOS, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/getIncome/{idInstitution}",
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<?> getIncome(@PathVariable Long idInstitution, @RequestBody IncomeDTO incomeDTO) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateFrom = null;
+        Date dateTo = null;
+        try {
+            dateFrom = formatter.parse(incomeDTO.getDateFrom());
+            dateTo = formatter.parse(incomeDTO.getDateTo());
+            double income = 0;
+            List<Reservation> reservations = reservationsService.findByInstitution(idInstitution);
+
+            for (Reservation reservation : reservations) {
+                if (reservation.getProjection().getDate().before(dateTo) && reservation.getProjection().getDate().after(dateFrom))
+                    for (Ticket ticket : reservation.getTickets_reserved()) {
+                        income += ticket.getPrice().doubleValue();
+                    }
+            }
+
+            String incomeStr = income + "";
+            return new ResponseEntity<>(incomeStr, HttpStatus.OK);
+        } catch (ParseException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

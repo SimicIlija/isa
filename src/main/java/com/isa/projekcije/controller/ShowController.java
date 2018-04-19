@@ -21,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,17 +59,10 @@ public class ShowController {
             for (Projection projection : show.getProjections()) {
                 Date projectionDate = projection.getDate();
                 Date todayDate = new Date();
-                SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-                String strCurrDate = sdfDate.format(todayDate);
-                try {
-                    todayDate = new SimpleDateFormat("dd/MM/yyyy").parse(strCurrDate);
-                    if (projectionDate.before(todayDate))
-                        continue;
-                    shows.add(show);
-                    break;
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                if (projectionDate.before(todayDate))
+                    continue;
+                shows.add(show);
+                break;
             }
         }
         return new ResponseEntity<>(showToShowDTOConverter.convert(shows), HttpStatus.OK);
@@ -124,8 +115,17 @@ public class ShowController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> addShow(@RequestBody ShowDTO showDTO) {
-        Show show = showService.save(showDTOToShowConverter.convert(showDTO));
-        return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
+        if (showDTO.getName() == null || showDTO.getName().equals("")
+                || showDTO.getGenre() == null || showDTO.getGenre().equals("")
+                || showDTO.getProducer() == null || showDTO.getProducer().equals("")) {
+            return new ResponseEntity<>("Fields: name, genre and producer are mandatory", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            Show show = showService.save(showDTOToShowConverter.convert(showDTO));
+            return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fields: name, genre and producer are mandatory", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(
@@ -138,11 +138,19 @@ public class ShowController {
         if (edited == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        if (showDTO.getName() == null || showDTO.getName().equals("")
+                || showDTO.getGenre() == null || showDTO.getGenre().equals("")
+                || showDTO.getProducer() == null || showDTO.getProducer().equals("")) {
+            return new ResponseEntity<>("Fields: name, genre and producer are mandatory", HttpStatus.BAD_REQUEST);
+        }
+
         edited.setName(showDTO.getName());
         edited.setGenre(showDTO.getGenre());
         edited.setProducer(showDTO.getProducer());
         edited.setDuration(showDTO.getDuration());
         edited.setPosterFileName(showDTO.getPosterFileName());
+        edited.setDescription(showDTO.getDescription());
         Show newShow = showService.save(edited);
         return new ResponseEntity<>(showToShowDTOConverter.convert(newShow), HttpStatus.OK);
     }
@@ -185,7 +193,7 @@ public class ShowController {
             showService.save(show);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -199,7 +207,23 @@ public class ShowController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    @RequestMapping(
+            value = "/getImageURL/{idShow}",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getImageURL(@PathVariable Long idShow) {
+        Show show = showService.findOne(idShow);
+        if (show == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (show.getPosterFileName() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(show.getPosterFileName(), HttpStatus.OK);
     }
 }

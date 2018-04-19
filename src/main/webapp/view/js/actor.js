@@ -116,3 +116,57 @@ function deleteActor(idInstitution, idActor) {
     });
     return false;
 }
+
+function addActorClick() {
+    var idInstitution = $("#addActorInstitutionId").val();
+    var idShow = $("#addActorShowId").val();
+    var name = $("#addActorName").val();
+    lastname = $("#addActorLastname").val();
+
+    var dataActor = JSON.stringify({"name": name, "lastname": lastname, "idShow": idShow});
+    $.ajax({
+        async: false,
+        type: "POST",
+        url: "actors/addActor",
+        dataType: "json",
+        contentType: "application/json",
+        data: dataActor,
+        success: function (data) {
+            newActor = "<tr>"
+                + "<td id='actorName" + data.id + "'>" + data.name + "</td>"
+                + "<td id='actorLastname" + data.id + "'>" + data.lastname + "</td>"
+                + "<td class=\"td-actions\">"
+                + "<a href=\"#\" onclick=\"return editActor(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                + "</a>&nbsp;&nbsp;&nbsp;"
+                + "<a href=\"#\" onclick=\"return deleteActor(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                + "</a>"
+                + "</td>"
+                + "</tr>";
+            $("#addActorModal").modal('toggle');
+            $("#tableActorsTBody" + idInstitution).append(newActor);
+        }
+    });
+}
+
+function editActorClick() {
+    idActor = $("#idActorEdit").val();
+    var name = $("#nameActorEdit").val();
+    lastname = $("#lastnameActorEdit").val();
+
+    var dataActor = JSON.stringify({"name": name, "lastname": lastname});
+    $.ajax({
+        async: false,
+        type: "PUT",
+        url: "actors/editActor/" + idActor,
+        dataType: "json",
+        contentType: "application/json",
+        data: dataActor,
+        success: function (data) {
+            $('#actorName' + data.id).text(data.name);
+            $('#actorLastname' + data.id).text(data.lastname);
+            $('#editActorModal').modal('toggle');
+        }
+    });
+}

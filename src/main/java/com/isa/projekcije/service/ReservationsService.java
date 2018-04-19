@@ -13,7 +13,6 @@ public class ReservationsService {
     @Autowired
     private ReservationsRepository reservationsRepository;
 
-
     public Reservation save(Reservation reservation) {
         return reservationsRepository.save(reservation);
     }
@@ -39,5 +38,9 @@ public class ReservationsService {
 
     public List<Reservation> findAll() {
         return reservationsRepository.findAll();
+    }
+
+    public List<Reservation> findByInstitution(Long idInstitution) {
+        return reservationsRepository.findByProjectionAuditoriumInstitutionId(idInstitution);
     }
 }

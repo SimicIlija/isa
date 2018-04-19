@@ -17,6 +17,9 @@
     <script src="view/js/projection.js"></script>
     <script src="view/js/visitRating.js"></script>
     <script src="view/js/homeForLoggedIn.js"></script>
+    <script src="view/js/income.js"></script>
+    <script src="view/js/chart.js"></script>
+    <script src="view/js/onSaleTicket.js"></script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-D8WTGSqD_mFTqks7-mbFmpwdSFnAKA0"></script>
     <script src="view/toastr.min.js"></script>
@@ -38,7 +41,7 @@
                             <!--<li><a href="#tabHomeMyProfile" data-toggle="tab">My profile</a></li>
                             <li><a href="#tabHomeLogout" data-toggle="tab" onclick='return signout()'>Logout</a></li>-->
 
-                            <li><a href="#tabHomeMyProfile" data-toggle="tab" onclick='return myProfile()'>My
+                            <li><a href="#tabProfile" data-toggle="tab" onclick='return myProfile()'>My
                                 profile</a></li>
                             <li><a href="#tabHomeLogout" data-toggle="tab" onclick='return logout()'>Logout</a></li>
 
@@ -66,9 +69,11 @@
                         <!--<div class="tab-pane fade in active" id="tabHomeMyProfile">profil</div>-->
 
 
-                        <div class="tab-pane fade in active" id="tabHomeMyProfile">
-                        </div>
-                        <div class="container" id="profileDiv">
+                        <!--<div class="tab-pane fade in active" id="tabHomeMyProfile">
+                        </div>-->
+                        <div class="tab-pane fade" id="tabProfile">
+                            <div class="container" id="profileDiv">
+                            </div>
                         </div>
                         <div class="container" id="changeInformationDiv">
                         </div>
@@ -90,9 +95,11 @@
                             <div class="container" id="myVisitsDiv">
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="tabFriends">prijatelji</div>
-                        <div class="container" id="friendsDiv">
+                        <div class="tab-pane fade" id="tabFriends">
+                            <div class="container" id="friendsDiv">
+                            </div>
                         </div>
+
                         <div class="container" id="friendsDivAdded">
                         </div>
                         <div class="tab-pane fade" id="tabSettingsTheatres">podesi pozoriste</div>
@@ -150,7 +157,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editAuditoriumButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editAuditoriumClick()"
+                            id="editAuditoriumButton">Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -186,7 +195,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editSegmentButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editSegmentClick()" id="editSegmentButton">
+                        Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -213,7 +224,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="addAuditoriumButton">Add</button>
+                    <button type="button" class="btn btn-success" onclick="addAuditoriumClick()"
+                            id="addAuditoriumButton">Add
+                    </button>
                 </div>
             </form>
         </div>
@@ -249,7 +262,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="addSegmentButton">Add</button>
+                    <button type="button" class="btn btn-success" onclick="addSegmentClick()" id="addSegmentButton">
+                        Add
+                    </button>
                 </div>
             </form>
         </div>
@@ -289,10 +304,15 @@
                         <input class="form-control" type="text" name="name" placeholder="Duration"
                                id="addShowDuration"/>
                     </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Image URL"
+                               id="addShowImageURL"/>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="addShowButton">Add</button>
+                    <button type="button" class="btn btn-success" onclick="addShowClick()" id="addShowButton">Add
+                    </button>
                 </div>
             </form>
         </div>
@@ -332,10 +352,16 @@
                         <input class="form-control" type="text" name="name" placeholder="Duration"
                                id="editShowDuration"/>
                     </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Image URL"
+                               id="editShowImageURL"/>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editShowButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editShowClick()" id="editShowButton">
+                        Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -367,7 +393,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="addActorButton">Add</button>
+                    <button type="button" class="btn btn-success" onclick="addActorClick()" id="addActorButton">Add
+                    </button>
                 </div>
             </form>
         </div>
@@ -399,7 +426,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editActorButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editActorClick()" id="editActorButton">
+                        Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -435,7 +464,6 @@
                             $('#datetimepicker1').datepicker();
                         });*/
                     </script>
-                    </p>
                     <p>
                         <select class="form-control" id="addProjectionAuditorium">
                             <option value="" disabled selected hidden>Select auditorium</option>
@@ -444,7 +472,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="addProjectionButton">Add</button>
+                    <button type="button" class="btn btn-success" onclick="addProjectionClick()"
+                            id="addProjectionButton">Add
+                    </button>
                 </div>
             </form>
         </div>
@@ -481,7 +511,6 @@
                             $('#datetimepicker2').datepicker();
                         });*/
                     </script>
-                    </p>
                     <p>
                         <select class="form-control" id="editProjectionAuditorium">
                             <option value="" disabled selected hidden>Select auditorium</option>
@@ -490,7 +519,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editProjectionButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editProjectionClick()"
+                            id="editProjectionButton">Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -523,7 +554,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="addSegmentProjectionButton">Add</button>
+                    <button type="button" class="btn btn-success" onclick="addSegmentProjectionClick()"
+                            id="addSegmentProjectionButton">Add
+                    </button>
                 </div>
             </form>
         </div>
@@ -552,7 +585,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editSegmentProjectionButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editSegmentProjectionClick()"
+                            id="editSegmentProjectionButton">Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -587,7 +622,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="editInstitutionButton">Confirm</button>
+                    <button type="button" class="btn btn-primary" onclick="editInstitutionClick()"
+                            id="editInstitutionButton">Confirm
+                    </button>
                 </div>
             </form>
         </div>
@@ -615,6 +652,79 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="uploadShowImageButton">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addOnSaleTicketModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add on sale ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addOnSaleTicketForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addOnSaleTicketInstitutionId"/>
+                    <input type="hidden" name="id" id="addOnSaleTicketProjectionId"/>
+                    <input type="hidden" name="id" id="addOnSaleTicketSegmentId"/>
+
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Seat row"
+                               id="addOnSaleTicketSeatRow"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Seat number"
+                               id="addOnSaleTicketSeatNumber"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Discount"
+                               id="addOnSaleTicketDiscount"/>
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="addOnSaleTicketClick()"
+                            id="addOnSaleTicketButton">Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editOnSaleTicketModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit on sale ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editOnSaleTicketForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="editOnSaleTicketInstitutionId"/>
+                    <input type="hidden" name="id" id="editOnSaleTicketId"/>
+
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Discount"
+                               id="editOnSaleTicketDiscount"/>
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="editOnSaleTicketClick()"
+                            id="editOnSaleTicketButton">Confirm
+                    </button>
                 </div>
             </form>
         </div>
