@@ -18,9 +18,7 @@ function registerAdmin() {
     $form = $("#registracijaAdmina");
     var data = getFormData($form);
     var json = JSON.stringify(data);
-    if (role !== 'fz') {
-        alert('Not implemented yet');
-    } else {
+    if (role === 'fz') {
         $.ajax({
             url: "users/registerFanZoneAdmin",
             type: "POST",
@@ -40,6 +38,30 @@ function registerAdmin() {
                 alert(errorThrown);
             }
         });
+    } else if (role === 'sys') {
+        $.ajax({
+            url: "users/registerSystemAdmin",
+            type: "POST",
+            data: json,
+            contentType: "application/json",
+            dataType: "text",
+            success: function (data, textStatus) {
+                if (textStatus !== "success") {
+                    toastr["error"]("Registration failed");
+
+                } else {
+                    toastr["success"]("Registration successfull");
+                    top.location.href = "login.html";
+                }
+
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"]("Registration failed");
+            }
+        });
+    } else if (role === 'ins') {
+        alert("TODO");
+    } else {
+        console.error("some ridicolous mistake");
     }
 
 }

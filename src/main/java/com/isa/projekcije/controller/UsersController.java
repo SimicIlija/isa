@@ -97,7 +97,7 @@ public class UsersController {
     }
 
     /**
-     * POST /users/register/registerSystemAdmin
+     * POST /users/registerSystemAdmin
      * Creates new System Admin admin based on registerDto. Only for system admins.
      */
     @PreAuthorize("hasAuthority('ADMIN_SYS')")
