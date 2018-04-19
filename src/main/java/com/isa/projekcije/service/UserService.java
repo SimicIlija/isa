@@ -1,10 +1,10 @@
 package com.isa.projekcije.service;
 
-import com.isa.projekcije.model.Friendship;
 import com.isa.projekcije.model.InstitutionAdmin;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
 import com.isa.projekcije.model.dto.RegistrationDTO;
+import com.isa.projekcije.model.fanzone.FanZoneAdmin;
 import com.isa.projekcije.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +114,7 @@ public class UserService {
     }
 
     public User findById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        return userRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
 
@@ -131,5 +131,10 @@ public class UserService {
 
     public List<User> findAll(Sort email) {
         return userRepository.findAll();
+    }
+
+    public FanZoneAdmin createFanZoneAdmin(RegistrationDTO registrationDTO) {
+        FanZoneAdmin fanZoneAdmin = FanZoneAdmin.createFromUser(registrationDTO);
+        return (FanZoneAdmin) userRepository.save(fanZoneAdmin);
     }
 }
