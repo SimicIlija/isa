@@ -92,6 +92,9 @@ function showSegmentsForProjection(idInstitution, idProjection) {
                     + "<a href=\"#\" onclick=\"return deleteSegmentProjection(" + idInstitution + ", " + idProjection + ", " + data[i].idSegment + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
                     + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showOnSaleTickets(" + idInstitution + ", " + idProjection + ', ' + data[i].idSegment + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
+                    + "</a>"
                     + "</td>"
                     + "</tr>";
 
@@ -162,7 +165,7 @@ function deleteSegmentProjection(idInstitution, idProjection, idSegment) {
             $('#segmentProjectionSegmentID' + data.idSegment).closest("tr").remove();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            toastr["error"]("Can't delete segment");
+            toastr["error"](jqXHR.responseText);
         }
     });
     return false;

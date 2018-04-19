@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -33,7 +32,8 @@ public class Ticket {
     @JoinColumn(name = "id_reservation")
     private Reservation reservation;
 
-
+    @OneToOne(mappedBy = "ticket", cascade = CascadeType.REMOVE)
+    private OnSaleTicket onSaleTicket;
 
     private boolean reserved;
 
@@ -59,6 +59,23 @@ public class Ticket {
         this.price = price;
         this.seat = seat;
         this.reserved = reserved;
+    }
+
+    public Ticket(BigDecimal price, Seat seat, Projection projection, Reservation reservation, OnSaleTicket onSaleTicket, boolean reserved) {
+        this.price = price;
+        this.seat = seat;
+        this.projection = projection;
+        this.reservation = reservation;
+        this.onSaleTicket = onSaleTicket;
+        this.reserved = reserved;
+    }
+
+    public OnSaleTicket getOnSaleTicket() {
+        return onSaleTicket;
+    }
+
+    public void setOnSaleTicket(OnSaleTicket onSaleTicket) {
+        this.onSaleTicket = onSaleTicket;
     }
 
     public long getId() {

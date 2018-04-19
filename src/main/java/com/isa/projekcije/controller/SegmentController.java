@@ -19,7 +19,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/segment")
-public class SegmentController {
+public class
+SegmentController {
 
     @Autowired
     private SegmentService segmentService;
@@ -111,6 +112,10 @@ public class SegmentController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> addSegment(@RequestBody SegmentDTO segmentDTO) {
+        if (segmentDTO.getLabel() == null || segmentDTO.getLabel().equals("")
+                || segmentDTO.getRowCount() <= 0 || segmentDTO.getSeatsInRowCount() <= 0) {
+            return new ResponseEntity<>("Fill in all fields. Rows and seats in row are positive numbers.", HttpStatus.OK);
+        }
         Segment segment = segmentService.save(segmentDTOToSegmentConverter.convert(segmentDTO));
         for (int i = 0; i < segment.getRowCount(); i++) {
             for (int j = 0; j < segment.getSeatsInRowCount(); j++) {
@@ -127,6 +132,10 @@ public class SegmentController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody SegmentDTO segmentDTO) {
+        if (segmentDTO.getLabel() == null || segmentDTO.getLabel().equals("")
+                || segmentDTO.getRowCount() <= 0 || segmentDTO.getSeatsInRowCount() <= 0) {
+            return new ResponseEntity<>("Fill in all fields. Rows and seats in row are positive numbers.", HttpStatus.OK);
+        }
         Segment edited = segmentService.findOne(id);
         if (edited == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

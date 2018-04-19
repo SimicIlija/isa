@@ -62,11 +62,30 @@ function uploadImageForShow(idShow) {
     return false;
 }
 
-function showImage(url) {
-    $('#showImageModal').modal('toggle');
-    div = $('#showImageModalDiv');
-    div.empty();
-    image = "<a href=\"" + url + "\">Show</a>";
-    div.append(image);
+function showImage(idShow) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "show/getImageURL/" + idShow,
+        dataType: "text",
+        success: function (data) {
+            if (!data) {
+                toastr["info"]("No poster.");
+            } else {
+                var win = window.open(data, '_blank');
+                if (win) {
+                    //Browser has allowed it to be opened
+                    win.focus();
+                } else {
+                    alert('Please allow popups for this website');
+                }
+            }
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["info"]("No poster.");
+        }
+    });
+
+
+
     return false;
 }

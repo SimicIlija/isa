@@ -19,6 +19,7 @@
     <script src="view/js/homeForLoggedIn.js"></script>
     <script src="view/js/income.js"></script>
     <script src="view/js/chart.js"></script>
+    <script src="view/js/onSaleTicket.js"></script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-D8WTGSqD_mFTqks7-mbFmpwdSFnAKA0"></script>
     <script src="view/toastr.min.js"></script>
@@ -68,8 +69,8 @@
                         <!--<div class="tab-pane fade in active" id="tabHomeMyProfile">profil</div>-->
 
 
-                        <div class="tab-pane fade in active" id="tabHomeMyProfile">
-                        </div>
+                        <!--<div class="tab-pane fade in active" id="tabHomeMyProfile">
+                        </div>-->
                         <div class="container" id="profileDiv">
                         </div>
                         <div class="container" id="changeInformationDiv">
@@ -632,21 +633,70 @@
 </div>
 
 
-<div class="modal fade" id="showImageModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="addOnSaleTicketModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Image</h5>
+                <h5 class="modal-title">Add on sale ticket</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="showImageModalDiv">
+            <form id="addOnSaleTicketForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="addOnSaleTicketInstitutionId"/>
+                    <input type="hidden" name="id" id="addOnSaleTicketProjectionId"/>
+                    <input type="hidden" name="id" id="addOnSaleTicketSegmentId"/>
 
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Seat row"
+                               id="addOnSaleTicketSeatRow"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Seat number"
+                               id="addOnSaleTicketSeatNumber"/>
+                    </p>
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Discount"
+                               id="addOnSaleTicketDiscount"/>
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="addOnSaleTicketButton">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editOnSaleTicketModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit on sale ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+            <form id="editOnSaleTicketForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="editOnSaleTicketInstitutionId"/>
+                    <input type="hidden" name="id" id="editOnSaleTicketId"/>
+
+                    <p>
+                        <input class="form-control" type="text" name="name" placeholder="Discount"
+                               id="editOnSaleTicketDiscount"/>
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="editOnSaleTicketButton">Confirm</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

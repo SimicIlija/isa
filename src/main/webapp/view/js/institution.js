@@ -132,7 +132,7 @@ function showInstitution(idInstitution) {
                 "                                </div>\n" +
                 "                            </div><br><br>" +
                 "<div class='row'>" +
-                "<div class='col-lg-4'>" +
+                "<div class='col-lg-6'>" +
                 "<div class=\"span7\">\n" +
                 "                                <div class=\"widget stacked widget-table action-table\">\n" +
                 "                                    <div id='divAddActor" + idInstitution + "' class=\"widget-header\">\n" +
@@ -154,7 +154,7 @@ function showInstitution(idInstitution) {
                 "                                </div>\n" +
                 "                            </div>" +
                 "</div>" +
-                "<div class='col-lg-5'>" +
+                "<div class='col-lg-6'>" +
 
                 "<div class=\"span7\">\n" +
                 "                                <div class=\"widget stacked widget-table action-table\">\n" +
@@ -178,8 +178,10 @@ function showInstitution(idInstitution) {
                 "                                </div>\n" +
                 "                            </div>" +
                 "</div>" +
+                "</div><br><br>" +
+                "<div class='row'>" +
 
-                "<div class='col-lg-3'>" +
+                "<div class='col-lg-4'>" +
 
                 "<div class=\"span7\">\n" +
                 "                                <div class=\"widget stacked widget-table action-table\">\n" +
@@ -192,10 +194,37 @@ function showInstitution(idInstitution) {
                 "                                            <tr>\n" +
                 "                                                <th>Segment ID</th>\n" +
                 "                                                <th>Price</th>\n" +
-                "                                                <th class=\"td-actions\" style=\"width:120px\"></th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:170px\"></th>\n" +
                 "                                            </tr>\n" +
                 "                                            </thead>\n" +
                 "                                            <tbody id=\"tableSegmentProjectionTBody" + idInstitution + "\">\n" +
+                "                                            </tbody>\n" +
+                "                                        </table>\n" +
+                "                                    </div>\n" +
+                "                                </div>\n" +
+                "                            </div>" +
+                "</div>" +
+
+                "<div class='col-lg-8'>" +
+
+                "<div class=\"span7\">\n" +
+                "                                <div class=\"widget stacked widget-table action-table\">\n" +
+                "                                    <div id='divAddOnSaleTickets" + idInstitution + "' class=\"widget-header\">\n" +
+                "                                        <h3>On sale tickets</h3>\n" +
+                "                                    </div>\n" +
+                "                                    <div class=\"widget-content\">\n" +
+                "                                        <table class=\"table table-striped table-bordered\">\n" +
+                "                                            <thead>\n" +
+                "                                            <tr>\n" +
+                "                                                <th>Show</th>\n" +
+                "                                                <th>Old price</th>\n" +
+                "                                                <th>Discount</th>\n" +
+                "                                                <th>Seat row</th>\n" +
+                "                                                <th>Seat number</th>\n" +
+                "                                                <th class=\"td-actions\" style=\"width:120px\"></th>\n" +
+                "                                            </tr>\n" +
+                "                                            </thead>\n" +
+                "                                            <tbody id=\"tableTicketsOnSaleTBody" + idInstitution + "\">\n" +
                 "                                            </tbody>\n" +
                 "                                        </table>\n" +
                 "                                    </div>\n" +
@@ -257,7 +286,7 @@ function showInstitution(idInstitution) {
                             + "<td id='showProducer" + data[i].id + "'>" + data[i].producer + "</td>"
                             + "<td id='showDuration" + data[i].id + "'>" + data[i].duration + "</td>"
                             + "<td id='showImage" + data[i].id + "'>"
-                            + "<a href=\"#\" id='clickImage" + data[i].id + "' onclick=\"return showImage(" + data[i].posterFileName + ");\" class=\"btn btn-small btn-default\">"
+                            + "<a href=\"#\" id='clickImage" + data[i].id + "' onclick=\"return showImage(" + data[i].id + ");\" class=\"btn btn-small btn-default\">"
                             + "<i class=\"glyphicon glyphicon-eye-open\"></i>"
                             + "</a>"
                             + "<input type='hidden' id='showImageURL" + data[i].id + "'>"

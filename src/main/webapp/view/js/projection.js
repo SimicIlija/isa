@@ -60,6 +60,9 @@ function deleteProjection(idInstitution, isShow, idProjection) {
         dataType: "json",
         success: function (data) {
             $('#projectionID' + data.id).closest("tr").remove();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr["error"](jqXHR.responseText);
         }
     });
     return false;

@@ -63,6 +63,8 @@ $(document).ready(function () {
                     + "</tr>";
                 $("#addAuditoriumModal").modal('toggle');
                 $("#tableAuditoriumsTBody" + idInstitution).append(newAuditorium);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
             }
         });
     });
@@ -81,6 +83,8 @@ $(document).ready(function () {
             success: function (data) {
                 $('#auditoriumName' + data.id).text(data.name);
                 $('#editAuditoriumModal').modal('toggle');
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
             }
         });
     });
@@ -106,6 +110,8 @@ $(document).ready(function () {
                 $('#segmentRowCount' + data.id).text(data.rowCount);
                 $('#segmentSeatsInRowCount' + data.id).text(data.seatsInRowCount);
                 $('#editSegmentModal').modal('toggle');
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
             }
         });
     });
@@ -118,37 +124,44 @@ $(document).ready(function () {
         rows = $("#addSegmentRows").val();
         seats = $("#addSegmentSeatsInRow").val();
 
-        var dataSegment = JSON.stringify({
-            "label": label,
-            "idAuditorium": idAuditorium,
-            "rowCount": rows,
-            "seatsInRowCount": seats
-        });
-        $.ajax({
-            async: false,
-            type: "POST",
-            url: "segment/addSegment",
-            dataType: "json",
-            contentType: "application/json",
-            data: dataSegment,
-            success: function (data) {
-                newSegment = "<tr>"
-                    + "<td id='segmentLabel" + data.id + "'>" + data.label + "</td>"
-                    + "<td id='segmentRowCount" + data.id + "'>" + data.rowCount + "</td>"
-                    + "<td id='segmentSeatsInRowCount" + data.id + "'>" + data.seatsInRowCount + "</td>"
-                    + "<td class=\"td-actions\">"
-                    + "<a href=\"#\" onclick=\"return editSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
-                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
-                    + "</a>&nbsp;&nbsp;&nbsp;"
-                    + "<a href=\"#\" onclick=\"return deleteSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
-                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
-                    + "</a>"
-                    + "</td>"
-                    + "</tr>";
-                $("#addSegmentModal").modal('toggle');
-                $("#tableSegmentsTBody" + idInstitution).append(newSegment);
-            }
-        });
+        if (isNaN(rows) || isNaN(seats)) {
+            toastr["error"]("Rows and seats number must be numbers.");
+        } else {
+
+            var dataSegment = JSON.stringify({
+                "label": label,
+                "idAuditorium": idAuditorium,
+                "rowCount": rows,
+                "seatsInRowCount": seats
+            });
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "segment/addSegment",
+                dataType: "json",
+                contentType: "application/json",
+                data: dataSegment,
+                success: function (data) {
+                    newSegment = "<tr>"
+                        + "<td id='segmentLabel" + data.id + "'>" + data.label + "</td>"
+                        + "<td id='segmentRowCount" + data.id + "'>" + data.rowCount + "</td>"
+                        + "<td id='segmentSeatsInRowCount" + data.id + "'>" + data.seatsInRowCount + "</td>"
+                        + "<td class=\"td-actions\">"
+                        + "<a href=\"#\" onclick=\"return editSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                        + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                        + "</a>&nbsp;&nbsp;&nbsp;"
+                        + "<a href=\"#\" onclick=\"return deleteSegment(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                        + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                        + "</a>"
+                        + "</td>"
+                        + "</tr>";
+                    $("#addSegmentModal").modal('toggle');
+                    $("#tableSegmentsTBody" + idInstitution).append(newSegment);
+                }, error: function (jqxhr, textStatus, errorThrown) {
+                    toastr["error"](jqxhr.responseText);
+                }
+            });
+        }
     });
 
 
@@ -191,7 +204,7 @@ $(document).ready(function () {
                     + "<td id='showProducer" + data.id + "'>" + data.producer + "</td>"
                     + "<td id='showDuration" + data.id + "'>" + data.duration + "</td>"
                     + "<td id='showImage" + data.id + "'>"
-                    + "<a href=\"#\" onclick=\"return showImage(" + data.posterFileName + ");\" class=\"btn btn-small btn-default\">"
+                    + "<a href=\"#\" onclick=\"return showImage(" + data.id + ");\" class=\"btn btn-small btn-default\">"
                     + "<i class=\"glyphicon glyphicon-eye-open\"></i>"
                     + "</a>"
                     + "<input type='hidden' id='showImageURL" + data.id + "'>"
@@ -211,6 +224,8 @@ $(document).ready(function () {
                     + "</tr>";
                 $("#addShowModal").modal('toggle');
                 $("#tableShowsTBody" + idInstitution).append(newShow);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"]("Fields: name, genre and producer are mandatory. Duration must be number.");
             }
         });
     });
@@ -246,6 +261,8 @@ $(document).ready(function () {
                 $('#showDuration' + data.id).text(data.duration);
                 $("#clickImage" + data.id).attr("onclick", "return showImage(" + data.posterFileName + ")");
                 $('#editShowModal').modal('toggle');
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"]("Fields: name, genre and producer are mandatory. Duration must be number.");
             }
         });
     });
@@ -346,7 +363,7 @@ $(document).ready(function () {
                 $("#addProjectionModal").modal('toggle');
                 $("#tableProjectionsTBody" + idInstitution).append(newProjection);
             }, error: function (jqxhr, textStatus, errorThrown) {
-                toastr["error"]("Wrong date format.");
+                toastr["error"](jqxhr.responseText);
             }
         });
     });
@@ -409,11 +426,16 @@ $(document).ready(function () {
                     + "</a>&nbsp;&nbsp;&nbsp;"
                     + "<a href=\"#\" onclick=\"return deleteSegmentProjection(" + idInstitution + ", " + idProjection + ", " + data.idSegment + ");\" class=\"btn btn-small btn-danger\">\n"
                     + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return showOnSaleTickets(" + idInstitution + ", " + idProjection + ', ' + data.idSegment + ");\" class=\"btn btn-small btn-default\" title=\"Show segments\">"
+                    + "<i class=\"glyphicon glyphicon-arrow-right\"></i>"
                     + "</a>"
                     + "</td>"
                     + "</tr>";
                 $("#addSegmentProjectionModal").modal('toggle');
                 $("#tableSegmentProjectionTBody" + idInstitution).append(newSegment);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
             }
         });
     });
@@ -502,26 +524,75 @@ $(document).ready(function () {
     });
 
 
-    $("#uploadShowImageButton").click(function () {
+    $("#addOnSaleTicketButton").click(function () {
+        var idInstitution = $("#addOnSaleTicketInstitutionId").val();
+        var idProjection = $("#addOnSaleTicketProjectionId").val();
+        var idSegment = $("#addOnSaleTicketSegmentId").val();
 
-        idShow = $("#uploadShowImageIdShow").val();
-        input = $("#uploadShowImageInput");
-        var file;
-        file = input[0].files[0];
-        /*$.ajax({
+        seatRow = $("#addOnSaleTicketSeatRow").val();
+        seatNumber = $("#addOnSaleTicketSeatNumber").val();
+        discount = $("#addOnSaleTicketDiscount").val();
+
+        var dataOnSaleTicket = JSON.stringify({
+            "idProjection": idProjection,
+            "discount": discount,
+            "idSegment": idSegment,
+            "seatRow": seatRow,
+            "seatNumber": seatNumber
+        });
+        $.ajax({
             async: false,
             type: "POST",
-            url: "show/addImage/" + idShow + "/image",
-            data: file,
+            url: "onSaleTicket/addOnSaleTicket",
             dataType: "json",
-            processData: false,
+            contentType: "application/json",
+            data: dataOnSaleTicket,
             success: function (data) {
-                $('#actorName' + data.id).text(data.name);
-                $('#actorLastname' + data.id).text(data.lastname);
-
+                newOnSaleTicket = "<tr>"
+                    + "<td id='onSaleTicketShowName" + data.id + "'>" + data.showName + "</td>"
+                    + "<td id='onSaleTicketOldPrice" + data.id + "'>" + data.oldPrice + "</td>"
+                    + "<td id='onSaleTicketDiscount" + data.id + "'>" + data.discount + "</td>"
+                    + "<td id='onSaleTicketSeatRow" + data.id + "'>" + data.seatRow + "</td>"
+                    + "<td id='onSaleTicketSeatNumber" + data.id + "'>" + data.seatNumber + "</td>"
+                    + "<td class=\"td-actions\">"
+                    + "<a href=\"#\" onclick=\"return editOnSaleTicket(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                    + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href=\"#\" onclick=\"return deleteOnSaleTicket(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                    + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                    + "</a>&nbsp;&nbsp;&nbsp;"
+                    + "</td>"
+                    + "</tr>";
+                $("#addOnSaleTicketModal").modal('toggle');
+                $("#tableTicketsOnSaleTBody" + idInstitution).append(newOnSaleTicket);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
             }
-        });*/
-        $('#editActorModal').modal('toggle');
+        });
+    });
+
+    $("#editOnSaleTicketButton").click(function () {
+
+        idOnSaleTicket = $("#editOnSaleTicketId").val();
+        discount = $("#editOnSaleTicketDiscount").val();
+
+        var dataOnSaleTicket = JSON.stringify({
+            "discount": discount,
+        });
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "onSaleTicket/editOnSaleTicket/" + idOnSaleTicket,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataOnSaleTicket,
+            success: function (data) {
+                $('#onSaleTicketDiscount' + data.id).text(data.discount);
+                $('#editOnSaleTicketModal').modal('toggle');
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"](jqxhr.responseText);
+            }
+        });
     });
 
 

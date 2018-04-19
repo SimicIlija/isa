@@ -79,7 +79,7 @@ function loadActors(idShow, newShow) {
 function loadProjections(idShow, newShow) {
     $.ajax({
         async: false,
-        url: "projections/getByShow/" + idShow,
+        url: "projections/getByShowCurrent/" + idShow,
         dataType: "json",
         success: function (dataProjections) {
             newShow += "<p>"
