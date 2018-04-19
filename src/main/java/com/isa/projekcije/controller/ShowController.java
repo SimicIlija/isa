@@ -150,6 +150,7 @@ public class ShowController {
         edited.setProducer(showDTO.getProducer());
         edited.setDuration(showDTO.getDuration());
         edited.setPosterFileName(showDTO.getPosterFileName());
+        edited.setDescription(showDTO.getDescription());
         Show newShow = showService.save(edited);
         return new ResponseEntity<>(showToShowDTOConverter.convert(newShow), HttpStatus.OK);
     }

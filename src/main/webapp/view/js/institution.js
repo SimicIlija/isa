@@ -381,3 +381,57 @@ function editInstitution(idInstitution) {
     $("#editInstitutionModal").modal('toggle');
     return false;
 }
+
+function editInstitutionClick() {
+    var idInstitution = $("#editInstitutionId").val();
+    var name = $("#nameInstitutionEdit").val();
+    var description = $("#descriptionInstitutionEdit").val();
+
+    var geocoder = new google.maps.Geocoder();
+    var address = $("#addressInstitutionEdit").val();
+    var latitude;
+    var longitude;
+
+    FindLatLong(address, function (data) {
+        var dataInstitution = JSON.stringify({
+            "name": name,
+            "longitude": data.Longitude,
+            "latitude": data.Latitude,
+            "description": description
+        });
+        $.ajax({
+            async: false,
+            type: "PUT",
+            url: "institution/editInstitution/" + idInstitution,
+            dataType: "json",
+            contentType: "application/json",
+            data: dataInstitution,
+            success: function (data) {
+                $('#institutionName' + data.id).text(data.name);
+                $('#institutionDescription' + data.id).text(data.description);
+                $('#editInstitutionModal').modal('toggle')
+
+                var geocoder = new google.maps.Geocoder();             // create a geocoder object
+                var location = new google.maps.LatLng(data.latitude, data.longitude);    // turn coordinates into an object
+                geocoder.geocode({'latLng': location}, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {           // if geocode success
+                        // if address found, pass to processing function
+                        $('#instisutionAdress' + idInstitution).empty();
+                        $('#instisutionAdress' + idInstitution).append(results[0].formatted_address);
+
+                    }
+                });
+
+
+                map = new google.maps.Map(document.getElementById('map' + idInstitution), {
+                    center: {lat: data.latitude, lng: data.longitude},
+                    zoom: 17
+                });
+                var marker = new google.maps.Marker({
+                    position: {lat: data.latitude, lng: data.longitude},
+                    map: map
+                });
+            }
+        });
+    });
+}

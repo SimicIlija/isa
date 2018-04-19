@@ -77,3 +77,73 @@ function deleteOnSaleTicket(idInstitution, idOnSaleTicket) {
     });
     return false;
 }
+
+function addOnSaleTicketClick() {
+    var idInstitution = $("#addOnSaleTicketInstitutionId").val();
+    var idProjection = $("#addOnSaleTicketProjectionId").val();
+    var idSegment = $("#addOnSaleTicketSegmentId").val();
+
+    seatRow = $("#addOnSaleTicketSeatRow").val();
+    seatNumber = $("#addOnSaleTicketSeatNumber").val();
+    discount = $("#addOnSaleTicketDiscount").val();
+
+    var dataOnSaleTicket = JSON.stringify({
+        "idProjection": idProjection,
+        "discount": discount,
+        "idSegment": idSegment,
+        "seatRow": seatRow,
+        "seatNumber": seatNumber
+    });
+    $.ajax({
+        async: false,
+        type: "POST",
+        url: "onSaleTicket/addOnSaleTicket",
+        dataType: "json",
+        contentType: "application/json",
+        data: dataOnSaleTicket,
+        success: function (data) {
+            newOnSaleTicket = "<tr>"
+                + "<td id='onSaleTicketShowName" + data.id + "'>" + data.showName + "</td>"
+                + "<td id='onSaleTicketOldPrice" + data.id + "'>" + data.oldPrice + "</td>"
+                + "<td id='onSaleTicketDiscount" + data.id + "'>" + data.discount + "</td>"
+                + "<td id='onSaleTicketSeatRow" + data.id + "'>" + data.seatRow + "</td>"
+                + "<td id='onSaleTicketSeatNumber" + data.id + "'>" + data.seatNumber + "</td>"
+                + "<td class=\"td-actions\">"
+                + "<a href=\"#\" onclick=\"return editOnSaleTicket(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-primary\">"
+                + "<i class=\"glyphicon glyphicon-pencil\"></i>"
+                + "</a>&nbsp;&nbsp;&nbsp;"
+                + "<a href=\"#\" onclick=\"return deleteOnSaleTicket(" + idInstitution + ", " + data.id + ");\" class=\"btn btn-small btn-danger\">\n"
+                + "<i class=\"glyphicon glyphicon-remove\"></i>"
+                + "</a>&nbsp;&nbsp;&nbsp;"
+                + "</td>"
+                + "</tr>";
+            $("#addOnSaleTicketModal").modal('toggle');
+            $("#tableTicketsOnSaleTBody" + idInstitution).append(newOnSaleTicket);
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"](jqxhr.responseText);
+        }
+    });
+}
+
+function editOnSaleTicketClick() {
+    idOnSaleTicket = $("#editOnSaleTicketId").val();
+    discount = $("#editOnSaleTicketDiscount").val();
+
+    var dataOnSaleTicket = JSON.stringify({
+        "discount": discount,
+    });
+    $.ajax({
+        async: false,
+        type: "PUT",
+        url: "onSaleTicket/editOnSaleTicket/" + idOnSaleTicket,
+        dataType: "json",
+        contentType: "application/json",
+        data: dataOnSaleTicket,
+        success: function (data) {
+            $('#onSaleTicketDiscount' + data.id).text(data.discount);
+            $('#editOnSaleTicketModal').modal('toggle');
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"](jqxhr.responseText);
+        }
+    });
+}

@@ -6,9 +6,9 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
-@Table(uniqueConstraints = {
+/*@Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"id_seat", "id_projection"})
-})
+})*/
 public class Ticket {
 
     @Id
@@ -78,14 +78,6 @@ public class Ticket {
         this.onSaleTicket = onSaleTicket;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -124,5 +116,13 @@ public class Ticket {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

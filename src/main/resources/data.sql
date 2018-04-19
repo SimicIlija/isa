@@ -124,7 +124,7 @@ insert into projection_rating (id_projection, id_user, projection_rating, instit
 insert into projection_rating (id_projection, id_user, projection_rating, institution_rating) values (7, 4, 5, 1);
 insert into projection_rating (id_projection, id_user, projection_rating, institution_rating) values (7, 1, 5, 4);
 
-insert into bid (bid_state, price, bidder_id, user_props_id) values ('DEFAULT', 245, 1, 2)
+insert into bid (bid_state, price, bidder_id, user_props_id) values ('DEFAULT', 245, 1, 2);
 
 insert into on_sale_ticket (ticket_id, discount) VALUES (1, 20);
 insert into on_sale_ticket (ticket_id, discount) VALUES (2, 30);

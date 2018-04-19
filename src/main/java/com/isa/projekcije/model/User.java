@@ -51,10 +51,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "reserver", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
-    @ManyToMany(mappedBy = "invited_friends", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "invited_friends")
     private List<Reservation> reservation_invited;
 
-    @ManyToMany(mappedBy = "confirmed_users", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "confirmed_users")
     private List<Reservation> reservation_confirmed;
 
     @JsonIgnore

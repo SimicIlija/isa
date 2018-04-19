@@ -141,8 +141,9 @@ public class InstitutionController {
         User loggedIn = userService.getCurrentUser();
         if (loggedIn.getRole().equals(Role.ADMIN_INST)) {
             InstitutionAdmin user = (InstitutionAdmin) loggedIn;
+            List<InstitutionDTO> institutionDTOList = institutionToInstitutionDTOConverter.convert(user.getInstitutions());
             if (user.getInstitutions() != null) {
-                return new ResponseEntity(institutionToInstitutionDTOConverter.convert(((InstitutionAdmin) loggedIn).getInstitutions()), HttpStatus.OK);
+                return new ResponseEntity<>(institutionDTOList, HttpStatus.OK);
             }
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
