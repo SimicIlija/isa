@@ -1,5 +1,7 @@
 package com.isa.projekcije.model;
 
+import com.isa.projekcije.model.dto.RegistrationDTO;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -34,5 +36,12 @@ public class InstitutionAdmin extends User {
 
     public void setInstitutions(List<Institution> institutions) {
         this.institutions = institutions;
+    }
+
+    public static InstitutionAdmin createNewInstitutionAdmin(RegistrationDTO registrationDTO) {
+        InstitutionAdmin institutionAdmin = new InstitutionAdmin(registrationDTO.getFirstName(),
+                registrationDTO.getLastName(), registrationDTO.getPhoneNumber(),
+                registrationDTO.getEmail(), registrationDTO.getPassword());
+        return institutionAdmin;
     }
 }

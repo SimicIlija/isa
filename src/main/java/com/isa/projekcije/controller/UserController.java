@@ -129,8 +129,10 @@ public class UserController {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getLoggedInUser() {
-        if (userService.getCurrentUser() != null) {
-            return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            RoleDto roleDto = RoleDto.createRoleDto(currentUser);
+            return new ResponseEntity<>(roleDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

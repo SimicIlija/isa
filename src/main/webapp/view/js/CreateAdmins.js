@@ -1,3 +1,27 @@
+window.onload = function () {
+    $.ajax({
+        url: "user/getLoggedInUser",
+        type: "POST",
+        dataType: "json",
+        success: function (data, textStatus) {
+            console.log(data);
+            if (textStatus !== "success") {
+                toastr["error"]("Registration failed");
+
+            } else {
+                if (data.role === 'ADMIN_SYS') {
+                    toastr["success"]("Approved");
+                } else {
+                    top.location.href = "login.html";
+                }
+            }
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            top.location.href = "login.html";
+        }
+    });
+};
+
 function getFormData($form) {
     var unordered_array = $form.serializeArray();
     var ordered_array = {};
@@ -35,7 +59,7 @@ function registerAdmin() {
                 }
 
             }, error: function (jqxhr, textStatus, errorThrown) {
-                alert(errorThrown);
+                toastr["error"]("Registration failed");
             }
         });
     } else if (role === 'sys') {
@@ -59,7 +83,25 @@ function registerAdmin() {
             }
         });
     } else if (role === 'ins') {
-        alert("TODO");
+        $.ajax({
+            url: "users/registerInstitutionAdmin",
+            type: "POST",
+            data: json,
+            contentType: "application/json",
+            dataType: "text",
+            success: function (data, textStatus) {
+                if (textStatus !== "success") {
+                    toastr["error"]("Registration failed");
+
+                } else {
+                    toastr["success"]("Registration successfull");
+                    top.location.href = "login.html";
+                }
+
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"]("Registration failed");
+            }
+        });
     } else {
         console.error("some ridicolous mistake");
     }

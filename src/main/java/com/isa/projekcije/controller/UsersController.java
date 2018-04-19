@@ -1,7 +1,7 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.model.InstitutionAdmin;
 import com.isa.projekcije.model.SystemAdmin;
-import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.RegistrationDTO;
 import com.isa.projekcije.model.fanzone.FanZoneAdmin;
 import com.isa.projekcije.service.EmailService;
@@ -38,31 +38,38 @@ public class UsersController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-
-
-
+    /**
+     * POST /users/registerInstitutionAdmin
+     * Creates new institution admin based on registerDto. Only for system admins.
+     */
+    @PreAuthorize("hasAuthority('ADMIN_SYS')")
     @RequestMapping(
             value = "/registerInstitutionAdmin",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerInstitutionAdmin(@RequestBody RegistrationDTO registrationDTO) {
-        System.out.println(registrationDTO.getFirstName());
+
         if (registrationDTO.isEmpty()) {
             return new ResponseEntity<>(new RuntimeException("Missing mandatory fields!"), HttpStatus.BAD_REQUEST);
-        }
-
-        if (!(registrationDTO.correctPassword())) {
-            return new ResponseEntity<>(new RuntimeException("Passwords do not match!"), HttpStatus.BAD_REQUEST);
         }
 
         if (userService.emailExists(registrationDTO)) {
             return new ResponseEntity<>(new RuntimeException("Email already exists!"), HttpStatus.BAD_REQUEST);
         }
-        User registeredUser = userService.createInstitutionAdmin(registrationDTO);
-        System.out.println(registeredUser.getFirstName());
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
-
+        try {
+            RandomString gen = new RandomString(10, ThreadLocalRandom.current());
+            registrationDTO.setPassword(gen.nextString());
+            InstitutionAdmin institutionAdmin = userService.createInstitutionAdmin(registrationDTO);
+            /**
+             * TODO: Promena sifre.
+             */
+            emailService.sendNotificaitionAsync(institutionAdmin);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**

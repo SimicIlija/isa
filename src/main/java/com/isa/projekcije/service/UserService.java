@@ -70,10 +70,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User createInstitutionAdmin(RegistrationDTO registrationDTO) {
-        InstitutionAdmin institutionAdmin = registrationDTO.createNewInstitutionAdmin();
-        System.out.println(institutionAdmin.getFirstName());
-        return userRepository.save(institutionAdmin);
+    public InstitutionAdmin createInstitutionAdmin(RegistrationDTO registrationDTO) {
+        InstitutionAdmin institutionAdmin = InstitutionAdmin.createNewInstitutionAdmin(registrationDTO);
+        return (InstitutionAdmin) userRepository.save(institutionAdmin);
     }
 
     public void setCurrentUser(User user) {
