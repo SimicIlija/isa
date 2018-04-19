@@ -24,6 +24,7 @@ public class EmailService {
     @Autowired
     private Environment env;
 
+    private SimpleMailMessage mail = new SimpleMailMessage();
     /*
      * Anotacija za oznacavanje asinhronog zadatka
      * Vise informacija na: https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling
@@ -35,12 +36,6 @@ public class EmailService {
         Thread.sleep(10000);
         System.out.println("Slanje emaila...");
 
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(user.getEmail());
-        mail.setFrom(env.getProperty("spring.mail.username"));
-        mail.setSubject("Setting password for your account");
-
-        mail.setText("Hello " + user.getFirstName() + ",\n\nThis is your new password:\n\n" + user.getPassword() + "");
 
         javaMailSender.send(mail);
 
@@ -55,11 +50,7 @@ public class EmailService {
         Thread.sleep(10000);
         System.out.println("Slanje emaila...");
 
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(user.getEmail());
-        mail.setFrom(env.getProperty("spring.mail.username"));
-        mail.setSubject("Primer slanja emaila pomocu asinhronog Spring taska");
-        mail.setText("Pozdrav " + user.getFirstName() + ",\n\nhvala Ĺˇto pratiĹˇ ISA.");
+
         javaMailSender.send(mail);
 
         System.out.println("Email poslat!");
@@ -71,5 +62,21 @@ public class EmailService {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public SimpleMailMessage getMail() {
+        return mail;
+    }
+
+    public void setMail(SimpleMailMessage mail) {
+        this.mail = mail;
+    }
+
+    public Environment getEnv() {
+        return env;
+    }
+
+    public void setEnv(Environment env) {
+        this.env = env;
     }
 }

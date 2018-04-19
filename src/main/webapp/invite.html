@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="view/jquery-3.3.1.min.js"></script>
+    <script src="view/js/homeForLoggedIn.js"></script>
+    <link rel="stylesheet" type="text/css" href="view/style.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="view/toastr.min.js"></script>
+    <link href="view/toastr.min.css" rel="stylesheet"/>
+    <script src="view/js/myReservations.js"></script>
+    <script src="view/js/invite.js">
+    </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel with-nav-tabs panel-default">
+            <div class="panel-heading">
+                <ul id="tabovi" , class="nav nav-tabs">
+                    <li class="active dropdown">
+                        <a href="#" data-toggle="dropdown">Home <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+
+                            <!--<li><a href="#tabHomeMyProfile" data-toggle="tab">My profile</a></li>
+                            <li><a href="#tabHomeLogout" data-toggle="tab" onclick='return signout()'>Logout</a></li>-->
+
+                            <li><a href="#tabHomeMyProfile" data-toggle="tab" onclick='return myProfile()'>My
+                                profile</a></li>
+                            <li><a href="#tabHomeLogout" data-toggle="tab" onclick='return logout()'>Logout</a></li>
+
+                        </ul>
+                    </li>
+                    <li><a href="#tabTheatres" data-toggle="tab">Theatres</a></li>
+                    <li><a href="#tabCinemas" data-toggle="tab" onclick='return tabCinemasClick()'>Cinemas</a></li>
+                    <li><a href="#tabFriends" data-toggle="tab" onclick='return tabFriendsClick()'>Friends</a></li>
+                    <li><a href="#tabMyReservations" data-toggle="tab" onclick='return tabMyReservationsClick()'>My
+                        Reservations</a></li>
+                    <li><a href="#tabMyInvites" data-toggle="tab" onclick='return tabMyInvites()'>My Invites</a></li>
+                    <li><a href="#tabConfirmedReservations" data-toggle="tab"
+                           onclick='return tabConfirmedReservations()'>Confirmed reservations</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">Settings <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#tabSettingsTheatres" data-toggle="tab">Theatres</a></li>
+                            <li><a href="#tabSettingsCinemas" data-toggle="tab"
+                                   onclick='return tabCinemaSettingsClick()'>Cinemas</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+
+                <div id="divovi" , class="tab-content">
+
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tabHomeMyProfile">
+                        </div>
+                        <div class="container" id="profileDiv">
+                        </div>
+                        <div class="container" id="changeInformationDiv">
+                        </div>
+
+                        <div class="tab-pane fade" id="tabTheatres">pozorista</div>
+                        <div class="tab-pane fade" id="tabCinemas">
+                            <div class="container" id="cinemaDiv">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabFriends"></div>
+                        <div class="container" id="friendsDiv"></div>
+                        <div class="container" id="reserverDiv">
+                        </div>
+                        <div class="container" id="invitesDiv">
+                        </div>
+                        <div class="container" id="confirmedDiv">
+                        </div>
+
+                        <div class="container" id="friendsDivAdded">
+                        </div>
+                        <div class="tab-pane fade" id="tabSettingsTheatres">podesi pozoriste</div>
+                        <div class="tab-pane fade" id="tabSettingsCinemas">
+                            <div class="container" id="cinemaSettingDiv">
+
+                                <div class="span7">
+                                    <div class="widget stacked widget-table action-table">
+                                        <div class="widget-header">
+                                            <i class="glyphicon glyphicon-list"></i>
+                                            <h3>Cinemas</h3>
+                                        </div>
+                                        <div class="widget-content">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Description</th>
+                                                    <th class="td-actions" style="width:200px"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="tableCinemasTBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editAuditoriumModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit auditorium</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editAuditoriumForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="idAuditoriumEdit"/>
+                        <p>
+                            <label>Name</label> <input class="form-control" type="text" name="name"
+                                                       id="nameAuditoriumEdit"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editAuditoriumButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editSegmentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit segment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editSegmentForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="idSegmentEdit"/>
+                        <input type="hidden" name="id" id="idInstitutionSegmentEdit"/>
+                        <p>
+                            <label>Label</label> <input class="form-control" type="text" name="label"
+                                                        id="labelSegmentEdit"/>
+                        </p>
+                        <p>
+                            <label>Rows</label> <input class="form-control" type="text" name="label"
+                                                       id="rowsSegmentEdit"/>
+                        </p>
+                        <p>
+                            <label>Seats in row</label> <input class="form-control" type="text" name="label"
+                                                               id="seatsInRowSegmentEdit"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editSegmentButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addAuditoriumModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New auditorium</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addAuditoriumForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="addAuditoriumInstitutionId"/>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Name"
+                                   id="addAuditoriumName"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addAuditoriumButton">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addSegmentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New segment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addSegmentForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="addSegmentInstitutionId"/>
+                        <input type="hidden" name="id" id="addSegmentAuditoriumId"/>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Label"
+                                   id="addSegmentLabel"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Rows"
+                                   id="addSegmentRows"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Seats in row"
+                                   id="addSegmentSeatsInRow"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addSegmentButton">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addShowModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New show</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addShowForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="addShowInstitutionId"/>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Name"
+                                   id="addShowName"/>
+                        </p>
+                        <p>
+                        <textarea class="form-control" name="name" placeholder=Description
+                                  id="addShowDescription"></textarea>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Genre"
+                                   id="addShowGenre"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Producer"
+                                   id="addShowProducer"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Duration"
+                                   id="addShowDuration"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addShowButton">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editShowModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit show</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editShowForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="idShowEdit"/>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Name"
+                                   id="editShowName"/>
+                        </p>
+                        <p>
+                        <textarea class="form-control" name="name" placeholder=Description
+                                  id="editShowDescription"></textarea>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Genre"
+                                   id="editShowGenre"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Producer"
+                                   id="editShowProducer"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Duration"
+                                   id="editShowDuration"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editShowButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addActorModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New actor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addActorForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="addActorInstitutionId"/>
+                        <input type="hidden" name="id" id="addActorShowId"/>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Firstname"
+                                   id="addActorName"/>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Lastname"
+                                   id="addActorLastname"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addActorButton">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editActorModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit actor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editActorForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="idActorEdit"/>
+                        <input type="hidden" name="id" id="idInstitutionActorEdit"/>
+                        <p>
+                            <label>Label</label> <input class="form-control" type="text" name="label"
+                                                        id="nameActorEdit"/>
+                        </p>
+                        <p>
+                            <label>Rows</label> <input class="form-control" type="text" name="label"
+                                                       id="lastnameActorEdit"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editActorButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addProjectionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New projection</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addProjectionForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="addProjectionInstitutionId"/>
+                        <input type="hidden" name="id" id="addProjectionShowId"/>
+                        <p>
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='text' id="addProjectionDate" class="form-control"
+                                       placeholder="Date yyyy-MM-dd HH:mm:ss"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            /*$(function () {
+                                $('#datetimepicker1').datepicker();
+                            });*/
+                        </script>
+                        </p>
+                        <p>
+                            <select class="form-control" id="addProjectionAuditorium">
+                                <option value="" disabled selected hidden>Select auditorium</option>
+                            </select>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addProjectionButton">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editProjectionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit projection</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editProjectionForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="idPrjectionEdit"/>
+                        <input type="hidden" name="id" id="idShowProjectionEdit"/>
+                        <input type="hidden" name="id" id="idInstitutionProjectionEdit"/>
+                        <p>
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker2'>
+                                <input type='text' id="editProjectionDate" class="form-control"
+                                       placeholder="Date yyyy-MM-dd HH:mm:ss"/>
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            /*$(function () {
+                                $('#datetimepicker2').datepicker();
+                            });*/
+                        </script>
+                        </p>
+                        <p>
+                            <select class="form-control" id="editProjectionAuditorium">
+                                <option value="" disabled selected hidden>Select auditorium</option>
+                            </select>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editProjectionButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addSegmentProjectionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add segment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addSegmentProjectionForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="addSegmentProjectionInstitutionId"/>
+                        <input type="hidden" name="id" id="addSegmentProjectionProjectionId"/>
+                        <p>
+                            <select class="form-control" id="addSegmentProjectionSegment">
+                                <option value="" disabled selected hidden>Select segment</option>
+                            </select>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="name" placeholder="Price"
+                                   id="addSegmentProjectionPrice"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addSegmentProjectionButton">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editSegmentProjectionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit segment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editSegmentProjectionForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="editSegmentProjectionInstitutionId"/>
+                        <input type="hidden" name="id" id="editSegmentProjectionProjectionId"/>
+                        <input type="hidden" name="id" id="editSegmentProjectionSegmentId"/>
+                        <p>
+                            <label>Price</label> <input class="form-control" type="text" name="label"
+                                                        id="priceSegmentProjectionEdit"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editSegmentProjectionButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editInstitutionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit institution</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editInstitutionForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="editInstitutionId"/>
+                        <p>
+                            <label>Name</label> <input class="form-control" type="text" name="label"
+                                                       id="nameInstitutionEdit"/>
+                        </p>
+                        <p>
+                            <label>Description</label> <textarea class="form-control" name="label"
+                                                                 id="descriptionInstitutionEdit"></textarea>
+                        </p>
+                        <p>
+                            <label>Adress</label> <input class="form-control" type="text" name="label"
+                                                         id="addressInstitutionEdit"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="editInstitutionButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="uploadShowImageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="uploadShowImageForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="uploadShowImageIdShow"/>
+                        <p>
+                            <label>Name</label> <input id="uploadShowImageInput" class="form-control" name="FileUpload"
+                                                       multiple="" type="file"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="uploadShowImageButton">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

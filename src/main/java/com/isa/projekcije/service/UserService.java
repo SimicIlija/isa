@@ -32,6 +32,7 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
 
+
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);

@@ -160,4 +160,8 @@ public class FriendshipService {
         List<UserDTO> usersDTOs = userToUserDTO.convert(users);
         return usersDTOs;
     }
+
+    public List<Friendship> findBySenderFirstNameOrReceiverFirstName(String name) {
+        return friendshipRepository.findBySenderFirstNameOrReceiverFirstName(name, name);
+    }
 }

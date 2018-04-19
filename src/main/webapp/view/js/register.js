@@ -21,15 +21,15 @@ function getFormData($form) {
 
 function registerUser() {
 
-    var x = document.forms["registracija"]["passwordConfirm"].value;
-    var y = document.forms["registracija"]["password"].value;
+    // var x = document.forms["registracija"]["passwordConfirm"].value;
+    // var y = document.forms["registracija"]["password"].value;
     var z = document.forms["registracija"]["email"].value;
     var phone = document.forms["registracija"]["phoneNumber"].value;
     var FN = document.forms["registracija"]["firstName"].value;
     var LN = document.forms["registracija"]["lastName"].value;
 
 
-    if ((z == "" || phone == "" || FN == "" || LN == "") || (x == "" && y == "" && z == "" && phone == "" && FN == "" && LN == "")) {
+    if ((z == "" || phone == "" || FN == "" || LN == "") || (z == "" && phone == "" && FN == "" && LN == "")) {
         toastr["error"]("You have to fill out all input fields", "Registration failed");
 
     } else {

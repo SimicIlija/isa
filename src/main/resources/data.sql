@@ -28,7 +28,7 @@ insert into segment (row_count,seats_in_row_count,closed, label, id_auditorium) 
 
 insert into seat (row, seat_number, id_segment) values (1, 1, 1);
 insert into seat (row, seat_number, id_segment) values (1, 2, 1);
-insert into seat (row, seat_number, id_segment) values (1, 3, 1);
+insert into seat (row, seat_number, id_segment) values (1, 4, 1);
 insert into seat (row, seat_number, id_segment) values (2, 1, 1);
 insert into seat (row, seat_number, id_segment) values (2, 2, 1);
 insert into seat (row, seat_number, id_segment) values (2, 3, 1);

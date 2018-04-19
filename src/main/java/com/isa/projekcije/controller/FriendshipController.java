@@ -101,6 +101,29 @@ public class FriendshipController {
     }
 
     @RequestMapping(
+            value = "/getFriends",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getFriends() {
+        User loggedIn = userService.getCurrentUser();
+
+        List<Friendship> friendships = friendshipService.findBySenderIdOrReceiverId(loggedIn.getId(), loggedIn.getId());
+        List<User> friends = new ArrayList<User>();
+        for (Friendship f : friendships) {
+            if (f.getSender().getId() == loggedIn.getId()) {
+                friends.add(f.getReceiver());
+            }
+            if (f.getReceiver().getId() == loggedIn.getId()) {
+                friends.add(f.getSender());
+            }
+        }
+        List<UserDTO> friendsDTO = userToUserDTO.convert(friends);
+
+        return new ResponseEntity<>(friendsDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping(
             value = "/getRequests",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -145,5 +168,120 @@ public class FriendshipController {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
+    @RequestMapping(
+            value = "/searchByFirstName",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> searchByName(@RequestBody UserDTO userSearchByName) {
+        List<Friendship> currentUserFriendships = friendshipService.findBySenderIdOrReceiverId(userService.getCurrentUser().getId(), userService.getCurrentUser().getId());
+        List<Friendship> currentUserConfirmedFriendships = new ArrayList<Friendship>();
+        for (Friendship f : currentUserFriendships) {
+            if (f.isAccepted()) {
+                currentUserConfirmedFriendships.add(f);
+            }
+        }
+        List<User> retUser = new ArrayList<User>();
+        List<User> userName = new ArrayList<User>();
+        for (Friendship f : currentUserConfirmedFriendships) {
+            if (!(f.getReceiver().getId() == userService.getCurrentUser().getId())) {
+                retUser.add(f.getReceiver());
+            }
+            if (!(f.getSender().getId() == userService.getCurrentUser().getId())) {
+                retUser.add(f.getSender());
+            }
+
+
+            for (User user : retUser) {
+                if (userSearchByName != null) {
+                    if (user.getFirstName().contains(userSearchByName.getFirstName())) {
+                        userName.add(user);
+                    }
+                }
+            }
+        }
+        List<UserDTO> usersDTO = userToUserDTO.convert(userName);
+
+        return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(
+            value = "/searchByLastName",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> searchBySurname(@RequestBody UserDTO userSearchBySurname) {
+        List<Friendship> currentUserFriendships = friendshipService.findBySenderIdOrReceiverId(userService.getCurrentUser().getId(), userService.getCurrentUser().getId());
+        List<Friendship> currentUserConfirmedFriendships = new ArrayList<Friendship>();
+        for (Friendship f : currentUserFriendships) {
+            if (f.isAccepted()) {
+                currentUserConfirmedFriendships.add(f);
+            }
+        }
+        List<User> retUser = new ArrayList<User>();
+        List<User> userName = new ArrayList<User>();
+        for (Friendship f : currentUserConfirmedFriendships) {
+            if (!(f.getReceiver().getId() == userService.getCurrentUser().getId())) {
+                retUser.add(f.getReceiver());
+            }
+            if (!(f.getSender().getId() == userService.getCurrentUser().getId())) {
+                retUser.add(f.getSender());
+            }
+
+
+            for (User user : retUser) {
+                if (userSearchBySurname != null) {
+                    if (user.getLastName().contains(userSearchBySurname.getLastName())) {
+                        userName.add(user);
+                    }
+                }
+            }
+        }
+        List<UserDTO> usersDTO = userToUserDTO.convert(userName);
+
+        return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(
+            value = "/searchCombined",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> searchCombined(@RequestBody UserDTO userSearchBySurname) {
+        List<Friendship> currentUserFriendships = friendshipService.findBySenderIdOrReceiverId(userService.getCurrentUser().getId(), userService.getCurrentUser().getId());
+        List<Friendship> currentUserConfirmedFriendships = new ArrayList<Friendship>();
+        for (Friendship f : currentUserFriendships) {
+            if (f.isAccepted()) {
+                currentUserConfirmedFriendships.add(f);
+            }
+        }
+        List<User> retUser = new ArrayList<User>();
+        List<User> userName = new ArrayList<User>();
+        for (Friendship f : currentUserConfirmedFriendships) {
+            if (!(f.getReceiver().getId() == userService.getCurrentUser().getId())) {
+                retUser.add(f.getReceiver());
+            }
+            if (!(f.getSender().getId() == userService.getCurrentUser().getId())) {
+                retUser.add(f.getSender());
+            }
+
+
+            for (User user : retUser) {
+                if (userSearchBySurname != null) {
+                    if (user.getLastName().contains(userSearchBySurname.getLastName()) && user.getFirstName().contains(userSearchBySurname.getFirstName())) {
+                        userName.add(user);
+                    }
+                }
+            }
+        }
+        List<UserDTO> usersDTO = userToUserDTO.convert(userName);
+
+        return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+    }
 
 }

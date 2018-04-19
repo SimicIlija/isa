@@ -14,7 +14,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotNull
     @Digits(integer = 5, fraction = 2)
@@ -99,5 +99,13 @@ public class Ticket {
 
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 }
