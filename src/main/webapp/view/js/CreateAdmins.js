@@ -1,16 +1,24 @@
 window.onload = function () {
     $.ajax({
-        url: "user/getLoggedInUser",
-        type: "POST",
+        url: "user/authRole",
+        type: "GET",
         dataType: "json",
         success: function (data, textStatus) {
             console.log(data);
             if (textStatus !== "success") {
-                toastr["error"]("Registration failed");
+                toastr["error"]("Something failed");
 
             } else {
                 if (data.role === 'ADMIN_SYS') {
-                    toastr["success"]("Approved");
+                    console.log('ok');
+                    var mapProp = {
+                        center: new google.maps.LatLng(45.2508742, 19.836),
+                        zoom: 10
+                    };
+                    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                    google.maps.event.addListener(map, 'click', function (event) {
+                        placeMarker(map, event.latLng);
+                    });
                 } else {
                     top.location.href = "login.html";
                 }
@@ -33,6 +41,8 @@ function getFormData($form) {
 }
 
 var role = null;
+var isCinema = null;
+var marker = null;
 
 function registerAdmin() {
     var bool = validateData();
@@ -112,6 +122,10 @@ function changeRole(tempRole) {
     role = tempRole;
 }
 
+function changeType(newType) {
+    isCinema = newType;
+}
+
 function validateData() {
 
     var z = document.forms["registracijaAdmina"]["email"].value;
@@ -176,4 +190,73 @@ function validateData() {
         }
     }
     return true;
+}
+
+function validateInsData() {
+    if (isCinema === null) {
+        toastr["error"]("You must choose type");
+        return false;
+    }
+    var name = document.forms["instAdd"]["name"].value;
+    var description = document.forms["instAdd"]["description"].value;
+    if (name.trim() === '') {
+        toastr["error"]("You must enter name");
+        return false;
+    }
+    if (description.trim() === '') {
+        toastr["error"]("You must enter description");
+        return false;
+    }
+    if (marker === null) {
+        toastr["error"]("Pin location on map");
+        return false;
+    }
+    return true;
+}
+
+function createNewInstitution() {
+    var bool = validateInsData();
+    if (!bool) {
+        return;
+    }
+    var dataObj = {};
+    dataObj.isCinema = isCinema;
+    dataObj.name = document.forms["instAdd"]["name"].value;
+    dataObj.description = document.forms["instAdd"]["description"].value;
+    dataObj.longitude = marker.position.lng();
+    dataObj.latitude = marker.position.lat();
+    var json = JSON.stringify(dataObj);
+    console.log(json);
+
+    $.ajax({
+        url: "institution",
+        type: "POST",
+        data: json,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data, textStatus) {
+            if (textStatus !== "success") {
+                toastr["error"]("Submission failed");
+
+            } else {
+                toastr["success"]("Added new instituion");
+            }
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Adding failed");
+        }
+    });
+}
+
+function placeMarker(map, location) {
+    if (marker) {
+        marker.setPosition(location);
+    } else {
+        marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+    // alert(marker.position.lat());
+    // alert(marker.position.lng());
 }

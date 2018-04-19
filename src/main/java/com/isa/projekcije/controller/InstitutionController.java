@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -94,11 +96,13 @@ public class InstitutionController {
         return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(institutions), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_SYS')")
     @RequestMapping(
             method = RequestMethod.POST,
             consumes = "application/json"
     )
-    public ResponseEntity<?> addInstitution(@RequestBody InstitutionDTO institutionDTO) {
+    public ResponseEntity<?> addInstitution(@Valid @RequestBody InstitutionDTO institutionDTO) {
+        System.out.println(institutionDTO.isCinema());
         Institution newInstitution = institutionService.save(institutionDTOToInstitutionConverter.convert(institutionDTO));
         return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(newInstitution), HttpStatus.CREATED);
     }

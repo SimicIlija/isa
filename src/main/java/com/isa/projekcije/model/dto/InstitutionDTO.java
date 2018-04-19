@@ -1,19 +1,31 @@
 package com.isa.projekcije.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+
 public class InstitutionDTO {
 
     private Long id;
+
+    @NotEmpty
     private String name;
+    @NotNull
     private double longitude;
+    @NotNull
     private double latitude;
+    @NotEmpty
     private String description;
-    private Boolean isCinema;
+    @JsonProperty
+    private boolean isCinema;
     private Double rating;
 
     public InstitutionDTO() {
     }
 
-    public InstitutionDTO(Long id, String name, double longitude, double latitude, String description, Boolean isCinema) {
+    public InstitutionDTO(Long id, String name, double longitude, double latitude, String description,
+                          boolean isCinema) {
         this.id = id;
         this.name = name;
         this.longitude = longitude;
@@ -70,11 +82,11 @@ public class InstitutionDTO {
         this.description = description;
     }
 
-    public Boolean isCinema() {
+    public boolean isCinema() {
         return isCinema;
     }
 
-    public void setCinema(Boolean cinema) {
+    public void setCinema(boolean cinema) {
         isCinema = cinema;
     }
 }

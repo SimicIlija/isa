@@ -163,6 +163,17 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/authRole", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity authRole() {
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            RoleDto roleDto = RoleDto.createRoleDto(currentUser);
+            return new ResponseEntity<>(roleDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
     /*@RequestMapping(
             value = "/logout",
             method = RequestMethod.GET,
