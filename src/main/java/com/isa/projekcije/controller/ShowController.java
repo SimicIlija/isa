@@ -106,6 +106,19 @@ public class ShowController {
     }
 
     @RequestMapping(
+            value = "/getByShowId/{id}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getByShowId(@PathVariable Long id) {
+        Show show = showService.findOne(id);
+        if (show == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
+    }
+
+    @RequestMapping(
             value = "/addShow",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE

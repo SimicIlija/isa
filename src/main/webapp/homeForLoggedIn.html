@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
-
+    <script src="view/js/invite.js"></script>
+    <script src="view/jquery-3.3.1.min.js"></script>
+    <script src="view/js/homeForLoggedIn.js"></script>
     <link rel="stylesheet" type="text/css" href="view/style.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="view/jquery-3.3.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
     <script src="view/js/auditorium.js"></script>
     <script src="view/js/segment.js"></script>
     <script src="view/js/institution.js"></script>
@@ -20,6 +21,9 @@
             src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-D8WTGSqD_mFTqks7-mbFmpwdSFnAKA0"></script>
     <script src="view/toastr.min.js"></script>
     <link href="view/toastr.min.css" rel="stylesheet"/>
+    <script src="view/js/myReservations.js"></script>
+    <script src="view/js/invite.js"></script>
+
 </head>
 <body>
 <div class="row">
@@ -44,6 +48,8 @@
                     <li><a href="#tabCinemas" data-toggle="tab" onclick='return tabCinemasClick()'>Cinemas</a></li>
                     <li><a href="#tabMyVisits" data-toggle="tab" onclick='return tabMyVisitsClick()'>My visits</a></li>
                     <li><a href="#tabFriends" data-toggle="tab" onclick='return tabFriendsClick()'>Friends</a></li>
+                    <li><a href="#tabMyInvites" data-toggle="tab" onclick='return tabMyInvites()'>My Invites</a></li>
+
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">Settings <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -65,6 +71,14 @@
                         <div class="container" id="profileDiv">
                         </div>
                         <div class="container" id="changeInformationDiv">
+                        </div>
+                        <div class="tab-pane fade" id="tabReserver">
+                            <div class="container" id="reserverDiv">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabMyInvites">
+                            <div class="container" id="invitesDiv">
+                            </div>
                         </div>
 
                         <div class="tab-pane fade" id="tabTheatres">pozorista</div>
@@ -109,7 +123,7 @@
                             </div>
                         </div>
                     </div>
-
+                </div>
                 </div>
             </div>
         </div>

@@ -6,21 +6,36 @@ import java.util.List;
 
 public class ReservationDTO {
     private Long id;
-    private Long idSeat;
+    private List<Long> idSeat;
     private String date;
     private Long idReserver;
     private Long idProjection;
-    private List<Long> friends;
+    private List<String> friends;
 
     public ReservationDTO() {
     }
 
-    public ReservationDTO(Long id, Long idSeat, String date, Long idReserver, Long idProjection) {
-        this.id = id;
+    public ReservationDTO(List<Long> idSeat, Long idProjection, List<String> friends) {
         this.idSeat = idSeat;
-        this.date = date;
-        this.idReserver = idReserver;
+
         this.idProjection = idProjection;
+        this.friends = friends;
+    }
+
+    public List<Long> getIdSeat() {
+        return idSeat;
+    }
+
+    public void setIdSeat(List<Long> idSeat) {
+        this.idSeat = idSeat;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
     }
 
     public Long getId() {
@@ -31,13 +46,6 @@ public class ReservationDTO {
         this.id = id;
     }
 
-    public Long getIdSeat() {
-        return idSeat;
-    }
-
-    public void setIdSeat(Long idSeat) {
-        this.idSeat = idSeat;
-    }
 
     public String getDate() {
         return date;

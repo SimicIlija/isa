@@ -54,12 +54,16 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "invited_friends", fetch = FetchType.EAGER)
     private List<Reservation> reservation_invited;
 
+    @ManyToMany(mappedBy = "confirmed_users", fetch = FetchType.EAGER)
+    private List<Reservation> reservation_confirmed;
+
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
     private Set<UserProps> userProps;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<ProjectionRating> projectionRatings;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "bidder")
@@ -157,6 +161,7 @@ public class User implements Serializable {
         this.bids = bids;
     }
 
+
     public List<ProjectionRating> getProjectionRatings() {
         return projectionRatings;
     }
@@ -164,6 +169,7 @@ public class User implements Serializable {
     public void setProjectionRatings(List<ProjectionRating> projectionRatings) {
         this.projectionRatings = projectionRatings;
     }
+
 
     public List<Reservation> getReservations() {
         return reservations;
@@ -179,5 +185,14 @@ public class User implements Serializable {
 
     public void setReservation_invited(List<Reservation> reservation_invited) {
         this.reservation_invited = reservation_invited;
+    }
+
+    public List<Reservation> getReservation_confirmed() {
+        return reservation_confirmed;
+    }
+
+    public void setReservation_confirmed(List<Reservation> reservation_confirmed) {
+        this.reservation_confirmed = reservation_confirmed;
+
     }
 }

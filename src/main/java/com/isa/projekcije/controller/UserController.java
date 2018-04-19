@@ -19,10 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -78,6 +75,30 @@ public class UserController {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(
+            value = "/getUserByEmail",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserByEmail(@RequestBody UserDTO email) {
+        User user = this.userService.findByEmail(email.getEmail());
+        if (user != null) {
+            UserDTO userDTO = userToUserDTO.convert(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(
+            value = "/getUserById/{idUser}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getReserver(@PathVariable Long idUser) {
+        User user = userService.findById(idUser);
+        UserDTO userDTO = userToUserDTO.convert(user);
+        return new ResponseEntity(userDTO, HttpStatus.OK);
+    }
+
 
     @RequestMapping(
             value = "/registerUser",
@@ -90,10 +111,6 @@ public class UserController {
             return new ResponseEntity(new RuntimeException("Missing mandatory fields!"), HttpStatus.BAD_REQUEST);
         }
 
-
-        if (!(registrationDTO.correctPassword())) {
-            return new ResponseEntity(new RuntimeException("Passwords do not match!"), HttpStatus.BAD_REQUEST);
-        }
 
         /*if(!(registrationDTO.correctPassword())){
             return new ResponseEntity(new RuntimeException("Passwords do not match!"),HttpStatus.BAD_REQUEST);
@@ -110,9 +127,15 @@ public class UserController {
         User retRegisteredUser = null;
         try {
 
+            retRegisteredUser = userService.createUser(registrationDTO);
+
+
+            emailService.getMail().setTo(retRegisteredUser.getEmail());
+            emailService.getMail().setFrom(emailService.getEnv().getProperty("spring.mail.username"));
+            emailService.getMail().setSubject("Setting password for your account");
+            emailService.getMail().setText("Hello " + retRegisteredUser.getFirstName() + ",\n\nThis is your new password:\n\n" + retRegisteredUser.getPassword() + "");
             emailService.sendNotificaitionAsync(registeredUser);
 
-            retRegisteredUser = userService.createUser(registrationDTO);
             UserDTO retRegisteredUserDTO = userToUserDTO.convert(retRegisteredUser);
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,12 +152,14 @@ public class UserController {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getLoggedInUser() {
-        User currentUser = userService.getCurrentUser();
-        if (currentUser != null) {
-            RoleDto roleDto = RoleDto.createRoleDto(currentUser);
-            return new ResponseEntity<>(roleDto, HttpStatus.OK);
+
+        UserDTO userDTO = new UserDTO();
+        if (userService.getCurrentUser() != null) {
+            userDTO = userToUserDTO.convert(userService.getCurrentUser());
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }
     }
 
@@ -150,7 +175,8 @@ public class UserController {
             return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
         }
     }*/
-    @PreAuthorize("isAuthenticated()")
+
+
     @RequestMapping(
             value = "/changeFirstName",
             method = RequestMethod.POST,

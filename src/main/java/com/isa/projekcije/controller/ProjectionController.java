@@ -172,5 +172,18 @@ public class ProjectionController {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(
+            value = "/getProjection/{idProjection}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProjection(@PathVariable Long idProjection) {
+        Projection projection = projectionService.findById(idProjection);
+        if (projection != null) {
+            ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(projection);
+            return new ResponseEntity(projectionDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
 
 }

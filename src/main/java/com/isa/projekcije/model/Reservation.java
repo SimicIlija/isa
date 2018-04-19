@@ -26,7 +26,7 @@ public class Reservation {
     private Date date;
 
     @NotNull
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.PERSIST)
     private List<Ticket> tickets_reserved;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -35,6 +35,13 @@ public class Reservation {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> invited_friends;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "reservation_confirmed_users",
+            joinColumns = @JoinColumn(name = "reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> confirmed_users;
 
     public Reservation() {
     }
@@ -98,4 +105,13 @@ public class Reservation {
     public void setInvited_friends(List<User> invited_friends) {
         this.invited_friends = invited_friends;
     }
+
+    public List<User> getConfirmed_users() {
+        return confirmed_users;
+    }
+
+    public void setConfirmed_users(List<User> confirmed_users) {
+        this.confirmed_users = confirmed_users;
+    }
+
 }
