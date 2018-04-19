@@ -168,7 +168,8 @@ $(document).ready(function () {
     $("#addShowButton").click(function () {
         $("#friendsDiv").empty();
         var idInstitution = $("#addShowInstitutionId").val();
-        name = $("#addShowName").val();
+
+        var name = $("#addShowName").val();
         description = $("#addShowDescription").val();
         genre = $("#addShowGenre").val();
         producer = $("#addShowProducer").val();
@@ -232,7 +233,7 @@ $(document).ready(function () {
 
     $("#editShowButton").click(function () {
         var idShow = $("#idShowEdit").val();
-        name = $("#editShowName").val();
+        var name = $("#editShowName").val();
         description = $("#editShowDescription").val();
         genre = $("#editShowGenre").val();
         producer = $("#editShowProducer").val();
@@ -270,7 +271,7 @@ $(document).ready(function () {
     $("#addActorButton").click(function () {
         var idInstitution = $("#addActorInstitutionId").val();
         var idShow = $("#addActorShowId").val();
-        name = $("#addActorName").val();
+        var name = $("#addActorName").val();
         lastname = $("#addActorLastname").val();
 
         var dataActor = JSON.stringify({"name": name, "lastname": lastname, "idShow": idShow});
@@ -304,7 +305,7 @@ $(document).ready(function () {
     $("#editActorButton").click(function () {
 
         idActor = $("#idActorEdit").val();
-        name = $("#nameActorEdit").val();
+        var name = $("#nameActorEdit").val();
         lastname = $("#lastnameActorEdit").val();
 
         var dataActor = JSON.stringify({"name": name, "lastname": lastname});
