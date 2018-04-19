@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Login or register</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="view/jquery-3.3.1.min.js"></script>
+    <script src="view/toastr.min.js"></script>
+    <link href="view/toastr.min.css" rel="stylesheet"/>
+
+    <script src="view/js/CreateAdmins.js"></script>
+    <style type="text/css">
+        body {
+
+        / / background: url('http://www.wallpaperup.com/uploads/wallpapers/2017/06/20/1092645/big_thumb_cb0d22aefd01488f154dacaa1a655255.jpg');
+            background-size: cover;
+            background-position: 50% 50%;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div id="login-overlay" class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title" id="myModalLabel"><b></b></h1>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-xs-9">
+
+                    <div class="well">
+
+                        <p class="lead" style="font-weight: bold; color:darkslateblue ">Register for PROJEKCIJE <span
+                                class="text-success"></span></p>
+                        <form id="registracijaAdmina" method="POST">
+                            <fieldset>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Choose type:
+                                        <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a onclick="changeRole('fz')">Fan Zone Admin</a></li>
+                                        <li><a onclick="changeRole('ins')">Institution Admin</a></li>
+                                        <li><a onclick="changeRole('sys')">System Admin</a></li>
+                                    </ul>
+                                </div>
+                                <label style="color:darkslateblue" class="control-label">Enter email</label><br/>
+                                <input type="text" class="form-control" title="Enter your email address here"
+                                       pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+                                       placeholder="samplemail@example.com" required id="email" name="email">
+                                <span id="spanEmail"></span><br/><br/>
+
+                                <label class="control-label" style="color:darkslateblue">Enter first name</label><br/>
+                                <input class="form-control"
+                                       title="First name must start with uppercase letter and must not contain digits"
+                                       type="text" placeholder="First name" id="firstName" name="firstName">
+                                <span id="spanFirstName"></span><br/><br/>
+
+                                <label style="color:darkslateblue" class="control-label">Enter last name</label><br/>
+                                <input class="form-control"
+                                       title="Last name must start with uppercase letter and must not contain digits"
+                                       type="text" placeholder="Last name" id="lastName" name="lastName">
+                                <span id="spanLastName"></span><br/><br/>
+
+                                <label style="color:darkslateblue" class="control-label">Enter contact
+                                    number</label><br/>
+                                <input class="form-control" type="text"
+                                       title="Phone number must be entered in the form specified by the placeholder"
+                                       placeholder="(555)555-5555" id="phoneNumber" name="phoneNumber">
+                                <span id="spanPhoneNumber"></span><br/><br/>
+
+
+                                <input class="btn btn-lg btn-primary btn-block" type="button" value="Register"
+                                       onclick="registerAdmin()">
+                                <div style="color:white;font-size:30px;" id="msg"></div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -19,7 +19,7 @@ function logInUser() {
         data: s,
         contentType: "application/json",
         dataType: "json",
-        success: function (data) {
+        success: function (data, textStatus, xhr) {
             if (data == false) {
                 toastr["error"]("Username/password is incorrect,doesn't exist or empty");
 
@@ -28,7 +28,12 @@ function logInUser() {
                 alert('uspeo!');
             }
         }, error: function (jqxhr, textStatus, errorThrown) {
-            alert(errorThrown);
+            if (jqxhr.status === 301) {
+                top.location.href = "changePassword.html";
+            }
+            if (jqxhr.status === 404) {
+                toastr["error"]("Username/password is incorrect,doesn't exist or empty");
+            }
         }
 
     });

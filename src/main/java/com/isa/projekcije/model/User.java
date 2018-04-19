@@ -4,7 +4,6 @@ package com.isa.projekcije.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.fanzone.Bid;
 import com.isa.projekcije.model.fanzone.UserProps;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -65,8 +64,6 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "bidder")
     private Set<Bid> bids;
-
-    private GrantedAuthority authorities;
 
 
     public User() {

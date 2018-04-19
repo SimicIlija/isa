@@ -5,8 +5,10 @@ import com.isa.projekcije.converters.RegistrationDTOToUser;
 import com.isa.projekcije.converters.UserToUserDTO;
 import com.isa.projekcije.model.ProjectionRating;
 import com.isa.projekcije.model.Reservation;
+import com.isa.projekcije.model.Role;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.*;
+import com.isa.projekcije.model.fanzone.FanZoneAdmin;
 import com.isa.projekcije.service.EmailService;
 import com.isa.projekcije.service.ProjectionRatingService;
 import com.isa.projekcije.service.RandomString;
@@ -61,6 +63,14 @@ public class UserController {
         User user = this.userService.findUser(loginDTO);
 
         if (user != null) {
+
+            if (user.getRole() == Role.ADMIN_FUN) {
+                FanZoneAdmin fanZoneAdmin = (FanZoneAdmin) userService.findById(user.getId());
+                if (!fanZoneAdmin.isChangedPassword()) {
+                    userService.setCurrentUser(user);
+                    return new ResponseEntity<>(HttpStatus.MOVED_PERMANENTLY);
+                }
+            }
             userService.setCurrentUser(user);
             UserDTO userDTO = userToUserDTO.convert(user);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
@@ -279,8 +289,13 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         usrLoggedIn.setPassword(changePasswordDTO.getPassword());
-        userService.save(usrLoggedIn);
-
+        if (usrLoggedIn.getRole() == Role.ADMIN_FUN) {
+            FanZoneAdmin fanZoneAdmin = (FanZoneAdmin) userService.findById(usrLoggedIn.getId());
+            fanZoneAdmin.setChangedPassword(true);
+            userService.save(fanZoneAdmin);
+        } else {
+            userService.save(usrLoggedIn);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
