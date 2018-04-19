@@ -1,8 +1,10 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.model.SystemAdmin;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.RegistrationDTO;
 import com.isa.projekcije.model.fanzone.FanZoneAdmin;
+import com.isa.projekcije.service.EmailService;
 import com.isa.projekcije.service.RandomString;
 import com.isa.projekcije.service.UserService;
 import org.slf4j.Logger;
@@ -27,6 +29,8 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping("/getAllUsers")
     public ResponseEntity<?> getUsersPage() {
@@ -84,13 +88,43 @@ public class UsersController {
             RandomString gen = new RandomString(10, ThreadLocalRandom.current());
             registrationDTO.setPassword(gen.nextString());
             FanZoneAdmin fanZoneAdmin = userService.createFanZoneAdmin(registrationDTO);
-            //TODO: add email
+            emailService.sendNotificaitionAsync(fanZoneAdmin);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-
     }
+
+    /**
+     * POST /users/register/registerSystemAdmin
+     * Creates new System Admin admin based on registerDto. Only for system admins.
+     */
+    @PreAuthorize("hasAuthority('ADMIN_SYS')")
+    @RequestMapping(
+            value = "/registerSystemAdmin",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> registerSystemAdmin(@RequestBody RegistrationDTO registrationDTO) {
+
+        if (registrationDTO.isEmpty()) {
+            return new ResponseEntity<>(new RuntimeException("Missing mandatory fields!"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (userService.emailExists(registrationDTO)) {
+            return new ResponseEntity<>(new RuntimeException("Email already exists!"), HttpStatus.BAD_REQUEST);
+        }
+        try {
+            RandomString gen = new RandomString(10, ThreadLocalRandom.current());
+            registrationDTO.setPassword(gen.nextString());
+            SystemAdmin systemAdmin = userService.createSystemAdmin(registrationDTO);
+            emailService.sendNotificaitionAsync(systemAdmin);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
