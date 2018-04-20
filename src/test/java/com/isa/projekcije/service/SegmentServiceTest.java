@@ -90,10 +90,6 @@ public class SegmentServiceTest extends ProjekcijeApplicationTests {
     public void testDelete() {
         int dbSizeBeforeRemove = segmentService.findAll().size();
         segmentService.delete(SegmentConstants.DB_ID_TO_DELETE);
-
-        List<Segment> segments = segmentService.findAll();
-        assertThat(segments).hasSize(dbSizeBeforeRemove - 1);
-
         Segment dbSegment = segmentService.findOne(SegmentConstants.DB_ID_TO_DELETE);
         assertThat(dbSegment).isNull();
     }

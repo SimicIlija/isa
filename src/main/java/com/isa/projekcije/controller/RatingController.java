@@ -45,15 +45,17 @@ public class RatingController {
             method = RequestMethod.POST
     )
     public ResponseEntity<?> addProjectionRating(@RequestBody ProjectionRatingDTO projectionRatingDTO) {
-        ProjectionRating projectionRating = projectionRatingService.findOne(projectionRatingDTO.getId());
+        if (projectionRatingDTO.getId() != null) {
+            ProjectionRating projectionRating = projectionRatingService.findOne(projectionRatingDTO.getId());
 
-        if (projectionRating == null) {
-            projectionRating = projectionRatingService.getByUserAndProjection(userService.getCurrentUser().getId(),
-                    projectionRatingDTO.getIdProjection());
-            if (projectionRating != null) {
-                projectionRating.setProjectionRating(projectionRatingDTO.getProjectionRating());
-                ProjectionRating editedProjectionRating = projectionRatingService.saveRating(projectionRating);
-                return new ResponseEntity<>(projectionRatingToProjectionRatingDTO.convert(editedProjectionRating), HttpStatus.OK);
+            if (projectionRating == null) {
+                projectionRating = projectionRatingService.getByUserAndProjection(userService.getCurrentUser().getId(),
+                        projectionRatingDTO.getIdProjection());
+                if (projectionRating != null) {
+                    projectionRating.setProjectionRating(projectionRatingDTO.getProjectionRating());
+                    ProjectionRating editedProjectionRating = projectionRatingService.saveRating(projectionRating);
+                    return new ResponseEntity<>(projectionRatingToProjectionRatingDTO.convert(editedProjectionRating), HttpStatus.OK);
+                }
             }
         }
 

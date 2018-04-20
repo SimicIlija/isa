@@ -24,10 +24,6 @@ public class ProjectionRatingService {
         return projectionRatingRepository.getByProjectionId(idProjection);
     }
 
-    public List<ProjectionRating> getByUser(Long idUser) {
-        return projectionRatingRepository.getByUserId(idUser);
-    }
-
     public ProjectionRating getByUserAndProjection(Long idUser, Long idProjection) {
         return projectionRatingRepository.findByUserIdAndProjectionId(idUser, idProjection);
     }

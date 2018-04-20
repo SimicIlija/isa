@@ -120,7 +120,8 @@
 }
 
 .ticketOnSale {
-    border-radius: 25px;
+    border-color: #ffcc51;
+    border-style: dotted;
     background-color: rgba(255, 218, 85, 0.42);
     padding-left: 20px;
     padding-top: 5px;

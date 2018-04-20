@@ -5,6 +5,7 @@ import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,7 +43,7 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-
+    @Transactional
     public Ticket save(Ticket ticketToAdd) {
         return ticketRepository.save(ticketToAdd);
     }

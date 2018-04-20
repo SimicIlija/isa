@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.Charset;
@@ -54,6 +56,8 @@ public class AuditoriumControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     @WithMockUser(authorities = "ADMIN_INST")
+    @Transactional
+    @Rollback(true)
     public void testAddAuditorium() throws Exception {
 
         AuditoriumDTO auditoriumDTO = new AuditoriumDTO();
@@ -69,6 +73,8 @@ public class AuditoriumControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     @WithMockUser(authorities = "ADMIN_INST")
+    @Transactional
+    @Rollback(true)
     public void testEditAuditorium() throws Exception {
 
         AuditoriumDTO auditoriumDTO = new AuditoriumDTO();
@@ -84,14 +90,16 @@ public class AuditoriumControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     @WithMockUser(authorities = "ADMIN_INST")
-    public void testDeleteInstitutionOK() throws Exception {
+    @Transactional
+    @Rollback(true)
+    public void testDeleteAuditoriumOK() throws Exception {
 
         mockMvc.perform(delete(URL_PREFIX + "/deleteAuditorium/" + AuditoriumConstants.DB_ID_TO_DELETE)).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN_INST")
-    public void testDeleteInstitutionNotFound() throws Exception {
+    public void testDeleteAuditoriumNotFound() throws Exception {
 
         mockMvc.perform(delete(URL_PREFIX + "/deleteAuditorium/" + AuditoriumConstants.DB_NON_EXISTING_ID)).andExpect(status().isNotFound());
     }

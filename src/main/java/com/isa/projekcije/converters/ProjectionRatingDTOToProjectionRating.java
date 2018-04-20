@@ -36,7 +36,9 @@ public class ProjectionRatingDTOToProjectionRating implements Converter<Projecti
             User user = userService.getUserById(projectionRatingDTO.getIdUser());
             projectionRating.setUser(user);
         }
-        projectionRating.setId(projectionRatingDTO.getId());
+        if (projectionRatingDTO.getId() != null) {
+            projectionRating.setId(projectionRatingDTO.getId());
+        }
         projectionRating.setProjectionRating(projectionRatingDTO.getProjectionRating());
         projectionRating.setInstitutionRating(projectionRatingDTO.getInstitutionRating());
         return projectionRating;

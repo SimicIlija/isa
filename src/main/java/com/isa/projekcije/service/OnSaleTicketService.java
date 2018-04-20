@@ -21,10 +21,6 @@ public class OnSaleTicketService {
         return onSaleTicketRepository.findByTicketProjectionAuditoriumInstitutionIdAndTicketReserved(idInstitution, reserved);
     }
 
-    public List<OnSaleTicket> findByShow(Long idShow) {
-        return onSaleTicketRepository.findByTicketProjectionShowId(idShow);
-    }
-
     public List<OnSaleTicket> findByTicketProjectionIdAndTicketSeatSegmentId(Long idProjection, Long idSegment) {
         return onSaleTicketRepository.findByTicketProjectionIdAndTicketSeatSegmentId(idProjection, idSegment);
     }
@@ -40,6 +36,10 @@ public class OnSaleTicketService {
         }
         onSaleTicketRepository.delete(onSaleTicket);
         return onSaleTicket;
+    }
+
+    public OnSaleTicket findByTicketId(Long idTicket) {
+        return onSaleTicketRepository.findByTicketId(idTicket);
     }
 
 }
