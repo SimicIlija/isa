@@ -185,8 +185,7 @@ public class OnSaleTicketController {
         List<Ticket> tickets = new ArrayList<Ticket>();
         tickets.add(ticket);
         reservation.setTickets_reserved(tickets);
-        reservation.setInvited_friends(new ArrayList<User>());
-        reservation.setConfirmed_users(new ArrayList<User>());
+
 
         ticket.setReserved(true);
         ticket.setReservation(reservation);
