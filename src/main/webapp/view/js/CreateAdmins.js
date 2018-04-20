@@ -19,6 +19,7 @@ window.onload = function () {
                     google.maps.event.addListener(map, 'click', function (event) {
                         placeMarker(map, event.latLng);
                     });
+                    loadInstituions();
                 } else {
                     top.location.href = "login.html";
                 }
@@ -28,6 +29,8 @@ window.onload = function () {
             top.location.href = "login.html";
         }
     });
+
+
 };
 
 function getFormData($form) {
@@ -43,6 +46,8 @@ function getFormData($form) {
 var role = null;
 var isCinema = null;
 var marker = null;
+var instId = null;
+var adminId = null;
 
 function registerAdmin() {
     var bool = validateData();
@@ -240,6 +245,7 @@ function createNewInstitution() {
 
             } else {
                 toastr["success"]("Added new instituion");
+                loadInstituions();
             }
 
         }, error: function (jqxhr, textStatus, errorThrown) {
@@ -257,6 +263,103 @@ function placeMarker(map, location) {
             map: map
         });
     }
-    // alert(marker.position.lat());
-    // alert(marker.position.lng());
+}
+
+function loadInstituions() {
+    instId = null;
+    adminId = null;
+    $.ajax({
+        url: "institution/getInstitutions",
+        type: "GET",
+        dataType: "json",
+        success: function (data, textStatus) {
+            if (textStatus !== "success") {
+                toastr["error"]("Something failed");
+
+            } else {
+                var dropdown = $('#insDrDo');
+                dropdown.empty();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var inst =
+                        "<li><a onclick=\'changeInstId(" + data[i].id + ")\'>" + data[i].name + "</a></li>";
+                    dropdown.append(inst);
+                }
+            }
+
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Failed to get institutions");
+        }
+    });
+}
+
+function loadAdmins() {
+    var dropdown = $('#freeAdmin');
+    $.ajax({
+        url: "institution/" + instId + "/freeadmins",
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data, textStatus) {
+            dropdown.empty();
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i].id;
+                var inst =
+                    "<li><a onclick=\'changeAdminId(" + data[i].id + ")\'>" + data[i].email + "</a></li>";
+                dropdown.append(inst);
+            }
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Something failed");
+        }
+    });
+}
+
+function changeInstId(id) {
+    instId = id;
+    adminId = null;
+    var info = $('#insAdmins');
+    $.ajax({
+        url: "institution/" + id + "/admins",
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data, textStatus) {
+            var stringDiv = "<div id=\"insAdmins\">";
+            for (var i = 0; i < data.length; i++) {
+                stringDiv += data[i].email + "<br/>";
+            }
+            stringDiv += "</div>";
+            info.replaceWith(stringDiv);
+            loadAdmins();
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Something failed");
+        }
+    });
+}
+
+function changeAdminId(id) {
+    adminId = id;
+}
+
+function addNewAdmin() {
+    if (instId === null) {
+        toastr["error"]("Choose institution");
+    }
+    else if (adminId === null) {
+        toastr["error"]("Choose admin!");
+    } else {
+        $.ajax({
+            url: "institution/" + instId + "/adm/" + adminId,
+            type: "POST",
+            dataType: "text",
+            success: function (data, textStatus) {
+                toastr["success"]("Added new admin for instituion");
+                changeInstId(instId);
+            }, error: function (jqxhr, textStatus, errorThrown) {
+
+                toastr["error"](jqxhr.status);
+                loadInstituions();
+            }
+        });
+    }
 }

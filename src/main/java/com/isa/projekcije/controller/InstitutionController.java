@@ -3,10 +3,7 @@ package com.isa.projekcije.controller;
 import com.isa.projekcije.converters.InstitutionDTOToInstitutionConverter;
 import com.isa.projekcije.converters.InstitutionToInstitutionDTOConverter;
 import com.isa.projekcije.model.*;
-import com.isa.projekcije.model.dto.ChartDTO;
-import com.isa.projekcije.model.dto.ChartValueDTO;
-import com.isa.projekcije.model.dto.IncomeDTO;
-import com.isa.projekcije.model.dto.InstitutionDTO;
+import com.isa.projekcije.model.dto.*;
 import com.isa.projekcije.service.InstitutionService;
 import com.isa.projekcije.service.ProjectionRatingService;
 import com.isa.projekcije.service.ReservationsService;
@@ -25,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/institution")
@@ -249,6 +247,8 @@ public class InstitutionController {
     @RequestMapping(value = "/{idins}/adm/{ida}", method = RequestMethod.POST)
     public ResponseEntity addNewAdminToIns(@PathVariable("idins") long idins,
                                            @PathVariable("ida") long ida) {
+        System.out.println(idins);
+        System.out.println(ida);
         try {
             Institution institution = institutionService.findOne(idins);
             if (institution == null) {
@@ -266,7 +266,37 @@ public class InstitutionController {
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
 
+    @RequestMapping(value = "/{id}/admins", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity adminsOfIns(@PathVariable("id") long id) {
+        try {
+            Institution institution = institutionService.findOne(id);
+            if (institution == null) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            List<InstitutionAdmin> admins = institution.getInstitutionAdmins();
+            List<RoleDto> retVal = admins.stream().map(RoleDto::createRoleDto).collect(Collectors.toList());
+            return new ResponseEntity<>(retVal, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/{id}/freeadmins", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity freeAdminsForIns(@PathVariable("id") long id) {
+        try {
+            Institution institution = institutionService.findOne(id);
+            if (institution == null) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            List<User> insAdmins = userService.findInsAdmins();
+            insAdmins = insAdmins.stream().filter(ia -> !institution.haveAdmin(ia.getId())).collect(Collectors.toList());
+            List<RoleDto> retVal = insAdmins.stream().map(RoleDto::createRoleDto).collect(Collectors.toList());
+            return new ResponseEntity<>(retVal, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

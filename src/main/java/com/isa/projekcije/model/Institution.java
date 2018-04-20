@@ -160,4 +160,14 @@ public class Institution {
         }
         return false;
     }
+
+    public boolean haveAdmin(long id) {
+        boolean present = false;
+        for (InstitutionAdmin institutionAdmin1 : institutionAdmins) {
+            if (id == institutionAdmin1.getId()) {
+                present = true;
+            }
+        }
+        return present;
+    }
 }
