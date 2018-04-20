@@ -55,10 +55,12 @@ insert into seat (row, seat_number, id_segment) values (1, 2, 3);
 insert into seat (row, seat_number, id_segment) values (1, 1, 4);
 
 
-insert into show(name,genre,producer,duration, poster_file_name, id_institution, description) values ('Red sparrow','thriller', 'Francis Lorens', 141, 'https://goo.gl/images/DcM4U2', 1, 'frfrgvregvrwv');
-insert into show(name,genre,producer,duration, poster_file_name, id_institution, description) values ('LED','drama', 'Oleg Trofim', 113, 'https://goo.gl/images/8MFZ9e', 1, 'rgergergergervvb');
-insert into show(name,genre,producer,duration, id_institution, description) values ('Rampage 3D','action', 'Brad Peyton', 107, 1, 'vruihveuie');
-insert into show(name,genre,producer,duration, id_institution, description) values ('Gnome Alone 3D','comedy', 'Peter Lepeniotis', 89, 1, 'fjwruhfirhrue');
+
+insert into show(name,genre,producer,duration, id_institution, description) values ('Red sparrow','thriller', 'Francis Lorens', 141, 1, 'frfrgvregvrwv');
+insert into show(name,genre,producer,duration, id_institution, description) values ('LED','drama', 'Oleg Trofim', 113, 1, 'rgergergergervvb');
+insert into show(name,genre,producer,duration, id_institution, description) values ('Rampage 3D','action', 'Brad Peyton', 107, 2, 'vruihveuie');
+insert into show(name,genre,producer,duration, id_institution, description) values ('Gnome Alone 3D','comedy', 'Peter Lepeniotis', 89, 3, 'fjwruhfirhrue');
+
 
 insert into show(name,genre,producer,duration, id_institution, description) values ('Show1','action', 'Producer1', 107, 2, 'vruihveuie');
 insert into show(name,genre,producer,duration, id_institution, description) values ('show2','comedy', 'Producer2', 89, 2, 'fjwruhfirhrue');
