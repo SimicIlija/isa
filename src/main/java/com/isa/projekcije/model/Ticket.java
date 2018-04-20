@@ -6,9 +6,9 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
-/*@Table(uniqueConstraints = {
+@Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"id_seat", "id_projection"})
-})*/
+})
 public class Ticket {
 
     @Id
@@ -37,8 +37,8 @@ public class Ticket {
 
     private boolean reserved;
 
-    @Version
-    private Long version;
+    /*@Version
+    private Long version;*/
 
     public Ticket() {
     }
@@ -129,11 +129,11 @@ public class Ticket {
         return id;
     }
 
-    public Long getVersion() {
+    /*public Long getVersion() {
         return version;
     }
 
     public void setVersion(Long version) {
         this.version = version;
-    }
+    }*/
 }

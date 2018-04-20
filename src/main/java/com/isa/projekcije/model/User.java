@@ -19,7 +19,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long id;
+    protected Long id;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -82,7 +82,7 @@ public class User implements Serializable {
 
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -96,7 +96,7 @@ public class User implements Serializable {
     }
 
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
