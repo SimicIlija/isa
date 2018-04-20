@@ -1,11 +1,8 @@
 package com.isa.projekcije.model;
 
-import com.isa.projekcije.model.fanzone.ThemeProps;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Show {
@@ -37,9 +34,6 @@ public class Show {
 
     @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
     private List<Actor> actors;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "show", cascade = CascadeType.REMOVE)
-    private Set<ThemeProps> themeProps;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_institution")

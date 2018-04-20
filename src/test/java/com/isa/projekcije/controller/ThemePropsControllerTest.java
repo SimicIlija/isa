@@ -50,7 +50,6 @@ public class ThemePropsControllerTest extends ProjekcijeApplicationTests {
         dto.setDescription("des");
         dto.setName("nam");
         dto.setPrice(123);
-        dto.setShowId(1);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -68,46 +67,12 @@ public class ThemePropsControllerTest extends ProjekcijeApplicationTests {
         dto.setDescription("des");
         dto.setName("naadsasdm");
         dto.setPrice(123);
-        dto.setShowId(1);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(put(apiUrl + "/2").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void unsuccessfulCreate() throws Exception {
-        ThemePropsDTO dto = new ThemePropsDTO();
-        dto.setAmount(12);
-        dto.setDescription("des");
-        dto.setName("nam");
-        dto.setPrice(123);
-        dto.setShowId(-1);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String json = objectMapper.writeValueAsString(dto);
-
-        mockMvc.perform(post(apiUrl + "/add").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void unsuccessfulUpdateNoShow() throws Exception {
-        ThemePropsDTO dto = new ThemePropsDTO();
-        dto.setAmount(12);
-        dto.setDescription("des");
-        dto.setName("naadsasdm");
-        dto.setPrice(123);
-        dto.setShowId(-1);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String json = objectMapper.writeValueAsString(dto);
-
-        mockMvc.perform(put(apiUrl + "/1").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -128,7 +93,6 @@ public class ThemePropsControllerTest extends ProjekcijeApplicationTests {
         dto.setDescription("des");
         dto.setName("naadsasdm");
         dto.setPrice(123);
-        dto.setShowId(1);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(dto);

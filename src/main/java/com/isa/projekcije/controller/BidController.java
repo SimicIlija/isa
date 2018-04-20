@@ -95,7 +95,7 @@ public class BidController {
     public ResponseEntity addNewBid(@PathVariable("id") long id, @Valid @RequestBody double price) {
         try {
             UserProps userProps = userPropsService.findById(id);
-            if (userProps.getState() == UserPropsState.DENIED) {
+            if (userProps.getState() != UserPropsState.APPROVED) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
             if (bidService.isAccepted(userProps.getId())) {
