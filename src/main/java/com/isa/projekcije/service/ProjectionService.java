@@ -14,22 +14,6 @@ public class ProjectionService {
     @Autowired
     private ProjectionRepository projectionRepository;
 
-    public List<Projection> findByShow(Long showId) {
-        return projectionRepository.findByShow(showId);
-    }
-
-    public List<Projection> findByAuditorium(Long auditoriumId) {
-        return projectionRepository.findByAuditorium(auditoriumId);
-    }
-
-    public List<Projection> findByDate(Date date) {
-        return projectionRepository.findByDate(date);
-    }
-
-    public Projection findByTickets(Long ticketId) {
-        return projectionRepository.findByTickets(ticketId);
-    }
-
     public Projection findById(Long id) {
         return projectionRepository.findById(id);
     }

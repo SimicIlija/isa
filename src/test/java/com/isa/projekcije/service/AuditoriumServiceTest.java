@@ -80,6 +80,8 @@ public class AuditoriumServiceTest extends ProjekcijeApplicationTests {
     }
 
     @Test
+    @Transactional
+    @Rollback(true)
     public void testDelete() {
         int dbSizeBeforeRemove = auditoriumService.findAll().size();
 

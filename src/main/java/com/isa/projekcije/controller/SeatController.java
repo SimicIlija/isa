@@ -55,7 +55,7 @@ public class SeatController {
         Seat addedSeat = seatService.save(seat);
         SeatDTO seatDto = seatToSeatDTO.convert(addedSeat);
 
-        return new ResponseEntity(seatDto, HttpStatus.OK);
+        return new ResponseEntity(seatDto, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN_INST')")

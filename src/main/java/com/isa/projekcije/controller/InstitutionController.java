@@ -8,6 +8,11 @@ import com.isa.projekcije.service.InstitutionService;
 import com.isa.projekcije.service.ProjectionRatingService;
 import com.isa.projekcije.service.ReservationsService;
 import com.isa.projekcije.service.UserService;
+import com.isa.projekcije.model.dto.ChartDTO;
+import com.isa.projekcije.model.dto.ChartValueDTO;
+import com.isa.projekcije.model.dto.IncomeDTO;
+import com.isa.projekcije.model.dto.InstitutionDTO;
+import com.isa.projekcije.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,6 +50,9 @@ public class InstitutionController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OnSaleTicketService onSaleTicketService;
 
     @RequestMapping(
             value = "/getById/{idInstitution}",
@@ -232,7 +240,12 @@ public class InstitutionController {
             for (Reservation reservation : reservations) {
                 if (reservation.getProjection().getDate().before(dateTo) && reservation.getProjection().getDate().after(dateFrom))
                     for (Ticket ticket : reservation.getTickets_reserved()) {
-                        income += ticket.getPrice().doubleValue();
+                        OnSaleTicket onSaleTicket = onSaleTicketService.findByTicketId(ticket.getId());
+                        if (onSaleTicket != null) {
+                            income += ticket.getPrice().doubleValue() * ((100.0 - onSaleTicket.getDiscount()) / 100.0);
+                        } else {
+                            income += ticket.getPrice().doubleValue();
+                        }
                     }
             }
 

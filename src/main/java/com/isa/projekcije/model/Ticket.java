@@ -37,6 +37,9 @@ public class Ticket {
 
     private boolean reserved;
 
+    @Version
+    private Long version;
+
     public Ticket() {
     }
 
@@ -124,5 +127,13 @@ public class Ticket {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

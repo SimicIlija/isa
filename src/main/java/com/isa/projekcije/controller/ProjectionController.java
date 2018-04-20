@@ -141,7 +141,7 @@ public class ProjectionController {
             Projection addedProjection = projectionService.save(projection);
             ProjectionDTO projectionDTO = projectionToProjectionDTO.convert(addedProjection);
 
-            return new ResponseEntity<>(projectionDTO, HttpStatus.OK);
+            return new ResponseEntity<>(projectionDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Fill in all fields.", HttpStatus.BAD_REQUEST);
         }
@@ -223,7 +223,7 @@ public class ProjectionController {
 
     @RequestMapping(
             value = "/getProjection/{idProjection}",
-            method = RequestMethod.POST,
+            method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProjection(@PathVariable Long idProjection) {
         Projection projection = projectionService.findById(idProjection);

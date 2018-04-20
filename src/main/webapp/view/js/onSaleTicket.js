@@ -160,14 +160,14 @@ function loadTicketsOnSale(idInstitution, str) {
                 newPrice = (data[i].oldPrice * (100 - data[i].discount)) / 100;
                 divTicket = "<div id='divOnSaleTicketID" + data[i].id + "' class='ticketOnSale'>"
                     + "<h3>" + data[i].showName + "</h3>"
-                    + "Date: " + date + "<br>"
-                    + "Auditorium: " + data[i].auditoriumName + "<br>"
-                    + "Segment: " + data[i].segmentName + "<br>"
-                    + "Old Price: " + data[i].oldPrice + "<br>"
-                    + "Discount: " + data[i].discount + "%" + "<br>"
-                    + "New price: " + newPrice + "<br>"
-                    + "Seat row: " + data[i].seatRow + ", seat number: " + data[i].seatNumber + "<br><br>"
-                    + "<button type=\"button\" onclick='reserveOnSaleTicketClick(" + data[i].id + ")' class=\"btn btn-default\">Reserve</button>"
+                    + "<b>Date:</b> " + date + "<br>"
+                    + "<b>Auditorium:</b> " + data[i].auditoriumName + "<br>"
+                    + "<b>Segment:</b> " + data[i].segmentName + "<br>"
+                    + "<b>Old Price:</b> " + data[i].oldPrice + "<br>"
+                    + "<b>Discount:</b> " + data[i].discount + "%" + "<br>"
+                    + "<b>New price:</b> " + newPrice + "<br>"
+                    + "<b>Seat row:</b> " + data[i].seatRow + ", <b>seat number:</b> " + data[i].seatNumber + "<br><br>"
+                    + "<button type=\"button\" onclick='reserveOnSaleTicketClick(" + data[i].id + ")' class=\"btn btn-warning\">Reserve</button>"
                     + "</div>";
                 str += divTicket;
             }

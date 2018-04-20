@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class OnSaleTicketController {
         } catch (Exception e) {
             return new ResponseEntity<>("Ticket already added.", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(onSaleTicketToOnSaleTicketDTO.convert(onSaleTicket), HttpStatus.OK);
+        return new ResponseEntity<>(onSaleTicketToOnSaleTicketDTO.convert(onSaleTicket), HttpStatus.CREATED);
     }
 
     @RequestMapping(
@@ -105,11 +104,11 @@ public class OnSaleTicketController {
             value = "/editOnSaleTicket/{idOnSaleTicket}",
             method = RequestMethod.PUT
     )
-    public ResponseEntity<?> addOnSaleTicket(@PathVariable Long idOnSaleTicket, @RequestBody OnSaleTicketDTO onSaleTicketDTO) {
+    public ResponseEntity<?> editOnSaleTicket(@PathVariable Long idOnSaleTicket, @RequestBody OnSaleTicketDTO onSaleTicketDTO) {
         OnSaleTicket onSaleTicket = onSaleTicketService.findOne(idOnSaleTicket);
         if (onSaleTicket == null) {
             return new ResponseEntity<>("Ticket does't exist.",
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
         if (onSaleTicket.getTicket().isReserved()) {
             return new ResponseEntity<>("Ticket already reserved!",
@@ -135,7 +134,7 @@ public class OnSaleTicketController {
     public ResponseEntity<?> deleteOnSaleTicket(@PathVariable Long idOnSaleTicker) {
         OnSaleTicket toDelete = onSaleTicketService.findOne(idOnSaleTicker);
         if (toDelete == null) {
-            return new ResponseEntity<>("Ticket not found.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Ticket not found.", HttpStatus.NOT_FOUND);
         }
         if (toDelete.getTicket().isReserved()) {
             return new ResponseEntity<>("Ticket already reserved.", HttpStatus.BAD_REQUEST);
@@ -162,7 +161,6 @@ public class OnSaleTicketController {
         return new ResponseEntity<>(onSaleTicketDTOS, HttpStatus.OK);
     }
 
-    @Transactional
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/reserveOnSaleTicket/{idOnSaleTicket}",

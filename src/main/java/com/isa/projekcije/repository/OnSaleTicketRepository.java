@@ -12,4 +12,6 @@ public interface OnSaleTicketRepository extends JpaRepository<OnSaleTicket, Long
     public List<OnSaleTicket> findByTicketProjectionShowId(Long idShow);
 
     public List<OnSaleTicket> findByTicketProjectionIdAndTicketSeatSegmentId(Long idProjection, Long idSegment);
+
+    public OnSaleTicket findByTicketId(Long idTicket);
 }

@@ -110,7 +110,7 @@ public class ShowController {
         return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN_INST')")
+    //@PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addShow",
             method = RequestMethod.POST,
