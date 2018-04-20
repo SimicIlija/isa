@@ -7,8 +7,7 @@ import com.isa.projekcije.model.Reservation;
 import com.isa.projekcije.model.Ticket;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.ReservationDTO;
-import com.isa.projekcije.model.dto.UserDTO;
-import com.isa.projekcije.service.EmailService;
+import com.isa.projekcije.service.ProjectionService;
 import com.isa.projekcije.service.ReservationsService;
 import com.isa.projekcije.service.TicketService;
 import com.isa.projekcije.service.UserService;
@@ -18,11 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +41,9 @@ public class ReservationsController {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private ProjectionService projectionService;
 
 
     @RequestMapping(
@@ -195,6 +194,5 @@ public class ReservationsController {
         List<ReservationDTO> reservationDTO = reservationToReservationDTO.convert(toReturn);
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
-
 
 }

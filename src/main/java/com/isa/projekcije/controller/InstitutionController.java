@@ -107,6 +107,7 @@ public class InstitutionController {
         return new ResponseEntity<>(institutionToInstitutionDTOConverter.convert(newInstitution), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editInstitution/{id}",
             method = RequestMethod.PUT,
@@ -153,6 +154,7 @@ public class InstitutionController {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/getCharts/{idInstitution}",
             method = RequestMethod.GET
@@ -214,6 +216,7 @@ public class InstitutionController {
         return new ResponseEntity<>(chartDTOS, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/getIncome/{idInstitution}",
             method = RequestMethod.POST

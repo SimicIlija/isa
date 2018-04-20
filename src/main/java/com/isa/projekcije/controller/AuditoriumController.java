@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class AuditoriumController {
         return new ResponseEntity<>(auditoriumToAuditoriumDTOConverter.convert(auditoriumList), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "addAuditorium",
             method = RequestMethod.POST,
@@ -49,6 +51,7 @@ public class AuditoriumController {
         return new ResponseEntity<>(auditoriumToAuditoriumDTOConverter.convert(auditorium), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editAuditorium/{id}",
             method = RequestMethod.PUT,
@@ -67,6 +70,7 @@ public class AuditoriumController {
         return new ResponseEntity<>(auditoriumToAuditoriumDTOConverter.convert(newAuditorium), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/deleteAuditorium/{id}",
             method = RequestMethod.DELETE

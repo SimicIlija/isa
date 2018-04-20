@@ -11,7 +11,19 @@ function getFormData($form) {
 $(document).ready(function () {
 
     $.ajax({
+        async: false,
+        type: "POST",
+        url: "user/getLoggedInUser",
+        dataType: "json",
+        success: function (data) {
+            if (data.role === "ADMIN_SYS") {
+                $("a[href=\"#tabSystemAdmin").remove();
+                $("#tabovi").append("<li><a href=\"#tabSystemAdmin\" data-toggle=\"tab\" onclick='return buttonSystemAdminsClick()'>System admins</a></li>");
+            }
+        }
+    });
 
+    $.ajax({
         url: "institution/getInstitutionsByAdmin",
         dataType: "json",
         success: function (data) {
@@ -37,6 +49,12 @@ $(document).ready(function () {
     });*/
 
 });
+
+
+function buttonSystemAdminsClick() {
+    top.location.href = "CreateAdmins.html";
+    return false;
+}
 
 function tabCinemasClick() {
     $("#friendsDiv").empty();
@@ -75,11 +93,12 @@ function cinemaRepertoar(idInstitution) {
             var newShow;
             var i;
             var idShow;
+            var str = "<div class='container'><div class='row'><div class='col-lg-9'>"
             for (i = 0; i < data.length; i++) {
                 idShow = data[i].id;
                 newShow =
                     "<div class='container'>"
-                    + "<div class=\"divCinemaTheatre\">"
+                    + "<div class=\"divCinemaTheatreShow\">"
                     + "<h2>" + data[i].name + "</h2>"
                     + "<p>"
                     + "<b>Genre:</b> " + data[i].genre + "<br>"
@@ -92,8 +111,13 @@ function cinemaRepertoar(idInstitution) {
                 newShow = loadProjections(idShow, newShow);
                 newShow += "</div>"
                     + "</div>";
-                cinemaDiv.append(newShow);
+                //cinemaDiv.append(newShow);
+                str += newShow;
             }
+            str += "</div><div class='col-lg-3'><h2>On sale tickets</h2>";
+            str = loadTicketsOnSale(idInstitution, str);
+            str += "</div></div></div>";
+            cinemaDiv.append(str);
         }
     });
 }
@@ -120,7 +144,7 @@ function loadProjections(idShow, newShow) {
     $("#friendsDiv").empty();
     $.ajax({
         async: false,
-        url: "projections/getByShow/" + idShow,
+        url: "projections/getByShowCurrent/" + idShow,
         dataType: "json",
         success: function (dataProjections) {
             newShow += "<p>"

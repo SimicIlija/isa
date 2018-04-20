@@ -3,10 +3,7 @@ package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.RegistrationDTOToUser;
 import com.isa.projekcije.converters.UserToUserDTO;
-import com.isa.projekcije.model.ProjectionRating;
-import com.isa.projekcije.model.Reservation;
-import com.isa.projekcije.model.Role;
-import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.*;
 import com.isa.projekcije.model.dto.*;
 import com.isa.projekcije.model.fanzone.FanZoneAdmin;
 import com.isa.projekcije.service.EmailService;
@@ -67,6 +64,15 @@ public class UserController {
                     return new ResponseEntity<>(HttpStatus.MOVED_PERMANENTLY);
                 }
             }
+
+            if (user.getRole() == Role.ADMIN_INST) {
+                InstitutionAdmin institutionAdmin = (InstitutionAdmin) userService.findById(user.getId());
+                if (!institutionAdmin.isPasswordChanged()) {
+                    userService.setCurrentUser(user);
+                    return new ResponseEntity<>(HttpStatus.MOVED_PERMANENTLY);
+                }
+            }
+
             userService.setCurrentUser(user);
             UserDTO userDTO = userToUserDTO.convert(user);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
@@ -156,6 +162,7 @@ public class UserController {
         UserDTO userDTO = new UserDTO();
         if (userService.getCurrentUser() != null) {
             userDTO = userToUserDTO.convert(userService.getCurrentUser());
+            userDTO.setRole(userService.getCurrentUser().getRole().toString());
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
 
         } else {
@@ -325,6 +332,10 @@ public class UserController {
             FanZoneAdmin fanZoneAdmin = (FanZoneAdmin) userService.findById(usrLoggedIn.getId());
             fanZoneAdmin.setChangedPassword(true);
             userService.save(fanZoneAdmin);
+        } else if (usrLoggedIn.getRole() == Role.ADMIN_INST) {
+            InstitutionAdmin institutionAdmin = (InstitutionAdmin) userService.findById(usrLoggedIn.getId());
+            institutionAdmin.setPasswordChanged(true);
+            userService.save(institutionAdmin);
         } else {
             userService.save(usrLoggedIn);
         }

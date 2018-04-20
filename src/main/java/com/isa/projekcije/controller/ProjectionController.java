@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -117,6 +118,7 @@ public class ProjectionController {
         return new ResponseEntity<>(projectionToProjectionDTO.convert(auditorium.getProjections()), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addProjection",
             method = RequestMethod.POST,
@@ -145,7 +147,7 @@ public class ProjectionController {
         }
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/deleteProjection/{idProjectionToDelete}",
             method = RequestMethod.DELETE)
@@ -162,6 +164,7 @@ public class ProjectionController {
         return new ResponseEntity<>(projectionDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "editProjection/{idProjection}",
             method = RequestMethod.PUT,

@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -109,6 +110,7 @@ public class ShowController {
         return new ResponseEntity<>(showToShowDTOConverter.convert(show), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addShow",
             method = RequestMethod.POST,
@@ -128,6 +130,7 @@ public class ShowController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editShow/{id}",
             method = RequestMethod.PUT,
@@ -155,6 +158,7 @@ public class ShowController {
         return new ResponseEntity<>(showToShowDTOConverter.convert(newShow), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/deleteShow/{id}",
             method = RequestMethod.DELETE
@@ -167,6 +171,7 @@ public class ShowController {
         return new ResponseEntity<>(showToShowDTOConverter.convert(deleted), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addActor",
             consumes = MediaType.APPLICATION_JSON_VALUE,

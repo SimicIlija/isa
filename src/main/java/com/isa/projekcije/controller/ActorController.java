@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,6 +44,7 @@ public class ActorController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addActor",
             method = RequestMethod.POST,
@@ -57,6 +59,7 @@ public class ActorController {
         return new ResponseEntity(actorDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/deleteActor/{idActorToDelete}",
             method = RequestMethod.DELETE,
@@ -67,6 +70,7 @@ public class ActorController {
         return new ResponseEntity(actorDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editActor/{idActor}",
             method = RequestMethod.PUT,

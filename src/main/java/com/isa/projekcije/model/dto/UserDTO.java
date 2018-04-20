@@ -5,7 +5,7 @@ public class UserDTO {
     protected Long id;
     protected String firstName;
     protected String lastName;
-
+    protected String role;
     protected String email;
 
     public UserDTO(Long id, String firstName, String lastName, String email) {
@@ -59,5 +59,13 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

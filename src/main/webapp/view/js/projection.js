@@ -15,6 +15,7 @@ function addProjection(idInstitution, idShow) {
             }
         }
     });
+    $('#addProjectionDate').val('');
     $('#addProjectionInstitutionId').val(idInstitution);
     $('#addProjectionShowId').val(idShow);
     $("#addProjectionModal").modal('toggle');
