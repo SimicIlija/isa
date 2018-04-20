@@ -52,9 +52,10 @@ public class InstitutionControllerTest extends ProjekcijeApplicationTests {
                 .andExpect(jsonPath("$.[*].latitude").value(hasItem(InstitutionConstants.DB_LATITUDE)));
     }
 
-    @Test(expected = Exception.class) //zbog authority
+    @Test
     @Transactional
     @Rollback(true)
+    @WithMockUser(authorities = "ADMIN_SYS")
     public void testAddInstitution() throws Exception {
         InstitutionDTO institutionDTO = new InstitutionDTO();
         institutionDTO.setName(InstitutionConstants.NEW_NAME);
@@ -67,7 +68,7 @@ public class InstitutionControllerTest extends ProjekcijeApplicationTests {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(institutionDTO);
 
-        mockMvc.perform(post(URL_PREFIX).contentType(contentType).content(json)).andExpect(status().isOk());
+        mockMvc.perform(post(URL_PREFIX).contentType(contentType).content(json)).andExpect(status().isCreated());
     }
 
     @Test

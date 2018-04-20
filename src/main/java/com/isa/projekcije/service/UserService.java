@@ -1,6 +1,7 @@
 package com.isa.projekcije.service;
 
 import com.isa.projekcije.model.InstitutionAdmin;
+import com.isa.projekcije.model.Role;
 import com.isa.projekcije.model.SystemAdmin;
 import com.isa.projekcije.model.User;
 import com.isa.projekcije.model.dto.LoginDTO;
@@ -114,5 +115,9 @@ public class UserService {
     public SystemAdmin createSystemAdmin(RegistrationDTO registrationDTO) {
         SystemAdmin systemAdmin = SystemAdmin.createFromDto(registrationDTO);
         return (SystemAdmin) userRepository.save(systemAdmin);
+    }
+
+    public List<User> findInsAdmins() {
+        return userRepository.findByRole(Role.ADMIN_INST);
     }
 }

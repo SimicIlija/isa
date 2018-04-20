@@ -146,4 +146,28 @@ public class Institution {
     public void setInstitutionAdmins(List<InstitutionAdmin> institutionAdmins) {
         this.institutionAdmins = institutionAdmins;
     }
+
+    public boolean addAdmin(InstitutionAdmin institutionAdmin) {
+        boolean present = false;
+        for (InstitutionAdmin institutionAdmin1 : institutionAdmins) {
+            if (institutionAdmin.getId() == institutionAdmin1.getId()) {
+                present = true;
+            }
+        }
+        if (!present) {
+            institutionAdmins.add(institutionAdmin);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean haveAdmin(long id) {
+        boolean present = false;
+        for (InstitutionAdmin institutionAdmin1 : institutionAdmins) {
+            if (id == institutionAdmin1.getId()) {
+                present = true;
+            }
+        }
+        return present;
+    }
 }
