@@ -51,11 +51,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "reserver", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
-    @ManyToMany(mappedBy = "invited_friends")
-    private List<Reservation> reservation_invited;
-
-    @ManyToMany(mappedBy = "confirmed_users")
-    private List<Reservation> reservation_confirmed;
 
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
@@ -179,20 +174,5 @@ public class User implements Serializable {
         this.reservations = reservations;
     }
 
-    public List<Reservation> getReservation_invited() {
-        return reservation_invited;
-    }
 
-    public void setReservation_invited(List<Reservation> reservation_invited) {
-        this.reservation_invited = reservation_invited;
-    }
-
-    public List<Reservation> getReservation_confirmed() {
-        return reservation_confirmed;
-    }
-
-    public void setReservation_confirmed(List<Reservation> reservation_confirmed) {
-        this.reservation_confirmed = reservation_confirmed;
-
-    }
 }

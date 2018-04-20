@@ -1,6 +1,10 @@
 function tabMyReservationsClick() {
     var configDiv = $('#configDiv');
     configDiv.empty();
+    var invitesDiv = $('#invitesDiv');
+    var confirmedDiv = $('#confirmedDiv');
+    confirmedDiv.empty();
+    invitesDiv.empty();
     var reserverDiv = $('#reserverDiv');
     reserverDiv.empty();
     $.ajax({
@@ -76,7 +80,20 @@ function otkaziRezervaciju(idReservation) {
         type: "DELETE",
         success: function (data) {
             if (data == true) {
-                tabMyReservationsClick();
+                $.ajax({
+                    async: false,
+                    url: "invites/cancelInvites/" + idReservation,
+                    dataType: "json",
+                    type: "DELETE",
+                    success: function (dataInvite) {
+                        if (dataInvite == true) {
+                            tabMyReservationsClick();
+                        } else {
+                            toastr["error"]("Could not delete invites");
+                        }
+
+                    }
+                });
             } else {
                 toastr["error"]("Could not delete reservation");
             }

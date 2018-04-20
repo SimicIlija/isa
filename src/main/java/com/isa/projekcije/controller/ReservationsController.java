@@ -2,15 +2,17 @@ package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.ReservationDTOToReservation;
 import com.isa.projekcije.converters.ReservationToReservationDTO;
-import com.isa.projekcije.model.Projection;
-import com.isa.projekcije.model.Reservation;
-import com.isa.projekcije.model.Ticket;
-import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.*;
 import com.isa.projekcije.model.dto.ReservationDTO;
+
 import com.isa.projekcije.service.ProjectionService;
 import com.isa.projekcije.service.ReservationsService;
 import com.isa.projekcije.service.TicketService;
 import com.isa.projekcije.service.UserService;
+
+import com.isa.projekcije.model.dto.UserDTO;
+import com.isa.projekcije.service.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +44,10 @@ public class ReservationsController {
 
     @Autowired
     private TicketService ticketService;
+    @Autowired
+    private InviteService inviteService;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private ProjectionService projectionService;
@@ -60,10 +67,45 @@ public class ReservationsController {
 
         Reservation reservation = reservationDTOToReservation.convert(reservationDTO);
         //Reservation saved = reservationsService.save(reservation);
+        List<User> invitedFriends = new ArrayList<User>();
+
+        Show show = reservation.getProjection().getShow();
+        for (String email : reservationDTO.getFriends()) {
+            User friend = userService.findByEmail(email);
+            //kreira se novi poziv za svakog prijatelja
+            Invite invite = new Invite(reservation.getId(), friend.getId());
+
+            List<Invite> existingInvites = inviteService.findByIdInvitedUser(friend.getId());
+            for (Invite existingInvite : existingInvites) {
+                Reservation existingReservation = reservationsService.findById(existingInvite.getIdReservation());
+                Projection existingProjection = existingReservation.getProjection();
+                Date existingDate = existingReservation.getProjection().getDate();
+                if (existingDate.equals(reservation.getProjection().getDate()) && existingProjection.getId() == reservation.getProjection().getId()) {
+                    return new ResponseEntity(false, HttpStatus.OK);
+                }
+            }
+            Invite saved = inviteService.save(invite);
+
+
+            //slanje emaila svakom korisniku
+            emailService.getMail().setTo(friend.getEmail());
+            emailService.getMail().setFrom(emailService.getEnv().getProperty("spring.mail.username"));
+            emailService.getMail().setSubject("You have been invited to a projection");
+            String text = "Hello " + friend.getFirstName() + ",\n\n" + reservation.getReserver().getFirstName() + " " + reservation.getReserver().getLastName() + " invited you to see " + show.getName() + "\n\n" +
+                    "Click on the link to confirm/reject invite: http://localhost:1234/invite.html";
+
+            emailService.getMail().setText(text);
+            try {
+                emailService.sendNotificaitionAsync(friend);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         ReservationDTO reservationDTO1 = reservationToReservationDTO.convert(reservation);
 
-        return new ResponseEntity(reservationDTO1, HttpStatus.OK);
+        return new ResponseEntity(true, HttpStatus.OK);
     }
 
 
@@ -82,15 +124,18 @@ public class ReservationsController {
             value = "/cancelReservation/{idToDelete}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getReserverReservations(@PathVariable Long idToDelete) {
-        Reservation reservation = reservationsService.delete(idToDelete);
+    public ResponseEntity<?> cancelReservation(@PathVariable Long idToDelete) {
+        Reservation reservation = reservationsService.findById(idToDelete);
+
+        for (Ticket ticket : reservation.getTickets_reserved()) {
+            ticket.setReserved(false);
+            ticket.setReservation(null);
+        }
         User loggedIn = userService.getCurrentUser();
         loggedIn.getReservations().remove(reservation);
 
-        for (User invited : reservation.getInvited_friends()) {
-            invited.getReservation_invited().remove(reservation);
-            invited.getReservation_confirmed().remove(reservation);
-        }
+
+        //provera vremena otkazivanja rezervacije
         Projection projection = reservation.getProjection();
         Date projectionDate = projection.getDate();
         Long timeProjection = projectionDate.getTime();
@@ -100,6 +145,12 @@ public class ReservationsController {
         Long currentTime = date.getTime();
         if (timeProjection - currentTime <= 30) {
             return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        reservationsService.delete(idToDelete);
+
+        List<Invite> invitesToDelete = inviteService.findByIdReservation(idToDelete);
+        for (Invite invite : invitesToDelete) {
+            inviteService.delete(invite.getId());
         }
 
         ReservationDTO reservationDTO = reservationToReservationDTO.convert(reservation);
@@ -113,71 +164,33 @@ public class ReservationsController {
     public ResponseEntity<?> getInvites(@PathVariable Long idUser) {
         //List<Reservation> reservations = reservationsService.findAll();
         User invited = userService.findById(idUser);
-        List<Reservation> toReturn = invited.getReservation_invited();
-       /*List<Reservation> toReturn = new ArrayList<Reservation>();
-       for(Reservation res : reservations){
-            for(User inv : res.getInvited_friends()){
-                if(inv.getId() == invited.getId()){
-                    toReturn.add(res);
-                }
+        List<Invite> userInvites = inviteService.findByIdInvitedUser(idUser);
+        List<Reservation> toReturn = new ArrayList<Reservation>();
+
+        for (Invite invite : userInvites) {
+            if (invite.getConfirmed() == false) {
+                toReturn.add(reservationsService.findById(invite.getIdReservation()));
             }
-        }*/
+        }
+
         List<ReservationDTO> reservationDTO = reservationToReservationDTO.convert(toReturn);
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
 
     @RequestMapping(
-            value = "/decline/{idReservation}",
+            value = "/setReserved/{idReservation}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> decline(@PathVariable Long idReservation) {
+    public ResponseEntity<?> setReserved(@PathVariable Long idReservation) {
         Reservation reservation = reservationsService.findById(idReservation);
-        User invited = userService.getCurrentUser();
-        List<User> userEmails = reservation.getInvited_friends();
-        User found = null;
-        for (User current : userEmails) {
-            if (current.getEmail().equals(invited.getEmail())) {
-                found = current;
-                break;
-            }
-        }
-        reservation.getInvited_friends().remove(found);
+        Ticket free = reservation.getTickets_reserved().get(reservation.getTickets_reserved().size() - 1);
+        free.setReserved(false);
+        free.setReservation(null);
+        Ticket savedTicket = ticketService.save(free);
+        reservation.getTickets_reserved().remove(reservation.getTickets_reserved().size() - 1);
 
-        List<Ticket> tickets = reservation.getTickets_reserved();
-        Ticket toRemove = reservation.getTickets_reserved().remove(reservation.getTickets_reserved().size() - 1);
+        Reservation savedReservation = reservationsService.save(reservation);
 
-
-        for (Ticket ticket : ticketService.findAll()) {
-            if (ticket.getId() == toRemove.getId()) {
-                ticket.setReserved(false);
-                Ticket ret = ticketService.save(ticket);
-            }
-        }
-
-        Reservation saved = reservationsService.save(reservation);
-        ReservationDTO reservationDTO = reservationToReservationDTO.convert(saved);
-        if (reservationDTO == null) {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(true, HttpStatus.OK);
-    }
-
-    @RequestMapping(
-            value = "/confirm/{idReservation}",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> confirm(@PathVariable Long idReservation) {
-
-        User invited = userService.getCurrentUser();
-
-
-        Reservation removed = reservationsService.findById(idReservation);
-        removed.getInvited_friends().remove(invited);
-        Reservation r = reservationsService.save(removed);
-        invited.getReservation_invited().remove(removed);
-        invited.getReservation_confirmed().add(removed);
-        User saved = userService.save(invited);
-        List<ReservationDTO> reservationDTO = reservationToReservationDTO.convert(saved.getReservation_confirmed());
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
@@ -189,9 +202,17 @@ public class ReservationsController {
     public ResponseEntity<?> getConfirmedReservations(@PathVariable Long idUser) {
 
         User invited = userService.findById(idUser);
-        List<Reservation> toReturn = invited.getReservation_confirmed();
+        List<Reservation> confirmedReservations = new ArrayList<Reservation>();
+        List<Invite> invites = inviteService.findByIdInvitedUser(invited.getId());
 
-        List<ReservationDTO> reservationDTO = reservationToReservationDTO.convert(toReturn);
+        if (invites != null) {
+            for (Invite invite : invites) {
+                if (invite.getConfirmed() == true) {
+                    confirmedReservations.add(reservationsService.findById(invite.getIdReservation()));
+                }
+            }
+        }
+        List<ReservationDTO> reservationDTO = reservationToReservationDTO.convert(confirmedReservations);
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
 

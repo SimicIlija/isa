@@ -47,12 +47,15 @@
 
                         </ul>
                     </li>
-                    <li><a href="#tabTheatres" data-toggle="tab">Theatres</a></li>
+                    <li><a href="#tabCinemas" data-toggle="tab" onclick='return tabTheatresClick()'>Theatres</a></li>
                     <li><a href="#tabCinemas" data-toggle="tab" onclick='return tabCinemasClick()'>Cinemas</a></li>
                     <li><a href="#tabMyVisits" data-toggle="tab" onclick='return tabMyVisitsClick()'>My visits</a></li>
                     <li><a href="#tabFriends" data-toggle="tab" onclick='return tabFriendsClick()'>Friends</a></li>
+                    <li><a href="#tabMyReservations" data-toggle="tab" onclick='return tabMyReservationsClick()'>My
+                        Reservations</a></li>
                     <li><a href="#tabMyInvites" data-toggle="tab" onclick='return tabMyInvites()'>My Invites</a></li>
-
+                    <li><a href="#tabConfirmedReservations" data-toggle="tab"
+                           onclick='return tabMyConfirmedReservationsClick()'>Confirmed reservations</a></li>
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">Settings <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -78,12 +81,16 @@
                         </div>
                         <div class="container" id="changeInformationDiv">
                         </div>
-                        <div class="tab-pane fade" id="tabReserver">
+                        <div class="tab-pane fade" id="tabMyReservations">
                             <div class="container" id="reserverDiv">
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tabMyInvites">
                             <div class="container" id="invitesDiv">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabConfirmedReservations">
+                            <div class="container" id="confirmedDiv">
                             </div>
                         </div>
 
@@ -103,6 +110,7 @@
 
                         <div class="container" id="friendsDivAdded">
                         </div>
+
                         <div class="tab-pane fade" id="tabSettingsTheatres">podesi pozoriste</div>
                         <div class="tab-pane fade" id="tabSettingsCinemas">
                             <div class="container" id="cinemaSettingDiv">

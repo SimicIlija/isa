@@ -22,12 +22,12 @@ public class ReservationsService {
     }
 
     public Reservation delete(Long idToDelete) {
-        Reservation show = reservationsRepository.findOne(idToDelete);
-        if (show == null) {
+        Reservation reservation = reservationsRepository.findOne(idToDelete);
+        if (reservation == null) {
             return null;
         }
-        reservationsRepository.delete(show);
-        return show;
+        reservationsRepository.delete(reservation.getId());
+        return reservation;
     }
 
 

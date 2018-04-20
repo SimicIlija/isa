@@ -34,6 +34,10 @@ function tabMyInvites() {
                     type: "POST",
                     success: function (data) {
                         var invitesDiv = $('#invitesDiv');
+                        var confirmedDiv = $('#confirmedDiv');
+                        var reserverDiv = $('#reserverDiv');
+                        reserverDiv.empty();
+                        confirmedDiv.empty();
                         invitesDiv.empty();
                         invitesDiv.append("<p>");
                         for (var reservation = 0; reservation < data.length; reservation++) {
@@ -100,12 +104,26 @@ function otkaziDolazak(idReservation) {
 
     $.ajax({
         async: false,
-        url: "reservations/decline/" + idReservation,
+        url: "invites/decline/" + idReservation,
         dataType: "json",
         type: "PUT",
         success: function (data) {
             if (data == true) {
-                tabMyInvites();
+                $.ajax({
+                    async: false,
+                    url: "reservations/setReserved/" + idReservation,
+                    dataType: "json",
+                    type: "PUT",
+                    success: function (dataReserved) {
+                        if (dataReserved == true) {
+                            top.location.href = "homeForLoggedIn.html";
+                            //tabMyInvites();
+                        } else {
+                            toastr["error"]('Could not decline invite');
+                        }
+                    }
+                });
+
             } else {
                 toastr["error"]('Could not decline invite');
             }
@@ -119,19 +137,19 @@ function potvrdiDolazak(idReservation) {
 
     $.ajax({
         async: false,
-        url: "reservations/confirm/" + idReservation,
+        url: "invites/confirm/" + idReservation,
         dataType: "json",
         type: "POST",
         success: function (dataSuccess) {
             if (dataSuccess == true) {
-                tabMyReservationsClick(dataSuccess);
+                tabMyConfirmedReservationsClick(dataSuccess);
             }
         }
     });
 
 }
 
-function tabMyReservationsClick(dataSuccess) {
+function tabMyConfirmedReservationsClick(dataSuccess) {
     $.ajax({
         async: false,
         url: "user/getLoggedInUser",
@@ -148,9 +166,13 @@ function tabMyReservationsClick(dataSuccess) {
                     dataType: "json",
                     type: "POST",
                     success: function (data) {
-                        var invitesDiv = $('#confirmedDiv');
+                        var confirmedDiv = $('#confirmedDiv');
+                        confirmedDiv.empty();
+                        var invitesDiv = $('#invitesDiv');
                         invitesDiv.empty();
-                        invitesDiv.append("<p>");
+                        var reserverDiv = $('#reserverDiv');
+                        reserverDiv.empty();
+                        confirmedDiv.append("<p>");
                         for (var reservation = 0; reservation < data.length; reservation++) {
                             $.ajax({
                                 async: false,
@@ -159,7 +181,7 @@ function tabMyReservationsClick(dataSuccess) {
                                 type: "POST",
                                 success: function (dataReserver) {
 
-                                    invitesDiv.append("<h4><b>You have confirmed" + dataReserver.firstName + "&nbsp;" + dataReserver.lastName + "'s invite</b></h4><br/>");
+                                    confirmedDiv.append("<h4><b>You have confirmed " + dataReserver.firstName + "&nbsp;" + dataReserver.lastName + "'s invite</b></h4><br/>");
                                     var projectionId = data[reservation].idProjection;
                                     $.ajax({
                                         async: false,
@@ -167,19 +189,19 @@ function tabMyReservationsClick(dataSuccess) {
                                         dataType: "json",
                                         type: "POST",
                                         success: function (dataProjection) {
-                                            invitesDiv.append("<p><b>Reservation made:</b> " + data[reservation].date + "</p>");
-                                            invitesDiv.append("<p><b>Projection date: </b>" + dataProjection.date + "</p>");
+                                            confirmedDiv.append("<p><b>Reservation made:</b> " + data[reservation].date + "</p>");
+                                            confirmedDiv.append("<p><b>Projection date: </b>" + dataProjection.date + "</p>");
                                             $.ajax({
                                                 async: false,
                                                 url: "show/getByShowId/" + dataProjection.id_show,
                                                 dataType: "json",
                                                 type: "POST",
                                                 success: function (dataShow) {
-                                                    invitesDiv.append("<p><b>Projection for show: </b>" + dataShow.name + "</p>");
-                                                    invitesDiv.append("<p><b>Show genre: </b>" + dataShow.genre + "</p>");
-                                                    invitesDiv.append("<p><b>Show producer: </b>" + dataShow.producer + "</p>");
-                                                    invitesDiv.append("<p><b>Show duration: </b>" + dataShow.duration + "</p>");
-                                                    invitesDiv.append("<p><b>Show description: </b>" + dataShow.description + "</p>");
+                                                    confirmedDiv.append("<p><b>Projection for show: </b>" + dataShow.name + "</p>");
+                                                    confirmedDiv.append("<p><b>Show genre: </b>" + dataShow.genre + "</p>");
+                                                    confirmedDiv.append("<p><b>Show producer: </b>" + dataShow.producer + "</p>");
+                                                    confirmedDiv.append("<p><b>Show duration: </b>" + dataShow.duration + "</p>");
+                                                    confirmedDiv.append("<p><b>Show description: </b>" + dataShow.description + "</p>");
 
                                                 }
                                             });
