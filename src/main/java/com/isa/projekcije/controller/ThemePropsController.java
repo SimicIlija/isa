@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,6 +34,7 @@ public class ThemePropsController {
      * GET api/themeprops/all
      * Returns all theme props, for admins only
      */
+    @PreAuthorize("hasAuthority('ADMIN_FUN')")
     @RequestMapping(value = "all", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAll() {
@@ -59,6 +61,7 @@ public class ThemePropsController {
      * POST api/themeprops/add
      * Creating new theme props based on dto.
      */
+    @PreAuthorize("hasAuthority('ADMIN_FUN')")
     @RequestMapping(value = "add", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -77,11 +80,13 @@ public class ThemePropsController {
      * PUT api/themeprops/{id}
      * Update theme props with path variable id
      */
+    @PreAuthorize("hasAuthority('ADMIN_FUN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity modifyThemeProps(@Valid @RequestBody ThemePropsDTO themePropsDTO, @PathVariable long id) {
         try {
+            System.out.println(themePropsDTO);
             ThemeProps themeProps = themePropsService.findById(id);
             themeProps.setPrice(themePropsDTO.getPrice());
             themeProps.setAmount(themePropsDTO.getAmount());
@@ -99,6 +104,7 @@ public class ThemePropsController {
      * DELETE api/themeprops/{id}
      * Delete theme props with path variable id
      */
+    @PreAuthorize("hasAuthority('ADMIN_FUN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteThemeProps(@PathVariable long id) {

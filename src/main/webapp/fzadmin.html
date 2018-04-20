@@ -51,37 +51,44 @@
                     </tbody>
                 </table>
 
-                <div id="addForm" class="modal-content well">
-                    <form method="post">
-                        <div class="form-group">
-                            <label for="name">Enter name:</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Enter description:</label>
-                            <input type="text" class="form-control" id="description">
-                        </div>
+                <div class="modal-content well">
+                    <form method="post" id="addForm">
+                        <h1>Add new theme props</h1>
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="name">Enter name:</label>
+                                <input type="text" class="form-control" name="name" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Enter description:</label>
+                                <input type="text" class="form-control"
+                                       name="description" id="description">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="amount">Enter amount:</label>
-                            <input type="number" min="0" step="1" class="form-control" id="amount">
-                        </div>
+                            <div class="form-group">
+                                <label for="amount">Enter amount:</label>
+                                <input type="number" min="0" step="1"
+                                       class="form-control" name="amount" id="amount">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="amount">Enter price:</label>
-                            <input type="number" min="0" step="0.01" class="form-control" id="price">
-                        </div>
+                            <div class="form-group">
+                                <label for="amount">Enter price:</label>
+                                <input type="number" min="0" step="0.01"
+                                       class="form-control" name="price" id="price">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="imageUrl">Enter image url:</label>
-                            <input type="text" class="form-control" id="imageUrl">
-                        </div>
+                            <div class="form-group">
+                                <label for="imageUrl">Enter image url:</label>
+                                <input type="text" class="form-control" name="imageUrl" id="imageUrl">
+                            </div>
 
-                        <input class="btn btn-lg btn-primary btn-block" type="button"
-                               value="Add new theme props"
-                               onclick="addNewTP()">
+                            <input class="btn btn-lg btn-primary btn-block" type="button"
+                                   value="Add new theme props"
+                                   onclick="addNewTP()">
+                        </fieldset>
                     </form>
                 </div>
+                <div id="editTP"></div>
             </div>
         </div>
 

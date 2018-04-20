@@ -3,17 +3,14 @@ package com.isa.projekcije.model.dto;
 import com.isa.projekcije.model.fanzone.ThemeProps;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
-
 public class ThemePropsDTO {
 
     @NotEmpty
     private String name;
     @NotEmpty
     private String description;
-    @NotNull
+
     private int amount;
-    @NotNull
     private double price;
 
     private String imageUrl;
