@@ -245,4 +245,28 @@ public class InstitutionController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_SYS')")
+    @RequestMapping(value = "/{idins}/adm/{ida}", method = RequestMethod.POST)
+    public ResponseEntity addNewAdminToIns(@PathVariable("idins") long idins,
+                                           @PathVariable("ida") long ida) {
+        try {
+            Institution institution = institutionService.findOne(idins);
+            if (institution == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            InstitutionAdmin institutionAdmin = (InstitutionAdmin) userService.findById(ida);
+            boolean bool1 = institution.addAdmin(institutionAdmin);
+            boolean bool2 = institutionAdmin.addInstitution(institution);
+            if (!(bool1 || bool2)) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+            userService.save(institutionAdmin);
+            institutionService.save(institution);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
 }

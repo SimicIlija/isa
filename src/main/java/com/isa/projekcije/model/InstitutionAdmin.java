@@ -51,4 +51,18 @@ public class InstitutionAdmin extends User {
     public void setPasswordChanged(boolean passwordChanged) {
         this.passwordChanged = passwordChanged;
     }
+
+    public boolean addInstitution(Institution institution) {
+        boolean present = false;
+        for (Institution institution1 : institutions) {
+            if (institution.getId() == institution1.getId()) {
+                present = true;
+            }
+        }
+        if (!present) {
+            institutions.add(institution);
+            return true;
+        }
+        return false;
+    }
 }
