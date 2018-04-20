@@ -8,7 +8,9 @@ import com.isa.projekcije.model.dto.InstitutionDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -22,6 +24,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@AutoConfigureMockMvc
 public class InstitutionControllerTest extends ProjekcijeApplicationTests {
 
     private static final String URL_PREFIX = "/institution";
@@ -68,11 +71,10 @@ public class InstitutionControllerTest extends ProjekcijeApplicationTests {
     }
 
     @Test
-    @Transactional
-    @Rollback(true)
+    @WithMockUser(authorities = "ADMIN_INST")
     public void testEditInstitution() throws Exception {
         InstitutionDTO institutionDTO = new InstitutionDTO();
-        institutionDTO.setId(InstitutionConstants.DB_ID);
+        institutionDTO.setId(InstitutionConstants.DB_ID_TO_EDIT);
         institutionDTO.setName(InstitutionConstants.NEW_NAME);
         institutionDTO.setDescription(InstitutionConstants.NEW_DESCRIPTION);
         institutionDTO.setLongitude(InstitutionConstants.NEW_LONGITUDE);
@@ -82,7 +84,7 @@ public class InstitutionControllerTest extends ProjekcijeApplicationTests {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(institutionDTO);
 
-        mockMvc.perform(put(URL_PREFIX + "/editInstitution/" + InstitutionConstants.DB_ID).contentType(contentType).content(json)).andExpect(status().isOk());
+        mockMvc.perform(put(URL_PREFIX + "/editInstitution/" + InstitutionConstants.DB_ID_TO_EDIT).contentType(contentType).content(json)).andExpect(status().isOk());
     }
 
     @Test

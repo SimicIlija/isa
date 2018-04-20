@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ SegmentController {
     }
 
 
-
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addSegment",
             method = RequestMethod.POST,
@@ -126,6 +127,7 @@ SegmentController {
         return new ResponseEntity<>(segmentToSegmnetDTOConverter.convert(segment), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editSegment/{id}",
             method = RequestMethod.PUT,
@@ -148,6 +150,7 @@ SegmentController {
         return new ResponseEntity<>(segmentToSegmnetDTOConverter.convert(newSegment), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/deleteSegment/{id}",
             method = RequestMethod.DELETE

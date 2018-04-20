@@ -3,12 +3,14 @@ insert into user_table (first_name, last_name, email, phone_number, password, ro
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Marko','Markovic','marko@gmail.com', '5558896', 'marko','ADMIN_SYS');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Smiljana','Dragoljevic','smiljana@gmail.com', '797679', 'smiljana','ADMIN_INST');
 
-insert into institution_admin (id, password_changed) VALUES (4, false);
+insert into institution_admin (id, password_changed) VALUES (4, true);
 insert into system_admin (id) VALUES (3);
 
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'ArenaCineplex', 19.853547, 45.254313, true);
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'Cinestar', 19.826031, 45.276086, true);
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opissss...', 'SNP', 19.843085, 45.255192, false);
+insert into institution (description, name, longitude, latitude, is_cinema) values ('opissss...', 'Pozoriste mladih', 19.843085, 45.255192, false);
+
 
 insert into admin_institution (admin_id, institution_id) values (4, 1);
 insert into admin_institution (admin_id, institution_id) values (4, 2);
@@ -19,6 +21,10 @@ insert into auditorium (name, id_institution) values ('sala3', 1);
 
 insert into auditorium (name, id_institution) values ('aud1', 2);
 insert into auditorium (name, id_institution) values ('aud2', 2);
+
+insert into auditorium (name, id_institution) values ('vip', 3);
+
+insert into auditorium (name, id_institution) values ('aud', 4);
 
 insert into segment (row_count,seats_in_row_count,closed, label, id_auditorium) values (2, 3, 0, '1A', 1);
 insert into segment (row_count,seats_in_row_count,closed, label, id_auditorium) values (3, 3, 0, '1B', 1);
@@ -62,8 +68,8 @@ insert into actor(name, lastname, id_show) values ('imeGlumca2', 'prezimeGlumca2
 insert into actor(name, lastname, id_show) values ('imeGlumca3', 'prezimeGlumca3', 1);
 insert into actor(name, lastname, id_show) values ('imeGlumca4', 'prezimeGlumca4', 1);
 
-insert into projection(id_show,date,id_auditorium) values (1,'2018-02-28 21:00:00',1);
-insert into projection(id_show,date,id_auditorium) values (1,'2018-02-28 20:00:00',2);
+insert into projection(id_show,date,id_auditorium) values (1,'2018-07-28 21:00:00',1);
+insert into projection(id_show,date,id_auditorium) values (1,'2018-07-28 20:00:00',2);
 insert into projection(id_show,date,id_auditorium) values (2,'2018-04-18 10:30:00',3);
 insert into projection(id_show,date,id_auditorium) values (2,'2018-06-28 21:00:00',1);
 insert into projection(id_show,date,id_auditorium) values (3,'2018-06-28 22:00:00',1);

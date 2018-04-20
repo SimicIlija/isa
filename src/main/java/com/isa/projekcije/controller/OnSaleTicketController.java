@@ -1,18 +1,19 @@
 package com.isa.projekcije.controller;
 
 import com.isa.projekcije.converters.OnSaleTicketToOnSaleTicketDTO;
-import com.isa.projekcije.model.OnSaleTicket;
-import com.isa.projekcije.model.Segment;
-import com.isa.projekcije.model.Ticket;
+import com.isa.projekcije.converters.ReservationToReservationDTO;
+import com.isa.projekcije.model.*;
 import com.isa.projekcije.model.dto.OnSaleTicketDTO;
-import com.isa.projekcije.service.OnSaleTicketService;
-import com.isa.projekcije.service.SegmentService;
-import com.isa.projekcije.service.TicketService;
+import com.isa.projekcije.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,8 +30,21 @@ public class OnSaleTicketController {
     private SegmentService segmentService;
 
     @Autowired
+    private ProjectionService projectionService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ReservationsService reservationsService;
+
+    @Autowired
+    private ReservationToReservationDTO reservationToReservationDTO;
+
+    @Autowired
     private OnSaleTicketToOnSaleTicketDTO onSaleTicketToOnSaleTicketDTO;
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addOnSaleTicket",
             method = RequestMethod.POST
@@ -65,6 +79,9 @@ public class OnSaleTicketController {
         if (onSaleTicketDTO.getDiscount() > 100 || onSaleTicketDTO.getDiscount() < 1) {
             return new ResponseEntity<>("Discount must be between 0 and 100.", HttpStatus.BAD_REQUEST);
         }
+        if (ticket.getProjection().getDate().before(new Date())) {
+            return new ResponseEntity<>("Projection outdated.", HttpStatus.BAD_REQUEST);
+        }
         OnSaleTicket onSaleTicket = new OnSaleTicket(ticket, onSaleTicketDTO.getDiscount());
         try {
             onSaleTicketService.save(onSaleTicket);
@@ -83,6 +100,7 @@ public class OnSaleTicketController {
         return new ResponseEntity<>(onSaleTicketToOnSaleTicketDTO.convert(onSaleTickets), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editOnSaleTicket/{idOnSaleTicket}",
             method = RequestMethod.PUT
@@ -109,6 +127,7 @@ public class OnSaleTicketController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/deleteOnSaleTicket/{idOnSaleTicker}",
             method = RequestMethod.DELETE
@@ -130,18 +149,51 @@ public class OnSaleTicketController {
             method = RequestMethod.GET
     )
     public ResponseEntity<?> getOnSaleTicketsByInstitution(@PathVariable Long idInstitution) {
-        List<OnSaleTicket> onSaleTickets = onSaleTicketService.findByInstitution(idInstitution, false);
-        return new ResponseEntity<>(onSaleTicketToOnSaleTicketDTO.convert(onSaleTickets), HttpStatus.OK);
+        List<OnSaleTicket> onSaleTickets = onSaleTicketService.findByInstitutionAndTicketReserved(idInstitution, false);
+
+        List<OnSaleTicketDTO> onSaleTicketDTOS = new ArrayList<OnSaleTicketDTO>();
+        for (OnSaleTicket onSaleTicket : onSaleTickets) {
+            Date now = new Date();
+            if (onSaleTicket.getTicket().getProjection().getDate().after(now)) {
+                onSaleTicketDTOS.add(onSaleTicketToOnSaleTicketDTO.convert(onSaleTicket));
+            }
+        }
+
+        return new ResponseEntity<>(onSaleTicketDTOS, HttpStatus.OK);
     }
 
+    @Transactional
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/reserveOnSaleTicket/{idOnSaleTicket}",
             method = RequestMethod.POST
     )
     public ResponseEntity<?> reserveOnSaleTicket(@PathVariable Long idOnSaleTicket) {
         OnSaleTicket onSaleTicket = onSaleTicketService.findOne(idOnSaleTicket);
+        if (onSaleTicket == null) {
+            return new ResponseEntity<>("Ticket is no longer available.", HttpStatus.NOT_FOUND);
+        }
+        Ticket ticket = onSaleTicket.getTicket();
+        if (ticket.isReserved()) {
+            return new ResponseEntity<>("Ticket already reserved.", HttpStatus.NOT_FOUND);
+        }
+        Reservation reservation = new Reservation();
+        Projection projection = onSaleTicket.getTicket().getProjection();
+        reservation.setProjection(projection);
+        reservation.setDate(new Date());
+        reservation.setReserver(userService.getCurrentUser());
+        List<Ticket> tickets = new ArrayList<Ticket>();
+        tickets.add(ticket);
+        reservation.setTickets_reserved(tickets);
+        reservation.setInvited_friends(new ArrayList<User>());
+        reservation.setConfirmed_users(new ArrayList<User>());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        ticket.setReserved(true);
+        ticket.setReservation(reservation);
+        reservationsService.save(reservation);
+        ticketService.save(ticket);
+
+        return new ResponseEntity<>(reservationToReservationDTO.convert(reservation), HttpStatus.OK);
     }
 
 }

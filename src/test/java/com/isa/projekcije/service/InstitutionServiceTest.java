@@ -64,7 +64,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
     @Transactional
     @Rollback(true)
     public void testEdit() {
-        Institution dbInstitution = institutionService.findOne(InstitutionConstants.DB_ID);
+        Institution dbInstitution = institutionService.findOne(InstitutionConstants.DB_ID_TO_EDIT);
 
         dbInstitution.setName(InstitutionConstants.NEW_NAME);
         dbInstitution.setDescription(InstitutionConstants.NEW_DESCRIPTION);
@@ -75,7 +75,7 @@ public class InstitutionServiceTest extends ProjekcijeApplicationTests {
         dbInstitution = institutionService.save(dbInstitution);
         assertThat(dbInstitution).isNotNull();
 
-        dbInstitution = institutionService.findOne(InstitutionConstants.DB_ID);
+        dbInstitution = institutionService.findOne(InstitutionConstants.DB_ID_TO_EDIT);
         assertThat(dbInstitution.getName()).isEqualTo(InstitutionConstants.NEW_NAME);
         assertThat(dbInstitution.getDescription()).isEqualTo(InstitutionConstants.NEW_DESCRIPTION);
         assertThat(dbInstitution.getLongitude()).isEqualTo(InstitutionConstants.NEW_LONGITUDE);

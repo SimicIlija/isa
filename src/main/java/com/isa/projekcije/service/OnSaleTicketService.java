@@ -17,7 +17,7 @@ public class OnSaleTicketService {
         return onSaleTicketRepository.save(onSaleTicket);
     }
 
-    public List<OnSaleTicket> findByInstitution(Long idInstitution, boolean reserved) {
+    public List<OnSaleTicket> findByInstitutionAndTicketReserved(Long idInstitution, boolean reserved) {
         return onSaleTicketRepository.findByTicketProjectionAuditoriumInstitutionIdAndTicketReserved(idInstitution, reserved);
     }
 

@@ -50,7 +50,7 @@ public class AuditoriumServiceTest extends ProjekcijeApplicationTests {
     public void testAdd() {
         Auditorium auditorium = new Auditorium();
         auditorium.setName(AuditoriumConstants.NEW_NAME);
-        Institution institution = institutionService.findOne(AuditoriumConstants.DB_INSTITUTION_ID);
+        Institution institution = institutionService.findOne(AuditoriumConstants.DB_INSTITUTION_ID_TO_ADD);
         auditorium.setInstitution(institution);
         int dbSizeBeforeAdd = auditoriumService.findAll().size();
 
@@ -61,35 +61,34 @@ public class AuditoriumServiceTest extends ProjekcijeApplicationTests {
         assertThat(auditoriums).hasSize(dbSizeBeforeAdd + 1);
         dbAuditorium = auditoriums.get(auditoriums.size() - 1);
         assertThat(dbAuditorium.getName()).isEqualTo(AuditoriumConstants.NEW_NAME);
-        assertThat(dbAuditorium.getInstitution().getId()).isEqualTo(AuditoriumConstants.DB_INSTITUTION_ID);
+        assertThat(dbAuditorium.getInstitution().getId()).isEqualTo(AuditoriumConstants.DB_INSTITUTION_ID_TO_ADD);
     }
 
     @Test
     @Transactional
     @Rollback(true)
     public void testEdit() {
-        Auditorium dbAuditorium = auditoriumService.findOne(AuditoriumConstants.DB_ID);
+        Auditorium dbAuditorium = auditoriumService.findOne(AuditoriumConstants.DB_ID_TO_EDIT);
 
         dbAuditorium.setName(AuditoriumConstants.NEW_NAME);
 
         dbAuditorium = auditoriumService.save(dbAuditorium);
         assertThat(dbAuditorium).isNotNull();
 
-        dbAuditorium = auditoriumService.findOne(AuditoriumConstants.DB_ID);
+        dbAuditorium = auditoriumService.findOne(AuditoriumConstants.DB_ID_TO_EDIT);
         assertThat(dbAuditorium.getName()).isEqualTo(AuditoriumConstants.NEW_NAME);
     }
 
     @Test
-    @Transactional
-    @Rollback(true)
     public void testDelete() {
         int dbSizeBeforeRemove = auditoriumService.findAll().size();
-        auditoriumService.delete(AuditoriumConstants.DB_ID_TO_DELETE);
+
+        auditoriumService.delete(AuditoriumConstants.DB_ID_TO_DELETE2);
 
         List<Auditorium> auditoriums = auditoriumService.findAll();
         assertThat(auditoriums).hasSize(dbSizeBeforeRemove - 1);
 
-        Auditorium dbAuditorium = auditoriumService.findOne(AuditoriumConstants.DB_ID_TO_DELETE);
+        Auditorium dbAuditorium = auditoriumService.findOne(AuditoriumConstants.DB_ID_TO_DELETE2);
         assertThat(dbAuditorium).isNull();
     }
 }

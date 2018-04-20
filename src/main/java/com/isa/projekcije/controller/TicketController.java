@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,7 @@ public class TicketController {
         return new ResponseEntity(ticketsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addTicket",
             method = RequestMethod.POST,
@@ -64,6 +66,7 @@ public class TicketController {
         return new ResponseEntity(ticketDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addTicketArray",
             method = RequestMethod.POST,
@@ -84,6 +87,7 @@ public class TicketController {
         return new ResponseEntity(addedTicketsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/addTicketsForSegment",
             method = RequestMethod.POST,
@@ -105,6 +109,7 @@ public class TicketController {
         return new ResponseEntity<>(segmentTicketsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/editTicketsForSegment",
             method = RequestMethod.PUT,
@@ -129,6 +134,7 @@ public class TicketController {
         return new ResponseEntity<>(segmentTicketsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping(
             value = "/deleteTicketsForSegment",
@@ -155,6 +161,7 @@ public class TicketController {
         return new ResponseEntity<>(segmentTicketsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/{idTicketToDelete}",
             method = RequestMethod.DELETE,
@@ -165,6 +172,7 @@ public class TicketController {
         return new ResponseEntity(ticketDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_INST')")
     @RequestMapping(
             value = "/{idTicket}",
             method = RequestMethod.PUT,

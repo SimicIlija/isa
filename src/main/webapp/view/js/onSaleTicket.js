@@ -147,3 +147,46 @@ function editOnSaleTicketClick() {
         }
     });
 }
+
+function loadTicketsOnSale(idInstitution, str) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "onSaleTicket/getOnSaleTicketsByInstitution/" + idInstitution,
+        dataType: "json",
+        success: function (data) {
+            for (i = 0; i < data.length; i++) {
+                date = data[i].showDate.substring(0, 16);
+                newPrice = (data[i].oldPrice * (100 - data[i].discount)) / 100;
+                divTicket = "<div id='divOnSaleTicketID" + data[i].id + "' class='ticketOnSale'>"
+                    + "<h3>" + data[i].showName + "</h3>"
+                    + "Date: " + date + "<br>"
+                    + "Auditorium: " + data[i].auditoriumName + "<br>"
+                    + "Segment: " + data[i].segmentName + "<br>"
+                    + "Old Price: " + data[i].oldPrice + "<br>"
+                    + "Discount: " + data[i].discount + "%" + "<br>"
+                    + "New price: " + newPrice + "<br>"
+                    + "Seat row: " + data[i].seatRow + ", seat number: " + data[i].seatNumber + "<br><br>"
+                    + "<button type=\"button\" onclick='reserveOnSaleTicketClick(" + data[i].id + ")' class=\"btn btn-default\">Reserve</button>"
+                    + "</div>";
+                str += divTicket;
+            }
+        }
+    });
+    return str;
+}
+
+function reserveOnSaleTicketClick(idOnSaleTicket) {
+    $.ajax({
+        async: false,
+        type: "POST",
+        url: "onSaleTicket/reserveOnSaleTicket/" + idOnSaleTicket,
+        dataType: "json",
+        success: function (data) {
+            $('#divOnSaleTicketID' + idOnSaleTicket).remove();
+            toastr["success"]("Reservation created.");
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"](jqxhr.responseText);
+        }
+    });
+}
