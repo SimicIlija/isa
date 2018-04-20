@@ -3,12 +3,12 @@ package com.isa.projekcije.model.dto;
 import com.isa.projekcije.model.fanzone.ThemeProps;
 
 public class ThemePropsGetDto {
+    private long id;
     private String name;
     private String description;
     private int amount;
     private double price;
     private String imageUrl;
-    private String showName;
 
     public ThemePropsGetDto() {
     }
@@ -53,20 +53,20 @@ public class ThemePropsGetDto {
         this.imageUrl = imageUrl;
     }
 
-    public String getShowName() {
-        return showName;
+    public long getId() {
+        return id;
     }
 
-    public void setShowName(String showName) {
-        this.showName = showName;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public ThemePropsGetDto(ThemeProps themeProps) {
+        this.id = themeProps.getId();
         this.amount = themeProps.getAmount();
         this.description = themeProps.getDescription();
         this.imageUrl = themeProps.getImageUrl();
         this.name = themeProps.getName();
         this.price = themeProps.getPrice();
-        this.showName = themeProps.getShow().getName();
     }
 }

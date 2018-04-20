@@ -2,8 +2,10 @@ insert into user_table (first_name, last_name, email, phone_number, password, ro
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Ilija','Simic','sima@gmail.com', '5558896', 'ilija','ADMIN_SYS');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Marko','Markovic','marko@gmail.com', '5558896', 'marko','ADMIN_SYS');
 insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Smiljana','Dragoljevic','smiljana@gmail.com', '797679', 'smiljana','ADMIN_INST');
+insert into user_table (first_name, last_name, email, phone_number, password, role) values ('Fz','Admin','fz@admin.fz', '797679', 'sifra','ADMIN_FUN');
 
 insert into institution_admin (id, password_changed) VALUES (4, true);
+insert into fan_zone_admin (id, changed_password) VALUES (5, TRUE );
 insert into system_admin (id) VALUES (3);
 
 insert into institution (description, name, longitude, latitude, is_cinema) values ('opis...', 'ArenaCineplex', 19.853547, 45.254313, true);
@@ -107,8 +109,8 @@ insert into ticket(price,id_seat,id_projection,reserved) values('200.00',19,7,fa
 insert into ticket(price,id_seat,id_projection,reserved) values('200.00',20,7,false);
 insert into ticket(price,id_seat,id_projection,reserved) values('200.00',21,7,false);
 
-insert into theme_props (name, description, amount, price, image_url, show_id) values ('igracka', 'opis', 20, 50, 'url', 1);
-insert into theme_props (name, description, amount, price, image_url, show_id) values ('igracka', 'opis', 0, 50, 'url', 1);
+insert into theme_props (name, description, amount, price, image_url) values ('igracka', 'opis', 20, 50, 'http://t0.gstatic.com/images?q=tbn:ANd9GcQ_Sw8iyje2a8mnrsYRNLGzG-G50U093i76B5wHEIt7uON-O57P');
+insert into theme_props (name, description, amount, price, image_url) values ('igracka', 'opis', 0, 50, null);
 
 insert into user_props (name, description, end_date, state, creator_id, image_url) values ('igracka', 'opis igracke', '2018-02-28', 'DENIED', 1, null);
 insert into user_props (name, description, end_date, state, creator_id, image_url) values ('igracka2', 'opis igracke2', '2018-02-28', 'APPROVED', 1, null);

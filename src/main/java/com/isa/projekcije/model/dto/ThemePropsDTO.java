@@ -1,10 +1,7 @@
 package com.isa.projekcije.model.dto;
 
-import com.isa.projekcije.model.Show;
 import com.isa.projekcije.model.fanzone.ThemeProps;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
 
 public class ThemePropsDTO {
 
@@ -12,12 +9,11 @@ public class ThemePropsDTO {
     private String name;
     @NotEmpty
     private String description;
-    @NotNull
+
     private int amount;
-    @NotNull
     private double price;
-    @NotNull
-    private long showId;
+
+    private String imageUrl;
 
     public ThemePropsDTO() {
     }
@@ -54,21 +50,21 @@ public class ThemePropsDTO {
         this.price = price;
     }
 
-    public long getShowId() {
-        return showId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setShowId(long showId) {
-        this.showId = showId;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public ThemeProps createThemeProps(Show show) {
+    public ThemeProps createThemeProps() {
         ThemeProps themeProps = new ThemeProps();
         themeProps.setName(name);
         themeProps.setDescription(description);
         themeProps.setAmount(amount);
         themeProps.setPrice(price);
-        themeProps.setShow(show);
+        themeProps.setImageUrl(imageUrl);
         return themeProps;
     }
 
@@ -79,7 +75,6 @@ public class ThemePropsDTO {
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
                 ", price=" + price +
-                ", showId=" + showId +
                 '}';
     }
 }

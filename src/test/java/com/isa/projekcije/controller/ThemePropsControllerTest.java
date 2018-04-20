@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,25 +33,27 @@ public class ThemePropsControllerTest extends ProjekcijeApplicationTests {
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN_FUN")
     public void unsuccessfulDelete() throws Exception {
         mockMvc.perform(delete(apiUrl + "/0")).andExpect(status().isNotFound());
     }
 
     @Test
     @Rollback
+    @WithMockUser(authorities = "ADMIN_FUN")
     public void successfulDelete() throws Exception {
         mockMvc.perform(delete(apiUrl + "/1")).andExpect(status().isOk());
     }
 
     @Test
     @Rollback
+    @WithMockUser(authorities = "ADMIN_FUN")
     public void successfulCreate() throws Exception {
         ThemePropsDTO dto = new ThemePropsDTO();
         dto.setAmount(12);
         dto.setDescription("des");
         dto.setName("nam");
         dto.setPrice(123);
-        dto.setShowId(1);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -62,52 +65,19 @@ public class ThemePropsControllerTest extends ProjekcijeApplicationTests {
 
     @Test
     @Rollback
+    @WithMockUser(authorities = "ADMIN_FUN")
     public void successfulUpdate() throws Exception {
         ThemePropsDTO dto = new ThemePropsDTO();
         dto.setAmount(12);
         dto.setDescription("des");
         dto.setName("naadsasdm");
         dto.setPrice(123);
-        dto.setShowId(1);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(put(apiUrl + "/2").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void unsuccessfulCreate() throws Exception {
-        ThemePropsDTO dto = new ThemePropsDTO();
-        dto.setAmount(12);
-        dto.setDescription("des");
-        dto.setName("nam");
-        dto.setPrice(123);
-        dto.setShowId(-1);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String json = objectMapper.writeValueAsString(dto);
-
-        mockMvc.perform(post(apiUrl + "/add").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void unsuccessfulUpdateNoShow() throws Exception {
-        ThemePropsDTO dto = new ThemePropsDTO();
-        dto.setAmount(12);
-        dto.setDescription("des");
-        dto.setName("naadsasdm");
-        dto.setPrice(123);
-        dto.setShowId(-1);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String json = objectMapper.writeValueAsString(dto);
-
-        mockMvc.perform(put(apiUrl + "/1").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -122,13 +92,13 @@ public class ThemePropsControllerTest extends ProjekcijeApplicationTests {
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN_FUN")
     public void unsuccessfulUpdate() throws Exception {
         ThemePropsDTO dto = new ThemePropsDTO();
         dto.setAmount(12);
         dto.setDescription("des");
         dto.setName("naadsasdm");
         dto.setPrice(123);
-        dto.setShowId(1);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(dto);
