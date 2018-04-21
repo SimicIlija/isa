@@ -152,8 +152,12 @@ public class BidController {
                                          @PathVariable("id2") long bidderId,
                                          @Valid @RequestBody boolean accepted) {
         try {
+            User user = userService.getCurrentUser();
             Bid bid = bidService.findById(userPropid, bidderId);
             if (bidService.isAccepted(userPropid)) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+            if (!bid.getUserProps().getCreator().getId().equals(user.getId())) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
             if (accepted) {
