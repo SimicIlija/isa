@@ -1,15 +1,14 @@
 package com.isa.projekcije.controller;
 
 import com.isa.projekcije.model.Invite;
-import com.isa.projekcije.model.Reservation;
 import com.isa.projekcije.model.User;
-import com.isa.projekcije.model.dto.ReservationDTO;
 import com.isa.projekcije.service.InviteService;
 import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +25,7 @@ public class InviteController {
     @Autowired
     private UserService userService;
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/cancelInvites/{idReservation}",
             method = RequestMethod.DELETE,
@@ -39,6 +39,7 @@ public class InviteController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/decline/{idReservation}",
             method = RequestMethod.PUT,
@@ -57,6 +58,7 @@ public class InviteController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/confirm/{idReservation}",
             method = RequestMethod.POST,
@@ -66,6 +68,9 @@ public class InviteController {
         User invited = userService.getCurrentUser();
 
         List<Invite> invites = inviteService.findByIdReservation(idReservation);
+        if (invites.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         for (Invite invite : invites) {
             invite.setConfirmed(true);
             Invite savedInvite = inviteService.save(invite);

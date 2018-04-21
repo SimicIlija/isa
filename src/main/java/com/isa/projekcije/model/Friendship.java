@@ -15,7 +15,10 @@ public class Friendship {
     @ManyToOne(fetch = FetchType.EAGER)
     private User receiver;
 
+
     private boolean accepted;
+
+
     private boolean sent;
 
     public Friendship() {
@@ -26,6 +29,13 @@ public class Friendship {
         this.receiver = receiver;
         this.accepted = false;
         this.sent = false;
+    }
+
+    public Friendship(User sender, User receiver, boolean accepted, boolean sent) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.accepted = accepted;
+        this.sent = sent;
     }
 
     public Long getId() {

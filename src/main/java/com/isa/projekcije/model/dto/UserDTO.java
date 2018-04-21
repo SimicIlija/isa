@@ -7,12 +7,29 @@ public class UserDTO {
     protected String lastName;
     protected String role;
     protected String email;
+    protected String phoneNumber;
 
     public UserDTO(Long id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public UserDTO(String firstName, String lastName, String role, String email, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public UserDTO(String email) {

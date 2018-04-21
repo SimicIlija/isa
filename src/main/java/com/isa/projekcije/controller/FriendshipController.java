@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Fidelity;
@@ -45,6 +46,7 @@ public class FriendshipController {
         return new ResponseEntity<>(friendshipService.getAllUsersExceptLoggedIn(), HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/create/{idCreate}",
             method = RequestMethod.POST)
@@ -58,6 +60,7 @@ public class FriendshipController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/removeFriend/{idRemove}",
             method = RequestMethod.DELETE)
@@ -77,6 +80,7 @@ public class FriendshipController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/accept/{senderId}",
             method = RequestMethod.PUT,
@@ -89,6 +93,7 @@ public class FriendshipController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/getAllFriendships",
             method = RequestMethod.POST,
@@ -100,6 +105,7 @@ public class FriendshipController {
         return new ResponseEntity<>(friendships, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/getFriends",
             method = RequestMethod.POST,
@@ -123,6 +129,7 @@ public class FriendshipController {
         return new ResponseEntity<>(friendsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/getRequests",
             method = RequestMethod.POST,
@@ -135,6 +142,7 @@ public class FriendshipController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/getConfirmed",
             method = RequestMethod.POST,
@@ -168,6 +176,7 @@ public class FriendshipController {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/searchByFirstName",
             method = RequestMethod.POST,
@@ -206,7 +215,7 @@ public class FriendshipController {
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/searchByLastName",
             method = RequestMethod.POST,
@@ -246,6 +255,7 @@ public class FriendshipController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/searchCombined",
             method = RequestMethod.POST,

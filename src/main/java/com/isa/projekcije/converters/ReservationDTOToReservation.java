@@ -52,17 +52,12 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
         reservation.setDate(date);
         reservation.setReserver(userService.getCurrentUser());
         reservation.setProjection(projectionService.findById(reservationDTO.getIdProjection()));
-
-
-
-        List<Ticket> tickets = new ArrayList<Ticket>();
-        for (Long id : reservationDTO.getIdSeat()) {
-            Ticket ticket = ticketService.findById(id);
-            ticket.setReserved(true);
-
-            tickets.add(ticket);
+        if (reservation.getProjection() == null) {
+            return null;
         }
-        reservation.setTickets_reserved(tickets);
+
+
+        reservation.setTickets_reserved(new ArrayList<Ticket>());
 
         Reservation res = reservationsService.save(reservation);
 

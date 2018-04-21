@@ -769,6 +769,8 @@ function configurationClick(idProjection) {
                     dataType: "json",
                     success: function (data) {
                         newConfig += "<button type=\"button\" class=\"btn btn-success\" onclick=\"pozoviPrijatelja()\">Invite friend</button>"
+                        newConfig += "<button type=\"button\" class=\"btn btn-fanger\" onclick=\"izbaci()\">Remove friend</button>"
+
                         newConfig += "<datalist id=\"exampleList\">"
                         for (i = 0; i < data.length; i++) {
                             newConfig +=
@@ -786,6 +788,11 @@ function configurationClick(idProjection) {
         }
 
     });
+
+}
+
+function izbaci() {
+    $("li").last().remove();
 
 }
 
@@ -1230,7 +1237,7 @@ function signout() {
 
 function myProfile() {
     $.ajax({
-        url: "user/getLoggedInUser",
+        url: "user/getLoggedInUserForProfile",
         dataType: "json",
         type: "POST",
         success: function (data) {
@@ -1321,7 +1328,7 @@ function changeEmail() {
                 + "<div class='changeInformationDiv'>"
 
                 + "<p> Change email: </p>"
-                + "<form id=\"changeEmailForm\" method=\"POST\"><input class=\"form-control\" type=\"text\" id=\"email\" name=\"email\"\n" +
+                + "<form id=\"changeEmailForm\" pattern=\"/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$/\" method=\"POST\"><input class=\"form-control\" type=\"text\" id=\"email\" name=\"email\"\n" +
                 "                               value=\"" + data.email + "\"><br/></form>"
                 + "  <button type=\"button\" class=\"btn btn-primary\" onclick='changeEmailConfirm()'\">Confirm</button>"
                 + "</div>"
@@ -1411,25 +1418,28 @@ function changeLastNameConfirm() {
 function changeEmailConfirm() {
     $form = $("#changeEmailForm");
     var data = getFormData($form);
-    var s = JSON.stringify(data);
-    $.ajax({
-        url: "user/changeEmail",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: s,
-        success: function (data) {
-            var changeInformationDiv = $('#changeInformationDiv');
-            changeInformationDiv.empty();
 
-            myProfile();
+    if (ok == true) {
+        var s = JSON.stringify(data);
+        $.ajax({
+            url: "user/changeEmail",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: s,
+            success: function (data) {
+                var changeInformationDiv = $('#changeInformationDiv');
+                changeInformationDiv.empty();
 
-        }, error: function (jqxhr, textStatus, errorThrown) {
-            toastr["error"]("Email already exists on a different account");
-        }
+                myProfile();
+
+            }, error: function (jqxhr, textStatus, errorThrown) {
+                toastr["error"]("Email already exists on a different account");
+            }
 
 
-    });
+        });
+    }
 }
 
 function changePhoneNumberConfirm() {
