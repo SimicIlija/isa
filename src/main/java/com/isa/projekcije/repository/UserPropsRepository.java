@@ -15,4 +15,6 @@ public interface UserPropsRepository extends JpaRepository<UserProps, Long> {
     List<UserProps> findApproved();
 
     List<UserProps> findByState(UserPropsState state);
+
+    List<UserProps> findByCreator_Id(long id);
 }

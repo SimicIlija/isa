@@ -101,4 +101,9 @@ public class UserProps {
     public void setBids(Set<Bid> bids) {
         this.bids = bids;
     }
+
+    public boolean isDateOk() {
+        Date date = new Date();
+        return endDate.after(date);
+    }
 }

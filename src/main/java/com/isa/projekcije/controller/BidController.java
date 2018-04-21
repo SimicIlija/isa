@@ -1,6 +1,7 @@
 package com.isa.projekcije.controller;
 
 import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.dto.BidDTO;
 import com.isa.projekcije.model.fanzone.Bid;
 import com.isa.projekcije.model.fanzone.BidState;
 import com.isa.projekcije.model.fanzone.UserProps;
@@ -12,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bid")
@@ -41,45 +44,36 @@ public class BidController {
     }
 
     /**
-     * GET api/bid/up/{id}
-     * Returns all bids where user props id is equal to id
-     */
-    @RequestMapping(value = "/up/{id}", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getByUserPropsId(@PathVariable("id") long id) {
-        try {
-            List<Bid> bids = bidService.findByUserProps(id);
-            return new ResponseEntity<>(bids, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    /**
-     * GET api/bid/bidder/{id}
+     * GET api/bid/bidder/
      * Returns all bids where bidder id is equal to id
      */
-    @RequestMapping(value = "/bidder/{id}", method = RequestMethod.GET,
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/bidder/", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getByBidderId(@PathVariable("id") long id) {
+    public ResponseEntity getByBidderId() {
         try {
-            List<Bid> bids = bidService.findByBidderId(id);
-            return new ResponseEntity<>(bids, HttpStatus.OK);
+            User user = userService.getCurrentUser();
+            List<Bid> bids = bidService.findByBidderId(user.getId());
+            List<BidDTO> retVal = bids.stream().map(BidDTO::createFromBid).collect(Collectors.toList());
+            return new ResponseEntity<>(retVal, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 
     /**
-     * GET api/bid/creator/{id}
+     * GET api/bid/creator/
      * Returns all bids where creator of user props id is equal to id
      */
-    @RequestMapping(value = "/creator/{id}", method = RequestMethod.GET,
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/creator/", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getByCreatorId(@PathVariable("id") long id) {
+    public ResponseEntity getByCreatorId() {
         try {
-            List<Bid> bids = bidService.findByCreatorId(id);
-            return new ResponseEntity<>(bids, HttpStatus.OK);
+            User currentUser = userService.getCurrentUser();
+            List<Bid> bids = bidService.findByCreatorId(currentUser.getId());
+            List<BidDTO> retVal = bids.stream().map(BidDTO::createFromBid).collect(Collectors.toList());
+            return new ResponseEntity<>(retVal, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -89,6 +83,7 @@ public class BidController {
      * POST api/bid/up/{id}
      * Creating a bid for user props.
      */
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/up/{id}", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,7 +96,10 @@ public class BidController {
             if (bidService.isAccepted(userProps.getId())) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-            User user = userService.findById(2);
+            User user = userService.getCurrentUser();
+            if (userProps.getCreator().getId().equals(user.getId())) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
             Bid bid = new Bid();
             bid.setBidder(user);
             bid.setUserProps(userProps);
@@ -118,15 +116,19 @@ public class BidController {
      * PUT api/bid/up/{id}
      * Updating a bid for user props.
      */
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/up/{id}", method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity modifyBid(@PathVariable("id") long id, @Valid @RequestBody double price) {
         try {
             UserProps userProps = userPropsService.findById(id);
-            User user = userService.findById(2);
+            User user = userService.getCurrentUser();
             Bid bid = bidService.findById(userProps.getId(), user.getId());
             if (bidService.isAccepted(userProps.getId())) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+            if (userProps.getCreator().getId().equals(user.getId())) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
             bid.setPrice(price);
@@ -150,8 +152,12 @@ public class BidController {
                                          @PathVariable("id2") long bidderId,
                                          @Valid @RequestBody boolean accepted) {
         try {
+            User user = userService.getCurrentUser();
             Bid bid = bidService.findById(userPropid, bidderId);
             if (bidService.isAccepted(userPropid)) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+            if (!bid.getUserProps().getCreator().getId().equals(user.getId())) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
             if (accepted) {

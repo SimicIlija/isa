@@ -1,11 +1,14 @@
 package com.isa.projekcije.controller;
 
+import com.isa.projekcije.model.User;
+import com.isa.projekcije.model.dto.BoughtDTO;
 import com.isa.projekcije.model.dto.ThemePropsDTO;
 import com.isa.projekcije.model.dto.ThemePropsGetDto;
+import com.isa.projekcije.model.fanzone.Bought;
 import com.isa.projekcije.model.fanzone.ThemeProps;
-import com.isa.projekcije.service.ShowService;
-import com.isa.projekcije.service.StorageService;
+import com.isa.projekcije.service.BoughtService;
 import com.isa.projekcije.service.ThemePropsService;
+import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,10 +28,10 @@ public class ThemePropsController {
     private ThemePropsService themePropsService;
 
     @Autowired
-    private ShowService showService;
+    private BoughtService boughtService;
 
     @Autowired
-    private StorageService storageService;
+    private UserService userService;
 
     /**
      * GET api/themeprops/all
@@ -48,6 +51,7 @@ public class ThemePropsController {
      * GET api/themeprops
      * Returns only theme props available for shopping. For all users.
      */
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAvailable() {
@@ -108,7 +112,6 @@ public class ThemePropsController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteThemeProps(@PathVariable long id) {
-        System.out.println(id);
         try {
             ThemeProps themeProps = themePropsService.findById(id);
             themePropsService.delete(themeProps);
@@ -118,4 +121,60 @@ public class ThemePropsController {
         }
     }
 
+    /**
+     * POST api/themeprops/buy/{id}
+     * Buy theme props.
+     */
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/buy/{id}", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity buyThemeProps(@PathVariable long id, @RequestBody int amountToBuy) {
+        try {
+            ThemeProps themeProps = themePropsService.findById(id);
+            System.out.println(amountToBuy);
+            if (amountToBuy > themeProps.getAmount()) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+            User currentUser = userService.getCurrentUser();
+            System.out.println(currentUser);
+            Bought bought = boughtService.findOne(themeProps.getId(), currentUser.getId());
+            if (bought != null) {
+                themeProps.setAmount(themeProps.getAmount() - amountToBuy);
+                bought.setAmount(bought.getAmount() + amountToBuy);
+                themePropsService.update(themeProps);
+                boughtService.update(bought);
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                System.out.println("d");
+                themeProps.setAmount(themeProps.getAmount() - amountToBuy);
+                themePropsService.update(themeProps);
+                bought = new Bought();
+                bought.setBuyer(currentUser);
+                bought.setAmount(amountToBuy);
+                bought.setThemeProps(themeProps);
+                boughtService.create(bought);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * GET api/themeprops/bought
+     * Get all theme props bought by current user.
+     */
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/bought", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getBought() {
+        try {
+            User currentUser = userService.getCurrentUser();
+            List<Bought> boughts = boughtService.findByUserId(currentUser.getId());
+            List<BoughtDTO> retval = boughts.stream().map(BoughtDTO::createFromBought).collect(Collectors.toList());
+            return new ResponseEntity<>(retval, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
 }

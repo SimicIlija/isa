@@ -1,7 +1,10 @@
 package com.isa.projekcije.model.fanzone;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -19,6 +22,10 @@ public class ThemeProps {
     private int amount;
     private double price;
     private String imageUrl;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "themeProps")
+    private Set<Bought> boughts;
 
 
     public long getId() {
@@ -67,6 +74,14 @@ public class ThemeProps {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Set<Bought> getBoughts() {
+        return boughts;
+    }
+
+    public void setBoughts(Set<Bought> boughts) {
+        this.boughts = boughts;
     }
 
     public ThemeProps() {
