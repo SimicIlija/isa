@@ -18,7 +18,7 @@ function changePassword() {
         contentType: "application/json",
         data: s,
         success: function () {
-            top.location.href = "homeForLoggedIn.html";
+            top.location.href = "login.html";
         }
 
     });

@@ -170,6 +170,23 @@ public class UserController {
         }
     }
 
+    @RequestMapping(
+            value = "/getLoggedInUserForProfile",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getLoggedInUserForProfile() {
+
+        UserDTO userDTO = new UserDTO();
+        if (userService.getCurrentUser() != null) {
+            userDTO = userToUserDTO.convert(userService.getCurrentUser());
+            // userDTO.setRole(userService.getCurrentUser().getRole().toString());
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        }
+    }
+
     @RequestMapping(value = "/authRole", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity authRole() {
@@ -258,6 +275,7 @@ public class UserController {
                     return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
                 }
             }
+
             usr.setEmail(user.getEmail());
             User u = userService.save(usr);
             userService.setCurrentUser(u);
@@ -287,7 +305,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(
             value = "/sendEmail",
             method = RequestMethod.POST,
@@ -302,6 +319,10 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             usr.setPassword(newPassword);
+            emailService.getMail().setTo(usr.getEmail());
+            emailService.getMail().setFrom(emailService.getEnv().getProperty("spring.mail.username"));
+            emailService.getMail().setSubject("Forgot password for your account?");
+            emailService.getMail().setText("Hello " + usr.getFirstName() + ",\n\nThis is your new password:\n\n" + usr.getPassword() + "");
 
             emailService.sendNotificaitionAsync(usr);
             userService.save(usr);

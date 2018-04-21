@@ -25,4 +25,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     Ticket findByProjectionIdAndSeatSegmentIdAndSeatRowAndSeatSeatNumber(Long idProjection, Long idSegment, int row, int seatNumber);
 
+    List<Ticket> findByReservationId(Long id);
 }

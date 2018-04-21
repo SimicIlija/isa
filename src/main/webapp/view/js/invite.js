@@ -82,9 +82,7 @@ function tabMyInvites() {
                             invitesDiv.append("<button type=\"button\" class=\"btn btn-primary\" onclick=\"potvrdiDolazak(" + data[reservation].id + "," + dataUserLoggedIn.id + ")\">Confirm reservation</button>");
                             invitesDiv.append("<button type=\"button\" class=\"btn btn-danger\" onclick=\"otkaziDolazak(" + data[reservation].id + ")\">Reject reservation</button>");
                             invitesDiv.append("</p>");
-                            var friendsDiv = $('#friendsDiv');
-                            friendsDiv.empty();
-                            friendsDiv.append(invitesDiv);
+
                         }
 
 

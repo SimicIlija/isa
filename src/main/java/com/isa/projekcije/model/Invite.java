@@ -33,6 +33,12 @@ public class Invite {
         this.confirmed = false;
     }
 
+    public Invite(Long idReservation, Long idInvitedUser, Boolean confirmed) {
+        this.idReservation = idReservation;
+        this.idInvitedUser = idInvitedUser;
+        this.confirmed = confirmed;
+    }
+
     public long getId() {
         return id;
     }

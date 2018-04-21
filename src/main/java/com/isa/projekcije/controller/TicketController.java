@@ -60,6 +60,9 @@ public class TicketController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addTicket(@RequestBody TicketDTO ticketToAdd) {
 
+        if (ticketToAdd.getId_projection() == null || ticketToAdd.getId_seat() == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         Ticket ticket = ticketDTOToTicket.convert(ticketToAdd);
         Ticket addedTicket = ticketService.save(ticket);
         TicketDTO ticketDTO = ticketToTicketDTO.convert(addedTicket);
@@ -98,6 +101,7 @@ public class TicketController {
             return new ResponseEntity<>("Fill in all fields.", HttpStatus.BAD_REQUEST);
         }
         Segment segment = segmentService.findOne(segmentTicketsDTO.getIdSegment());
+
         Projection projection = projectionService.findOne(segmentTicketsDTO.getIdProjection());
         if (segment == null || projection == null) {
             return new ResponseEntity<>("Fill in all fields.", HttpStatus.BAD_REQUEST);
@@ -156,6 +160,8 @@ public class TicketController {
                     return new ResponseEntity("Some tickets for segment are reserved.", HttpStatus.BAD_REQUEST);
                 }
                 ticketService.delete(ticket.getId());
+            } else {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<>(segmentTicketsDTO, HttpStatus.OK);

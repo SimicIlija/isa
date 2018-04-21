@@ -40,6 +40,11 @@ public class TicketService {
 
     }
 
+    public List<Ticket> findByReservationId(Long id) {
+        return ticketRepository.findByReservationId(id);
+
+    }
+
     public List<Ticket> findAll() {
         return ticketRepository.findAll();
     }
