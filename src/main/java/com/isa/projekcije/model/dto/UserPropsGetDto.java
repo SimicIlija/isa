@@ -87,6 +87,7 @@ public class UserPropsGetDto {
         userPropsGetDto.setId(userProps.getId());
         userPropsGetDto.setImageUrl(userProps.getImageUrl());
         userPropsGetDto.setCreatorName(userProps.getCreator().getEmail());
+        userPropsGetDto.setState(userProps.getState());
         return userPropsGetDto;
     }
 }

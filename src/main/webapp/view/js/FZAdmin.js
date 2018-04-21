@@ -12,6 +12,7 @@ window.onload = function () {
                 if (data.role === 'ADMIN_FUN') {
                     console.log('ok');
                     loadProps();
+                    loadUserProps();
                 } else {
                     top.location.href = "login.html";
                 }
@@ -35,6 +36,7 @@ function getFormData($form) {
 
 //GLOBALS
 var themeProps = null;
+var userProps = null;
 var editedId = null;
 
 function loadProps() {
@@ -65,7 +67,81 @@ function loadProps() {
                 list.append(tableRow);
             }
         }, error: function (jqxhr, textStatus, errorThrown) {
-            top.location.href = "login.html";
+            toastr["error"]("Failed to load.");
+        }
+    });
+
+}
+
+function loadUserProps() {
+    var list = $('#userProps');
+    $.ajax({
+        url: "api/userprops/unchecked",
+        type: "GET",
+        dataType: "json",
+        success: function (data, textStatus) {
+            userProps = data;
+            list.empty();
+            for (var i = 0; i < data.length; i++) {
+                var tableRow = "<tr>";
+                tableRow += "<td>" + data[i].name + "</td>";
+                tableRow += "<td>" + data[i].description + "</td>";
+                tableRow += "<td>" + data[i].creatorName + "</td>";
+                tableRow += "<td>" + " <input class=\"btn btn-lg btn-primary btn-block\" type=\"button\"\n" +
+                    "                                           value=\"Approve\"\n" +
+                    "                                           onclick=\"approveUp(" + i + ")\">" + "</td>";
+                tableRow += "<td>" + " <input class=\"btn btn-lg btn-danger btn-block\" type=\"button\"\n" +
+                    "                                           value=\"Deny\"\n" +
+                    "                                           onclick=\"denyUp(" + i + ")\">" + "</td>";
+                tableRow += "</tr>";
+                list.append(tableRow);
+            }
+        },
+        error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Failed to load.");
+        }
+    });
+}
+
+function approveUp(i) {
+    var id = userProps[i].id;
+    var bool = true;
+    var json = JSON.stringify(bool);
+    console.log(json);
+    $.ajax({
+        url: " api/userprops/" + id,
+        type: "POST",
+        dataType: "json",
+        data: json,
+        contentType: "application/json",
+        success: function (data, textStatus) {
+            console.log(data);
+            loadUserProps();
+        },
+        error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Failed to approve.");
+        }
+    });
+
+}
+
+function denyUp(i) {
+    var id = userProps[i].id;
+    var bool = false;
+    var json = JSON.stringify(bool);
+    console.log(json);
+    $.ajax({
+        url: " api/userprops/" + id,
+        type: "POST",
+        dataType: "json",
+        data: json,
+        contentType: "application/json",
+        success: function (data, textStatus) {
+            console.log(data);
+            loadUserProps();
+        },
+        error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Failed to approve.");
         }
     });
 
