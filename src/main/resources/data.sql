@@ -112,7 +112,7 @@ insert into ticket(price,id_seat,id_projection,reserved,version) values('200.00'
 insert into theme_props (name, description, amount, price, image_url) values ('igracka', 'opis', 20, 50, 'http://t0.gstatic.com/images?q=tbn:ANd9GcQ_Sw8iyje2a8mnrsYRNLGzG-G50U093i76B5wHEIt7uON-O57P');
 insert into theme_props (name, description, amount, price, image_url) values ('igracka', 'opis', 0, 50, null);
 
-insert into user_props (name, description, end_date, state, creator_id, image_url) values ('igracka', 'opis igracke', '2018-02-28', 'DENIED', 1, null);
+insert into user_props (name, description, end_date, state, creator_id, image_url) values ('igracka', 'opis igracke', '2018-02-28', 'UNCHECKED', 1, null);
 insert into user_props (name, description, end_date, state, creator_id, image_url) values ('igracka2', 'opis igracke2', '2018-02-28', 'APPROVED', 1, null);
 
 

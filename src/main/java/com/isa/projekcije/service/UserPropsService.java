@@ -1,6 +1,7 @@
 package com.isa.projekcije.service;
 
 import com.isa.projekcije.model.fanzone.UserProps;
+import com.isa.projekcije.model.fanzone.UserPropsState;
 import com.isa.projekcije.repository.UserPropsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,9 @@ public class UserPropsService {
 
     public List<UserProps> findApproved() {
         return userPropsRepository.findApproved();
+    }
+
+    public List<UserProps> findUnchecked() {
+        return userPropsRepository.findByState(UserPropsState.UNCHECKED);
     }
 }
