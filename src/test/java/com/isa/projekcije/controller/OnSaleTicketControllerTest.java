@@ -222,7 +222,7 @@ public class OnSaleTicketControllerTest extends ProjekcijeApplicationTests {
                 .andExpect(jsonPath("$.[*].seatNumber").value(hasItem(OnSaleTicketConstants.DB_SEAT_NUMBER)));
     }
 
-    /*@Test
+    @Test
     @WithMockUser(authorities = "REGISTERED")
     @Transactional
     @Rollback(true)
@@ -237,7 +237,7 @@ public class OnSaleTicketControllerTest extends ProjekcijeApplicationTests {
                 .contentType(MediaType.APPLICATION_JSON).content(json1))
                 .andExpect(status().isOk());
         mockMvc.perform(post(URL_PREFIX + "/reserveOnSaleTicket/" + OnSaleTicketConstants.DB_ID)).andExpect(status().isOk());
-    }*/
+    }
 
     @Test
     @WithMockUser(authorities = "REGISTERED")
