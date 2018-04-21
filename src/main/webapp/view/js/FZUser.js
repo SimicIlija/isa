@@ -12,6 +12,7 @@ window.onload = function () {
                 loadThemeProps();
                 loadBought();
                 loadMineUserProps();
+                loadMyBids();
             }
 
         }, error: function (jqxhr, textStatus, errorThrown) {
@@ -42,6 +43,29 @@ function loadThemeProps() {
                 tableRow += "<td>" + " <input class=\"btn btn-lg btn-danger btn-block\" type=\"button\"\n" +
                     "                                           value=\"Buy\"\n" +
                     "                                           onclick=\"buyTP(" + i + ")\">" + "</td>";
+                tableRow += "</tr>";
+                list.append(tableRow);
+            }
+        }, error: function (jqxhr, textStatus, errorThrown) {
+            toastr["error"]("Failed to load.");
+        }
+    });
+}
+
+function loadMyBids() {
+    var list = $('#iAmBidder');
+    $.ajax({
+        url: "api/bid/bidder/",
+        type: "GET",
+        dataType: "json",
+        success: function (data, textStatus) {
+            console.log(data);
+            list.empty();
+            for (var i = 0; i < data.length; i++) {
+                var tableRow = "<tr>";
+                tableRow += "<td>" + data[i].propsName + "</td>";
+                tableRow += "<td>" + data[i].price + "</td>";
+                tableRow += "<td>" + data[i].state + "</td>";
                 tableRow += "</tr>";
                 list.append(tableRow);
             }

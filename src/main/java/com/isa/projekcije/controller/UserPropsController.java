@@ -5,6 +5,7 @@ import com.isa.projekcije.model.dto.UserPropsDto;
 import com.isa.projekcije.model.dto.UserPropsGetDto;
 import com.isa.projekcije.model.fanzone.UserProps;
 import com.isa.projekcije.model.fanzone.UserPropsState;
+import com.isa.projekcije.service.BidService;
 import com.isa.projekcije.service.UserPropsService;
 import com.isa.projekcije.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class UserPropsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BidService bidService;
 
     /**
      * GET api/userprops/unchecked
@@ -61,14 +65,19 @@ public class UserPropsController {
     }
     /**
      * GET api/userprops
-     * Returns approved user props
-     * TODO
+     * Returns approved user props for bidding by user.
      */
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getApproved() {
+        User user = userService.getCurrentUser();
         List<UserProps> result = userPropsService.findApproved();
-        List<UserPropsGetDto> retVal = result.stream()
+        List<UserProps> notUsers = result.stream()
+                .filter(up -> !up.getCreator().getId().equals(user.getId())).collect(Collectors.toList());
+        List<UserProps> notAccepted = notUsers.stream()
+                .filter(up -> !bidService.isAccepted(up.getId())).collect(Collectors.toList());
+        List<UserPropsGetDto> retVal = notAccepted.stream()
                 .map(UserPropsGetDto::createGetDtoFromUserProps).collect(Collectors.toList());
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
