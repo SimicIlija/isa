@@ -3,6 +3,7 @@ package com.isa.projekcije.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.projekcije.model.fanzone.Bid;
+import com.isa.projekcije.model.fanzone.Bought;
 import com.isa.projekcije.model.fanzone.UserProps;
 
 import javax.persistence.*;
@@ -63,6 +64,10 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "bidder")
     private Set<Bid> bids;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "buyer")
+    private Set<Bought> boughts;
 
 
     public User() {
@@ -174,5 +179,11 @@ public class User implements Serializable {
         this.reservations = reservations;
     }
 
+    public Set<Bought> getBoughts() {
+        return boughts;
+    }
 
+    public void setBoughts(Set<Bought> boughts) {
+        this.boughts = boughts;
+    }
 }
