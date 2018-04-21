@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
@@ -43,7 +44,7 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public Ticket save(Ticket ticketToAdd) {
         return ticketRepository.save(ticketToAdd);
     }

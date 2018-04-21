@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 public class Reservation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,8 +29,6 @@ public class Reservation {
     @NotNull
     @OneToMany(mappedBy = "reservation")
     private List<Ticket> tickets_reserved;
-
-
 
     public Reservation() {
     }
@@ -85,7 +84,5 @@ public class Reservation {
     public void setProjection(Projection projection) {
         this.projection = projection;
     }
-
-
 
 }

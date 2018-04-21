@@ -25,7 +25,7 @@ function logInUser() {
 
             } else {
                 top.location.href = "homeForLoggedIn.html";
-                alert('uspeo!');
+                //alert('uspeo!');
             }
         }, error: function (jqxhr, textStatus, errorThrown) {
             if (jqxhr.status === 301) {

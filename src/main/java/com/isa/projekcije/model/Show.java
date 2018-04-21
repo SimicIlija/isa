@@ -9,7 +9,7 @@ public class Show {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @OneToMany(mappedBy = "show", cascade = CascadeType.REMOVE)
     private List<Projection> projections;
@@ -86,11 +86,11 @@ public class Show {
         this.description = description;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
