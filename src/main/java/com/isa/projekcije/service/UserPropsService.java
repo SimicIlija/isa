@@ -43,4 +43,8 @@ public class UserPropsService {
         retVal = list.stream().filter(UserProps::isDateOk).collect(Collectors.toList());
         return retVal;
     }
+
+    public List<UserProps> findByUser(Long id) {
+        return userPropsRepository.findByCreator_Id(id);
+    }
 }

@@ -42,8 +42,27 @@ public class UserPropsController {
     }
 
     /**
+     * GET api/userprops/mine
+     * Returns user props created by user
+     */
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/mine", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyUserProps() {
+        try {
+            User user = userService.getCurrentUser();
+            List<UserProps> myProps = userPropsService.findByUser(user.getId());
+            List<UserPropsGetDto> retVal = myProps.stream()
+                    .map(UserPropsGetDto::createGetDtoFromUserProps).collect(Collectors.toList());
+            return new ResponseEntity<>(retVal, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+    /**
      * GET api/userprops
      * Returns approved user props
+     * TODO
      */
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,12 +77,13 @@ public class UserPropsController {
      * POST api/userprops/add
      * Create new UserProps by currently logged user @param userPropsDto
      */
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "add", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addNewUserProp(@Valid @RequestBody UserPropsDto userPropsDto) {
         try {
-            User user = null; //TODO stavi pravog
+            User user = userService.getCurrentUser();
             UserProps userProps = userPropsDto.createUserProps(user);
             userProps = userPropsService.create(userProps);
             return new ResponseEntity<>(UserPropsGetDto.createGetDtoFromUserProps(userProps), HttpStatus.OK);

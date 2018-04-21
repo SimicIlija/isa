@@ -16,6 +16,8 @@ public class UserPropsDto {
     @NotNull
     private Date endDate;
 
+    private String imageUrl;
+
     public UserPropsDto() {
     }
 
@@ -43,11 +45,20 @@ public class UserPropsDto {
         this.endDate = endDate;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public UserProps createUserProps(User creator) {
         UserProps userProps = new UserProps();
         userProps.setState(UserPropsState.UNCHECKED);
         userProps.setName(this.name);
         userProps.setDescription(this.description);
+        userProps.setImageUrl(this.imageUrl);
         userProps.setEndDate(this.endDate);
         userProps.setCreator(creator);
         return userProps;
