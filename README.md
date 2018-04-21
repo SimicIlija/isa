@@ -26,3 +26,5 @@ Server je pokrenut na portu 1234.
 Nakon ovih koraka početna stranica se može videti [ovde](http://localhost:1234/index.html).
 
 Baza podataka se može videti [ovde](http://localhost:1234/h2-console).
+
+Izvrsen deployment na [heroku](https://isaspring.herokuapp.com/).
