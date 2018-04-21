@@ -21,7 +21,7 @@ function tabMyReservationsClick() {
                     async: false,
                     url: "projections/getProjection/" + projectionId,
                     dataType: "json",
-                    type: "POST",
+                    type: "GET",
                     success: function (dataProjection) {
                         reserverDiv.append("<h3>Reservation for:</h3>");
                         reserverDiv.append("<p><b>Reservetion made:</b> " + data[j].date + "</p>");

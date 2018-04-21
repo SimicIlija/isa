@@ -4,14 +4,7 @@ import com.isa.projekcije.converters.ReservationDTOToReservation;
 import com.isa.projekcije.converters.ReservationToReservationDTO;
 import com.isa.projekcije.model.*;
 import com.isa.projekcije.model.dto.ReservationDTO;
-
-import com.isa.projekcije.service.ProjectionService;
-import com.isa.projekcije.service.ReservationsService;
-import com.isa.projekcije.service.TicketService;
-import com.isa.projekcije.service.UserService;
-
 import com.isa.projekcije.service.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -97,7 +90,8 @@ public class ReservationsController {
             for (Long id : reservationDTO.getIdSeat()) {
                 Ticket ticket = ticketService.findById(id);
                 ticket.setReserved(true);
-
+                ticket.setReservation(reservation);
+                ticketService.save(ticket);
                 tickets.add(ticket);
             }
             reservation.setTickets_reserved(tickets);
@@ -169,6 +163,7 @@ public class ReservationsController {
         for (Ticket ticket : reservation.getTickets_reserved()) {
             ticket.setReserved(false);
             ticket.setReservation(null);
+            ticketService.save(ticket);
         }
         User loggedIn = userService.getCurrentUser();
         loggedIn.getReservations().remove(reservation);
