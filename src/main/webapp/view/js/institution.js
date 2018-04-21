@@ -70,26 +70,26 @@ function showInstitution(idInstitution) {
                 "</div>" +
                 "<div class='col-lg-6'>" +
                 "<div class=\"span7\">\n" +
-                "                                <div class=\"widget stacked widget-table action-table\">\n" +
-                "                                    <div id='divAddSegment" + idInstitution + "' class=\"widget-header\">\n" +
-                "                                        <h3>Segments</h3>\n" +
-                "                                    </div>\n" +
-                "                                    <div class=\"widget-content\">\n" +
-                "                                        <table class=\"table table-striped table-bordered\">\n" +
-                "                                            <thead>\n" +
-                "                                            <tr>\n" +
-                "                                                <th>Lable</th>\n" +
-                "                                                <th>Rows</th>\n" +
-                "                                                <th>Seats in row</th>\n" +
-                "                                                <th class=\"td-actions\" style=\"width:200px\"></th>\n" +
-                "                                            </tr>\n" +
-                "                                            </thead>\n" +
-                "                                            <tbody id=\"tableSegmentsTBody" + idInstitution + "\">\n" +
-                "                                            </tbody>\n" +
-                "                                        </table>\n" +
-                "                                    </div>\n" +
-                "                                </div>\n" +
-                "                            </div>" +
+                "<div class=\"widget stacked widget-table action-table\">\n" +
+                "<div id='divAddSegment" + idInstitution + "' class=\"widget-header\">\n" +
+                "<h3>Segments</h3>\n" +
+                "</div>\n" +
+                "<div class=\"widget-content\">\n" +
+                "<table class=\"table table-striped table-bordered\">\n" +
+                "<thead>\n" +
+                "<tr>\n" +
+                "<th>Lable</th>\n" +
+                "<th>Rows</th>\n" +
+                "<th>Seats in row</th>\n" +
+                "<th class=\"td-actions\" style=\"width:200px\"></th>\n" +
+                "</tr>\n" +
+                "</thead>" +
+                "<tbody id=\"tableSegmentsTBody" + idInstitution + "\">" +
+                "</tbody>" +
+                "</table>\n" +
+                "</div>\n" +
+                "</div>\n" +
+                "</div>" +
                 "</div>" +
                 "</div>" +
                 "</div>\n" +
@@ -313,7 +313,7 @@ function showInstitution(idInstitution) {
                 + "<div class='row'>"
                 + "<div class='col-lg-5'>"
                 + "<form id='showIncomeForm" + idInstitution + "'>" +
-                "<div class=\"form-group\">\n" +
+                "<div class=\"form-group\"><h3>Income</h3><br>" +
                 "<label>From: </label><div class='input-group date'>\n" +
                 "                            <input type='text' id=\"showIncomeDate1" + idInstitution + "\" class=\"form-control\"\n" +
                 "                                   placeholder=\"Date yyyy-MM-dd HH:mm:ss\"/>\n" +

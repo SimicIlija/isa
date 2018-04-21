@@ -1,7 +1,6 @@
 package com.isa.projekcije.service;
 
 import com.isa.projekcije.model.Reservation;
-import com.isa.projekcije.model.User;
 import com.isa.projekcije.repository.ReservationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import java.util.List;
 public class ReservationsService {
     @Autowired
     private ReservationsRepository reservationsRepository;
+
 
     public Reservation save(Reservation reservation) {
         return reservationsRepository.save(reservation);
