@@ -83,6 +83,9 @@ public class UserPropsController {
     public ResponseEntity acceptUserProps(@PathVariable long id, @RequestBody boolean approved) {
         try {
             UserProps userProps = userPropsService.findById(id);
+            if (!userProps.isDateOk()) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
             userProps.setState(approved ? UserPropsState.APPROVED : UserPropsState.DENIED);
             userProps = userPropsService.update(userProps);
             return new ResponseEntity<>(UserPropsGetDto.createGetDtoFromUserProps(userProps), HttpStatus.OK);

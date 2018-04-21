@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserPropsService {
@@ -30,10 +31,16 @@ public class UserPropsService {
     }
 
     public List<UserProps> findApproved() {
-        return userPropsRepository.findApproved();
+        List<UserProps> list = userPropsRepository.findByState(UserPropsState.APPROVED);
+        List<UserProps> retVal = null;
+        retVal = list.stream().filter(UserProps::isDateOk).collect(Collectors.toList());
+        return retVal;
     }
 
     public List<UserProps> findUnchecked() {
-        return userPropsRepository.findByState(UserPropsState.UNCHECKED);
+        List<UserProps> list = userPropsRepository.findByState(UserPropsState.UNCHECKED);
+        List<UserProps> retVal = null;
+        retVal = list.stream().filter(UserProps::isDateOk).collect(Collectors.toList());
+        return retVal;
     }
 }
